@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { wrap, transfer } from 'comlink';
+	import { resolve } from '$app/paths';
 	import { tiks } from '@rexa-developer/tiks';
 
 	// UI & Runtime States via Svelte 5 Runes
@@ -34,7 +35,8 @@
 			const ScannerWorker = (await import('$lib/web-worker?worker')).default;
 			worker = new ScannerWorker();
 			workerApi = wrap(worker);
-			await workerApi.init();
+			const basePath = resolve('/');
+			await workerApi.init(basePath);
 
 			// 1. Initialize tiks with maximum volume (1.0)
 			tiks.init({ theme: 'soft', volume: 1.0 });
@@ -53,7 +55,7 @@
 
 			await evaluateCameraPermissions();
 		} catch (err) {
-			errorMessage = 'Failed to boot scanner engine.';
+			errorMessage = err.message || 'Failed to boot scanner engine.';
 			permissionStatus = 'denied';
 		}
 	});

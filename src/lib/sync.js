@@ -1,35 +1,50 @@
 import { db } from './db';
-import { resolve } from '$app/paths';
+// 👇 Swap base for resolve and asset
+import { resolve, asset } from '$app/paths';
 
 export async function syncDatabase() {
 	try {
-		// 1. Fetch from your new direct SvelteKit API endpoint
+		// Use resolve() for internal API paths.
+		// SvelteKit natively parses paths containing query parameters inside resolve().
 		const manifestResponse = await fetch(resolve(`/api/manifest?t=${Date.now()}`));
 		if (!manifestResponse.ok) throw new Error('Could not fetch remote manifest');
 
 		const { seriesManifest } = await manifestResponse.json();
-
-		// 2. Pull local sync metadata maps out of IndexedDB
 		const localMetaArray = await db.syncMeta.toArray();
 		const localMetaMap = Object.fromEntries(localMetaArray.map((m) => [m.key, m.hash]));
 
-		// 3. Differential match loops
 		for (const [seriesId, remoteInfo] of Object.entries(seriesManifest)) {
 			const localHash = localMetaMap[seriesId];
 
-			// If hashes do not match, the file has been modified or is brand new!
 			if (localHash !== remoteInfo.hash) {
-				console.log(`🔄 Diff detected for Series ${seriesId}. Downloading fresh pack...`);
+				console.log(`🔄 Syncing data and images for Series ${seriesId}...`);
 
-				const dataResponse = await fetch(resolve(`/data/${remoteInfo.filename}`));
+				// Use asset() for static assets like data files
+				const dataResponse = await fetch(asset(`/data/${remoteInfo.filename}`));
 				if (!dataResponse.ok) continue;
 
 				const minifigsData = await dataResponse.json();
 
-				// Atomically update local database entries
+				// 1. Save text definitions directly to IndexedDB
 				await db.minifigs.bulkPut(minifigsData);
 
-				// Save the new hash down to the tracking table
+				// 2. Pre-cache binary images over the network
+				if ('caches' in window) {
+					const cacheKeys = await caches.keys();
+					const activeCacheName = cacheKeys[0];
+
+					if (activeCacheName) {
+						const cache = await caches.open(activeCacheName);
+
+						// Wrap image routes in asset() before submitting them to the Service Worker Cache
+						const imageUrls = minifigsData.map((fig) => asset(fig.image)).filter((url) => !!url);
+
+						console.log(`📦 Pre-downloading ${imageUrls.length} assets for offline use...`);
+						await cache.addAll(imageUrls);
+					}
+				}
+
+				// 3. Update hash tracking state
 				await db.syncMeta.put({
 					key: seriesId,
 					hash: remoteInfo.hash,
@@ -37,8 +52,7 @@ export async function syncDatabase() {
 				});
 			}
 		}
-		console.log('✅ Database sync analysis finished.');
 	} catch (error) {
-		console.warn('⚠️ Sync deferred. Using offline cached data stores:', error);
+		console.warn('⚠️ Sync deferred. Running fully local offline mode.', error);
 	}
 }

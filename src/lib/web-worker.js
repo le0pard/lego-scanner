@@ -6,20 +6,28 @@ let detector = null;
 const api = {
 	/**
 	 * Initialize the WASM module and detector instance inside the worker
+	 * @param {string} basePath - Passed dynamically from SvelteKit's main thread
 	 */
-	async init() {
+	async init(basePath = '/') {
+		const cleanBase = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+
 		prepareZXingModule({
 			overrides: {
 				locateFile: (path, prefix) => {
 					if (path.endsWith('.wasm')) {
 						// Dynamically prepend the deployment base path
-						return `/wasm/zxing/${ZXING_WASM_VERSION}/${path}`;
+						return `${cleanBase}/wasm/zxing/${ZXING_WASM_VERSION}/${path}`;
 					}
 					return `${prefix}${path}`;
 				}
 			},
 			fireImmediately: true
 		});
+
+		const supportedFormats = await BarcodeDetector.getSupportedFormats();
+		if (!supportedFormats.includes('data_matrix')) {
+			throw new Error('Data Matrix format is not supported on this device/browser.');
+		}
 
 		detector = new BarcodeDetector({ formats: ['data_matrix'] });
 	},
