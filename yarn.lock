@@ -413,9 +413,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.63.0":
-  version: 2.65.1
-  resolution: "@sveltejs/kit@npm:2.65.1"
+"@sveltejs/kit@npm:^2.66.0":
+  version: 2.66.0
+  resolution: "@sveltejs/kit@npm:2.66.0"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.9"
@@ -442,7 +442,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/fa7dd82a3955e60e17f3384d693373ce64ac65c36e913b6c4397ffb247ad95b5a211689af40ccd56134aa107a0ba6b6c405fdf30a2fc6a64bbc6b7ee6b47171e
+  checksum: 10c0/c90f595b7ac67aecc70c7eb737b4dc0df2063ee7bbaa796eff53c9cdd7719baf00b5f5d472d9bb0f202044f7f3cfecea91589c2448088c8fbf11613db17da226
   languageName: node
   linkType: hard
 
@@ -619,7 +619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tailwindcss/typography@npm:^0.5.19":
+"@tailwindcss/typography@npm:^0.5.20":
   version: 0.5.20
   resolution: "@tailwindcss/typography@npm:0.5.20"
   dependencies:
@@ -630,7 +630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tailwindcss/vite@npm:^4.3.0":
+"@tailwindcss/vite@npm:^4.3.1":
   version: 4.3.1
   resolution: "@tailwindcss/vite@npm:4.3.1"
   dependencies:
@@ -687,7 +687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^24":
+"@types/node@npm:^24.13.2":
   version: 24.13.2
   resolution: "@types/node@npm:24.13.2"
   dependencies:
@@ -876,10 +876,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:^4.4.3":
-  version: 4.4.3
-  resolution: "dexie@npm:4.4.3"
-  checksum: 10c0/3fcdecbd2b00c58593f566270024b862e927e27ac8280a875f7a42b8eb41d4b413a71bc129b616f1f38085fb6481c0a834b774278b6cc61bff22f6eb02af4a05
+"dexie@npm:^4.4.4":
+  version: 4.4.4
+  resolution: "dexie@npm:4.4.4"
+  checksum: 10c0/bad17d50ca69a5fc440d8c191ed2034831e0d7d3946068429b560ed96a89fad368f6d63422846f29446dabf570cba61a851e559918e76c766e816d13153dc670
   languageName: node
   linkType: hard
 
@@ -985,7 +985,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.4.1":
+"eslint@npm:^10.5.0":
   version: 10.5.0
   resolution: "eslint@npm:10.5.0"
   dependencies:
@@ -1343,24 +1343,24 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@rexa-developer/tiks": "npm:^0.3.0"
     "@sveltejs/adapter-static": "npm:^3.0.10"
-    "@sveltejs/kit": "npm:^2.63.0"
+    "@sveltejs/kit": "npm:^2.66.0"
     "@sveltejs/vite-plugin-svelte": "npm:^7.1.2"
-    "@tailwindcss/typography": "npm:^0.5.19"
-    "@tailwindcss/vite": "npm:^4.3.0"
-    "@types/node": "npm:^24"
+    "@tailwindcss/typography": "npm:^0.5.20"
+    "@tailwindcss/vite": "npm:^4.3.1"
+    "@types/node": "npm:^24.13.2"
     barcode-detector: "npm:^3.2.0"
     comlink: "npm:^4.4.2"
-    dexie: "npm:^4.4.3"
-    eslint: "npm:^10.4.1"
+    dexie: "npm:^4.4.4"
+    eslint: "npm:^10.5.0"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-svelte: "npm:^3.19.0"
     globals: "npm:^17.6.0"
-    prettier: "npm:^3.8.3"
-    prettier-plugin-svelte: "npm:^4.1.0"
+    prettier: "npm:^3.8.4"
+    prettier-plugin-svelte: "npm:^4.1.1"
     prettier-plugin-tailwindcss: "npm:^0.8.0"
-    svelte: "npm:^5.56.1"
+    svelte: "npm:^5.56.3"
     svelte-check: "npm:^4.6.0"
-    tailwindcss: "npm:^4.3.0"
+    tailwindcss: "npm:^4.3.1"
     typescript: "npm:^6.0.3"
     vite: "npm:^8.0.16"
   languageName: unknown
@@ -1762,13 +1762,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "prettier-plugin-svelte@npm:4.1.0"
+"prettier-plugin-svelte@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "prettier-plugin-svelte@npm:4.1.1"
   peerDependencies:
     prettier: ^3.0.0
     svelte: ^5.0.0
-  checksum: 10c0/883de0294c61f34c8cad6fe53efd92890cf187e6fdc4b592ccb5412efc0c4563f53dfbc05b9c10b50a11e35d8375f95a9ef0019fe8d91461b7c0fd7df971701a
+  checksum: 10c0/23a1c2f6fb64e152f1ad72e646860b67171f1f9d70081a676103a2ad41052c2f9e48f3567b52612c764a9fd06b44128ab098d4c1da4e88c726af5e6503545b67
   languageName: node
   linkType: hard
 
@@ -1830,7 +1830,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.8.3":
+"prettier@npm:^3.8.4":
   version: 3.8.4
   resolution: "prettier@npm:3.8.4"
   bin:
@@ -2016,7 +2016,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.56.1":
+"svelte@npm:^5.56.3":
   version: 5.56.3
   resolution: "svelte@npm:5.56.3"
   dependencies:
@@ -2047,7 +2047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.3.1, tailwindcss@npm:^4.3.0":
+"tailwindcss@npm:4.3.1, tailwindcss@npm:^4.3.1":
   version: 4.3.1
   resolution: "tailwindcss@npm:4.3.1"
   checksum: 10c0/7d852a242cd9367c1ba54c0aa4a9f7e437753ed3530f0dd7eb6c9c5be577323695412d3e14df80c28013bfc22cc2b55255558005fc0b73de8d633ff2dfc29b5f

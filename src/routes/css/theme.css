@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Brand/Primary: Lego Yellow-Gold (Highly visible, organic contrast) */
@@ -10,11 +10,11 @@
   --color-scanner-line: oklch(0.86 0.29 142); /* Vivid neon green */
 
   /* --- LIGHT MODE (Pico Slate Variant) --- */
-  --color-card-bg: oklch(0.97 0.01 240);       /* Soft off-white */
-  --color-app-bg: oklch(1.0 0.0 0);            /* Clean white base */
-  --color-text-main: oklch(0.25 0.02 240);     /* Deep charcoal readable text */
-  --color-text-muted: oklch(0.50 0.02 240);    /* Secondary text */
-  --color-border: oklch(0.88 0.01 240);        /* Subtle hairline dividers */
+  --color-card-bg: oklch(0.97 0.01 240); /* Soft off-white */
+  --color-app-bg: oklch(1 0 0); /* Clean white base */
+  --color-text-main: oklch(0.25 0.02 240); /* Deep charcoal readable text */
+  --color-text-muted: oklch(0.5 0.02 240); /* Secondary text */
+  --color-border: oklch(0.88 0.01 240); /* Subtle hairline dividers */
 
   /* Safe Area paddings built-in for iOS/Android PWA viewports */
   --spacing-pwa-top: env(safe-area-inset-top, 16px);
@@ -24,16 +24,16 @@
 /* --- DARK MODE (Dynamic Attribute Override) --- */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* Retain identical Chroma and Hue, scale only Lightness for perfect contrast pairing */
   --color-primary: oklch(0.78 0.16 85);
   --color-primary-hover: oklch(0.72 0.16 82);
 
-  --color-card-bg: oklch(0.18 0.02 240);       /* Deep Slate background */
-  --color-app-bg: oklch(0.12 0.02 240);        /* Pitch canvas black */
-  --color-text-main: oklch(0.92 0.01 240);     /* Soft crisp light text */
-  --color-text-muted: oklch(0.65 0.01 240);    /* Readably dimmed metadata */
-  --color-border: oklch(0.26 0.02 240);        /* Night-optimized borders */
+  --color-card-bg: oklch(0.18 0.02 240); /* Deep Slate background */
+  --color-app-bg: oklch(0.12 0.02 240); /* Pitch canvas black */
+  --color-text-main: oklch(0.92 0.01 240); /* Soft crisp light text */
+  --color-text-muted: oklch(0.65 0.01 240); /* Readably dimmed metadata */
+  --color-border: oklch(0.26 0.02 240); /* Night-optimized borders */
 }
 
 /* --- Pico-style Semantic HTML Enforcements --- */
@@ -41,8 +41,13 @@
   body {
     background-color: var(--color-app-bg);
     color: var(--color-text-main);
-    font-family: system-ui, -apple-system, sans-serif;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   /* Target native cards globally like Pico.css */
@@ -55,7 +60,9 @@
   }
 
   /* Unified mobile-first inputs */
-  input[type="text"], input[type="number"], select {
+  input[type='text'],
+  input[type='number'],
+  select {
     background-color: var(--color-app-bg);
     border: 1px solid var(--color-border);
     color: var(--color-text-main);

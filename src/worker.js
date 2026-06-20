@@ -7,63 +7,63 @@ const ASSETS_TO_CACHE = [...build, ...files];
 
 // 1. Install Event: Cache app shell assets (HTML, JS, CSS, basic UI icons)
 self.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches
-			.open(CACHE_NAME)
-			.then((cache) => {
-				return cache.addAll(ASSETS_TO_CACHE);
-			})
-			.then(() => self.skipWaiting())
-	);
+  event.waitUntil(
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(ASSETS_TO_CACHE);
+      })
+      .then(() => self.skipWaiting())
+  );
 });
 
 // 2. Activate Event: Clean up old versions of caches
 self.addEventListener('activate', (event) => {
-	event.waitUntil(
-		caches
-			.keys()
-			.then((keys) => {
-				return Promise.all(
-					keys.map((key) => {
-						if (key !== CACHE_NAME) return caches.delete(key);
-					})
-				);
-			})
-			.then(() => self.clients.claim())
-	);
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) => {
+        return Promise.all(
+          keys.map((key) => {
+            if (key !== CACHE_NAME) return caches.delete(key);
+          })
+        );
+      })
+      .then(() => self.clients.claim())
+  );
 });
 
 // 3. Fetch Event: Intercept image requests and manage cache dynamically
 self.addEventListener('fetch', (event) => {
-	if (event.request.method !== 'GET') return;
+  if (event.request.method !== 'GET') return;
 
-	const url = new URL(event.request.url);
+  const url = new URL(event.request.url);
 
-	// Only intercept local requests (like your Lego images)
-	if (url.origin === self.location.origin) {
-		event.respondWith(
-			caches.match(event.request).then((cachedResponse) => {
-				if (cachedResponse) {
-					return cachedResponse; // Return instantly from offline cache
-				}
+  // Only intercept local requests (like your Lego images)
+  if (url.origin === self.location.origin) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse; // Return instantly from offline cache
+        }
 
-				// If not cached, fetch from network
-				return fetch(event.request)
-					.then((networkResponse) => {
-						// Cache Lego images on-the-fly when first viewed
-						if (url.pathname.startsWith('/images/')) {
-							const responseClone = networkResponse.clone();
-							caches.open(CACHE_NAME).then((cache) => {
-								cache.put(event.request, responseClone);
-							});
-						}
-						return networkResponse;
-					})
-					.catch(() => {
-						// Fallback if network fails completely and asset isn't cached
-						return new Response('Offline image unavailable', { status: 503 });
-					});
-			})
-		);
-	}
+        // If not cached, fetch from network
+        return fetch(event.request)
+          .then((networkResponse) => {
+            // Cache Lego images on-the-fly when first viewed
+            if (url.pathname.startsWith('/images/')) {
+              const responseClone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseClone);
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => {
+            // Fallback if network fails completely and asset isn't cached
+            return new Response('Offline image unavailable', { status: 503 });
+          });
+      })
+    );
+  }
 });
