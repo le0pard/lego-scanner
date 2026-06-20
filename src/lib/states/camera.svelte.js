@@ -4,7 +4,7 @@ export const cameraState = $state({
   ready: false,
   selectedCameraId: null,
   cameras: [],
-  isHaveFlash: false,
+  isHaveFlash: true,
   isFlashOn: false,
   errorMessage: ''
 });
