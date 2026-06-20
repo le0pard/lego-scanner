@@ -795,6 +795,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
+  languageName: node
+  linkType: hard
+
 "clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
@@ -1349,6 +1356,7 @@ __metadata:
     "@tailwindcss/vite": "npm:^4.3.1"
     "@types/node": "npm:^24.13.2"
     barcode-detector: "npm:^3.2.0"
+    classnames: "npm:^2.5.1"
     comlink: "npm:^4.4.2"
     dexie: "npm:^4.4.4"
     eslint: "npm:^10.5.0"

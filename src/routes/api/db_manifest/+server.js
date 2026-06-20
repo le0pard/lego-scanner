@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 
 export const prerender = true;
 
-const DATA_DIR = path.resolve('static/data');
+const DATA_DIR = path.resolve('static/briks/data');
 
 function getFileHash(filePath) {
   const content = fs.readFileSync(filePath);
