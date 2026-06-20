@@ -16,7 +16,7 @@
   });
 </script>
 
-<main class="max-w-md landscape:max-w-4xl mx-auto min-h-[100dvh] px-4 pt-[var(--spacing-pwa-top)] pb-[var(--spacing-pwa-bottom)] flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden">
+<main class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt--pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden">
 
   <header class="py-3 flex justify-between items-center gap-2">
     <div class="flex-1 min-w-0">
@@ -154,7 +154,7 @@
       {/if}
     </div>
 
-    <article class="mt-4 mb-0 landscape:mt-0 landscape:w-1/2 flex-1 min-h-[220px] flex flex-col justify-between">
+    <article class="mt-4 mb-0 landscape:mt-0 landscape:w-1/2 flex-1 min-h-70 flex flex-col justify-between">
       <div class="space-y-1">
         <div class="flex justify-between items-start">
           <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
