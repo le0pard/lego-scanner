@@ -1,11 +1,44 @@
 <script>
+  import { onMount, onDestroy } from 'svelte';
+  import { resolve } from '$app/paths';
+  import { browser } from '$app/environment';
+  import { wrap } from 'comlink';
+
   import Camera from '$lib/components/Camera.svelte';
   import Header from '$lib/components/Header.svelte';
   import ScanResult from '$lib/components/ScanResult.svelte';
   import Upload from '$lib/components/Upload.svelte';
+  import WorkerError from '$lib/components/WorkerError.svelte';
+  import WorkerLoading from '$lib/components/WorkerLoading.svelte';
 
   import { isMenuOpen } from '$lib/states/menu.svelte';
   import { uploadTabState } from '$lib/states/tabs.svelte';
+
+  let workerLoaded = $state(false);
+  let errorMessage = $state('');
+
+  let worker = null;
+  let workerApi = null;
+
+  onMount(async () => {
+    if (!browser) return;
+
+    try {
+      const ScannerWorker = (await import('$lib/web-worker?worker')).default;
+      worker = new ScannerWorker();
+      workerApi = wrap(worker);
+      await workerApi.init(resolve('/'));
+      workerLoaded = true;
+    } catch (err) {
+      errorMessage = err.message || 'Failed to boot scanner engine.';
+    }
+  });
+
+  onDestroy(() => {
+    if (worker) {
+      worker.terminate();
+    }
+  });
 
   // Lock body scroll when drawer is open
   $effect(() => {
@@ -25,10 +58,16 @@
     <div
       class="w-full landscape:w-1/2 landscape:max-w-[75dvh] shrink-0 flex flex-col relative z-10 mx-auto"
     >
-      {#if uploadTabState()}
-        <Upload />
+      {#if errorMessage && errorMessage.length > 0}
+        <WorkerError {errorMessage} />
+      {:else if !workerLoaded}
+        <WorkerLoading />
       {:else}
-        <Camera />
+        {#if uploadTabState()}
+          <Upload {workerApi} />
+        {:else}
+          <Camera {workerApi} />
+        {/if}
       {/if}
     </div>
 

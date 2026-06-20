@@ -83,13 +83,8 @@
     >
       <ul class="space-y-4 text-lg font-bold">
         <li>
-          <a href="#" class="block py-2 text-text-main hover:text-primary transition-colors"
+          <a href="/" class="block py-2 text-text-main hover:text-primary transition-colors"
             >Scanner Dashboard</a
-          >
-        </li>
-        <li>
-          <a href="#" class="block py-2 text-text-main hover:text-primary transition-colors"
-            >My Minifig Inventory</a
           >
         </li>
         <li><hr class="border-border my-2" /></li>
@@ -112,9 +107,10 @@
         </li>
         <li>
           <a
-            href="#"
+            href="https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set-figure"
             class="block py-2 text-sm text-text-muted hover:text-text-main transition-colors"
-            >Report Missing Brick Set</a
+            target="_blank"
+            rel="noopener noreferrer">Report Missing Brick Set</a
           >
         </li>
       </ul>

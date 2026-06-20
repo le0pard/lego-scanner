@@ -1,3 +1,7 @@
+<script>
+  const { workerApi } = $props();
+</script>
+
 <div
   id="workspace-upload"
   class="w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed border-border hover:border-primary bg-card-bg shadow-lg rounded-2xl p-6 text-center cursor-pointer transition-colors group relative"
