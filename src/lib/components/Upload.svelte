@@ -15,7 +15,7 @@
     isProcessing = true;
 
     try {
-      // Get original image dimensions using a temporary Image object
+      // Load image into memory to get original dimensions
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
       await new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@
       });
       URL.revokeObjectURL(objectUrl);
 
-      // Calculate downscaled dimensions (max 1024px) to prevent WASM overload
+      // Calculate scaling ratio
       const MAX_DIM = 1024;
       let { width, height } = img;
 
@@ -35,12 +35,16 @@
         height = Math.round(height * ratio);
       }
 
-      // Create the ImageBitmap using the new scaled dimensions
-      const bitmap = await createImageBitmap(file, {
-        resizeWidth: width,
-        resizeHeight: height,
-        resizeQuality: 'medium' // 'medium' balances speed and sharpness
-      });
+      // Draw to an offscreen canvas.
+      // This forces correct orientation and smoothly blends the dotted Lego print!
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Create a clean bitmap from the canvas instead of the raw file
+      const bitmap = await createImageBitmap(canvas);
 
       // Send to worker
       const result = await workerApi.detect(transfer(bitmap, [bitmap]));
