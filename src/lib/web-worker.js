@@ -1,5 +1,6 @@
 import { expose } from 'comlink';
 import { BarcodeDetector, ZXING_WASM_VERSION, prepareZXingModule } from 'barcode-detector';
+import { imageProcessingPipeline } from '$lib/utils/worker/images'
 
 let detector = null;
 
@@ -55,6 +56,48 @@ const api = {
       // Close the bitmap inside the worker to immediately free system memory
       imageBitmap.close();
     }
+  },
+
+  /**
+   * Process a file
+   * @param {File} file
+   */
+  async detectFromFile(file) {
+    if (!detector) {
+      throw new Error('Worker scanner not initialized.');
+    }
+
+    const baseBmp = await createImageBitmap(file);
+    let result = null;
+
+    try {
+      // Loop through pipeline sequentially (saves RAM, stops early if found)
+      for (const processingMethod of imageProcessingPipeline) {
+        let currentBmp = null;
+
+        try {
+          currentBmp = await processingMethod(baseBmp);
+          const barcodes = await detector.detect(currentBmp);
+
+          if (barcodes.length > 0) {
+            result = barcodes[0].rawValue;
+            break;
+          }
+        } catch (err) {
+          console.warn('Worker pass failed:', err);
+        } finally {
+          // Close the intermediate bitmap to prevent GPU memory leaks.
+          // (Make sure we don't close the baseBmp by accident if the pass returned it)
+          if (currentBmp && currentBmp !== baseBmp) {
+            currentBmp.close();
+          }
+        }
+      }
+    } finally {
+      baseBmp.close();
+    }
+
+    return result;
   }
 };
 

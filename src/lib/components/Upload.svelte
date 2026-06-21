@@ -1,12 +1,14 @@
 <script>
+  import { onDestroy } from 'svelte';
   import classnames from 'classnames';
-  import { transfer } from 'comlink';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { scanResultState, setScanResult } from '$lib/states/scanResult.svelte';
+  import { setScanResult, setScanError, resetScanResult } from '$lib/states/scanResult.svelte';
 
   const { getScanner } = $props();
 
-  const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
+  const {
+    warning: warningTick
+  } = useTiks({ theme: 'crisp', volume: 1.0 });
 
   let isProcessing = $state(false);
   let isDragging = $state(false);
@@ -15,83 +17,16 @@
     isProcessing = true;
 
     try {
-      const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = objectUrl;
-      });
-      URL.revokeObjectURL(objectUrl);
+      const result = await getScanner().detectFromFile(file);
 
-      const w = img.width;
-      const h = img.height;
-
-      let result = null;
-      console.group('🔍 Scanner Debug Info');
-
-      // OPTIMIZED ORDER: Put the most likely fixes first!
-      for (let i = 0; i < 4; i++) {
-        let bmp;
-        let passName;
-
-        try {
-          if (i === 0) {
-            passName = '1. Smartphone Fix (600px Downscale)';
-            const max = 600;
-            const ratio = Math.min(max / w, max / h);
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.round(w * ratio);
-            canvas.height = Math.round(h * ratio);
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            bmp = await createImageBitmap(canvas);
-          } else if (i === 1) {
-            passName = '2. Native Raw File';
-            bmp = await createImageBitmap(file);
-          } else if (i === 2) {
-            passName = '3. Center Zoom (For far-away photos)';
-            const cx = Math.floor(w * 0.2);
-            const cy = Math.floor(h * 0.2);
-            const cw = Math.floor(w * 0.6);
-            const ch = Math.floor(h * 0.6);
-            bmp = await createImageBitmap(file, cx, cy, cw, ch);
-          } else if (i === 3) {
-            passName = '4. Cropped High-Contrast (For bad lighting)';
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.floor(w * 0.5);
-            canvas.height = Math.floor(h * 0.5);
-            const ctx = canvas.getContext('2d');
-            ctx.filter = 'grayscale(100%) contrast(250%)';
-            ctx.drawImage(img, -Math.floor(w * 0.25), -Math.floor(h * 0.25), w, h);
-            bmp = await createImageBitmap(canvas);
-          }
-
-          console.log(`Trying: ${passName}`);
-
-          result = await getScanner().detect(transfer(bmp, [bmp]));
-
-          if (result) {
-            console.log(`✅ Success! Engine locked on using: ${passName}`);
-            break;
-          }
-        } catch (e) {
-          console.warn(`Pass ${passName} failed internally:`, e);
-        }
-      }
-
-      console.groupEnd();
-
-      if (result && setScanResult(result)) {
-        console.log('🎯 Match found! Triggering success audio clip:', scanResultState.result);
-        successTick();
+      if (result) {
+        setScanResult(result);
       } else if (!result) {
-        errorTick();
-        console.warn('❌ WASM Engine failed to read Data Matrix on all passes.');
+        setScanError('WASM Engine failed to read Data Matrix.');
       }
     } catch (err) {
+      setScanError('Failed to process image');
       console.error('Failed to process image:', err);
-      errorTick();
     } finally {
       isProcessing = false;
     }
@@ -129,10 +64,14 @@
     if (file && file.type.startsWith('image/')) {
       await processFile(file);
     } else if (file) {
-      errorTick();
       console.warn('Dropped file is not an image.');
+      warningTick();
     }
   };
+
+  onDestroy(() => {
+    resetScanResult();
+  })
 </script>
 
 <label

@@ -4,7 +4,7 @@
   import { browser } from '$app/environment';
   import { transfer } from 'comlink';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { scanResultState, setScanResult } from '$lib/states/scanResult.svelte';
+  import { setScanResult, resetScanResult } from '$lib/states/scanResult.svelte';
 
   import {
     cameraState,
@@ -37,8 +37,6 @@
   let isCameraRequested = $state(false);
 
   let processingFrame = false;
-
-  const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
   const streamActiveTrack = () => {
     if (stream) {
@@ -109,16 +107,18 @@
     }
 
     const capabilities = activeTrack.getCapabilities();
-    const settings = activeTrack.getSettings();
 
-    if ('zoom' in capabilities) {
-      setZoomSettings({
-        min: capabilities.zoom.min,
-        max: capabilities.zoom.max,
-        step: capabilities.zoom.step || 0.1,
-        value: settings.zoom || capabilities.zoom.min
-      });
+    if (!Object.hasOwn(capabilities, 'zoom')) {
+      return
     }
+
+    const settings = activeTrack.getSettings();
+    setZoomSettings({
+      min: capabilities.zoom.min,
+      max: capabilities.zoom.max,
+      step: capabilities.zoom.step || 0.1,
+      value: settings.zoom || capabilities.zoom.min
+    });
   };
 
   const startCamera = async (explicitDeviceId = null) => {
@@ -176,12 +176,16 @@
     }
   };
 
+  const initCameraCapabilities = () => {
+    updateCameraList();
+    updateFlashStatus();
+    updateZoomStatus();
+  }
+
   const startStreamInVideo = async () => {
     videoElement.srcObject = stream;
     videoElement.onloadedmetadata = () => {
-      updateCameraList();
-      updateFlashStatus();
-      updateZoomStatus();
+      initCameraCapabilities();
       cameraReasyState();
       requestAnimationFrame(processingLoop);
     };
@@ -203,11 +207,10 @@
         const bitmap = await createImageBitmap(videoElement);
         const result = await getScanner().detect(transfer(bitmap, [bitmap]));
 
-        if (result && setScanResult(result)) {
-          console.log('🎯 Match found! Triggering success audio clip:', scanResultState.result);
-          successTick();
+        if (result) {
+          setScanResult(result);
         }
-      } catch (err) {
+      } catch {
         // Silent frame skip
       } finally {
         processingFrame = false;
@@ -289,6 +292,7 @@
 
   onDestroy(() => {
     cameraResetState();
+    resetScanResult();
     streamTeardown();
   });
 </script>
