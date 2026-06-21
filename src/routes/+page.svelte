@@ -14,31 +14,31 @@
   import { isMenuOpen } from '$lib/states/menu.svelte';
   import { uploadTabState } from '$lib/states/tabs.svelte';
 
-  let workerLoaded = $state(false);
+  let workersLoaded = $state(false);
   let errorMessage = $state('');
 
-  let worker = null;
-  let workerApi = null;
+  let scannerWorker = null;
+  let scannerWorkerApi = null;
 
-  const getScanner = () => workerApi;
+  const getScanner = () => scannerWorkerApi;
 
   onMount(async () => {
     if (!browser) return;
 
     try {
-      const ScannerWorker = (await import('$lib/web-worker?worker')).default;
-      worker = new ScannerWorker();
-      workerApi = wrap(worker);
-      await workerApi.init(resolve('/'));
-      workerLoaded = true;
+      const ScannerWorker = (await import('$lib/scanner-worker?worker')).default;
+      scannerWorker = new ScannerWorker();
+      scannerWorkerApi = wrap(scannerWorker);
+      await scannerWorkerApi.init(resolve('/'));
+      workersLoaded = true;
     } catch (err) {
       errorMessage = err.message || 'Failed to boot scanner engine.';
     }
   });
 
   onDestroy(() => {
-    if (worker) {
-      worker.terminate();
+    if (scannerWorker) {
+      scannerWorker.terminate();
     }
   });
 
@@ -62,7 +62,7 @@
     >
       {#if errorMessage && errorMessage.length > 0}
         <WorkerError {errorMessage} />
-      {:else if !workerLoaded}
+      {:else if !workersLoaded}
         <WorkerLoading />
       {:else}
         {#if uploadTabState()}

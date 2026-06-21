@@ -1,9 +1,9 @@
 <script>
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte';
-  // import { useTiks } from '@rexa-developer/tiks/svelte';
-  // import { db } from '$lib/utils/db';
+  import { useTiks } from '@rexa-developer/tiks/svelte';
+  import { db } from '$lib/utils/db';
 
-  // const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
+  const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
   let minifig = $state(null);
   let searchCompleted = $state(false);
@@ -12,30 +12,29 @@
     return fullString ? fullString.split(' ')[0] : '';
   };
 
-  $effect(() => {
+  $effect(async () => {
     if (scanResultState.result) {
       console.log('State changed! Reacting to new scan:', scanResultState.result);
 
       const shortCode = getShortCode(scanResultState.result);
-
-      // Query IndexedDB for the short code
-      // db.minifigs.get(shortCode).then((found) => {
-      //   searchCompleted = true;
-
-      //   if (found) {
-      //     minifig = found;
-      //     successTick();
-      //   } else {
-      //     // Code is valid but not in our database
-      //     minifig = null;
-      //     errorTick();
-      //   }
-      // }).catch((err) => {
-      //   console.error('Database query failed:', err);
-      //   searchCompleted = true;
-      //   minifig = null;
-      //   errorTick();
-      // });
+      try {
+        const found = await db.minifigures.where({ searchKeys: shortCode }).first();
+        if (found) {
+          minifig = found;
+          successTick();
+        } else {
+          // Code is valid but not in our database
+          minifig = null;
+          errorTick();
+        }
+      } catch (err) {
+        console.error('Database query failed:', err);
+        searchCompleted = true;
+        minifig = null;
+        errorTick();
+      } finally {
+        searchCompleted = true;
+      }
     } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
       console.log('Error scan:', scanResultState.errorMessage);
       errorTick();
@@ -56,7 +55,7 @@
     <div class="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
       {#if minifig}
         <div
-          class="bg-success-bg border border-success-border rounded-2xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
+          class="bg-success-bg border border-success-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
         >
           <div class="bg-success-icon-bg text-success-text p-2 rounded-xl shrink-0 z-10">
             <svg
@@ -82,10 +81,10 @@
         </div>
 
         <div
-          class="bg-card-bg border border-border shadow-md rounded-[1.5rem] p-4 flex gap-5 items-center relative"
+          class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex gap-5 items-center relative"
         >
           <div
-            class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-2xl shrink-0 flex justify-center items-center p-2 relative"
+            class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
           >
             <img
               src={minifig.image ||
@@ -108,7 +107,7 @@
         </div>
       {:else}
         <div
-          class="bg-error-bg border border-error-border rounded-2xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
+          class="bg-error-bg border border-error-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
         >
           <div class="bg-error-icon-bg text-error-text p-2 rounded-xl shrink-0 z-10">
             <svg
@@ -134,10 +133,10 @@
         </div>
 
         <div
-          class="bg-card-bg border border-border shadow-md rounded-[1.5rem] p-4 flex gap-5 items-center relative"
+          class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex gap-5 items-center relative"
         >
           <div
-            class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-2xl shrink-0 flex justify-center items-center p-2 relative"
+            class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
           >
             <svg
               class="w-12 h-12 text-text-muted opacity-50"

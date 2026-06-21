@@ -9,22 +9,22 @@ db.version(DB_VERSION).stores({
   syncMeta: '&series'
 });
 
-export async function syncDatabase() {
-  const MASTER_JSON_URL =
-    'https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/static/db.json';
+// export async function syncDatabase() {
+//   const MASTER_JSON_URL =
+//     'https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/static/db.json';
 
-  try {
-    const response = await fetch(MASTER_JSON_URL);
-    if (!response.ok) throw new Error('Network offline or repository unavailable.');
+//   try {
+//     const response = await fetch(MASTER_JSON_URL);
+//     if (!response.ok) throw new Error('Network offline or repository unavailable.');
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    // Bulk put handles upserts gracefully (updates match, adds new rows)
-    await db.minifigures.bulkPut(data.figures);
-    console.log('IndexedDB synchronized with cloud master file.');
-    return true;
-  } catch (error) {
-    console.warn('Network sync failed. Running on local cache.', error.message);
-    return false;
-  }
-}
+//     // Bulk put handles upserts gracefully (updates match, adds new rows)
+//     await db.minifigures.bulkPut(data.figures);
+//     console.log('IndexedDB synchronized with cloud master file.');
+//     return true;
+//   } catch (error) {
+//     console.warn('Network sync failed. Running on local cache.', error.message);
+//     return false;
+//   }
+// }

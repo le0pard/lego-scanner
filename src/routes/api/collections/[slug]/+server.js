@@ -32,8 +32,8 @@ export const GET = async ({ params }) => {
     const rawData = module.default;
 
     const processedMinifigures = rawData.minifigures.map((fig) => {
-      const generatedSearchKeys = fig.identifiers.map(
-        (id) => `${id.code}_${id.factory}_${id.year}`
+      const generatedSearchKeys = fig.identifiers.map((id) =>
+        [id.code, id.factory, id.year].filter(Boolean).join('_')
       );
 
       return {

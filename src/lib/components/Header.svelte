@@ -74,7 +74,7 @@
     <div
       id="mobile-menu"
       class={classnames(
-        'absolute inset-0 z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col justify-between text-left',
+        'absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain',
         {
           'translate-x-0': isMenuOpen(),
           '-translate-x-full': !isMenuOpen()
@@ -114,7 +114,7 @@
           >
         </li>
       </ul>
-      <div class="text-xs text-text-muted border-t border-border pt-4">
+      <div class="mt-auto text-xs text-text-muted border-t border-border pt-4">
         v1.4.0-BETA • PWA Sandbox
       </div>
     </div>
