@@ -25,8 +25,8 @@
       });
       URL.revokeObjectURL(objectUrl);
 
-      // Calculate scaling ratio
-      const MAX_DIM = 1024;
+      // Increased Max Dimension to 2048 to preserve barcode dot density
+      const MAX_DIM = 2048;
       let { width, height } = img;
 
       if (width > MAX_DIM || height > MAX_DIM) {
@@ -35,15 +35,20 @@
         height = Math.round(height * ratio);
       }
 
-      // Draw to an offscreen canvas.
-      // This forces correct orientation and smoothly blends the dotted Lego print!
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
+
+      // COMPUTER VISION MAGIC:
+      // Force grayscale and massively boost contrast. This merges the individual
+      // printed inkjet dots into solid black squares, making it trivial for ZXing to read.
+      ctx.filter = 'grayscale(100%) contrast(200%)';
+
+      // Draw the filtered image
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Create a clean bitmap from the canvas instead of the raw file
+      // Create the bitmap from our high-contrast canvas
       const bitmap = await createImageBitmap(canvas);
 
       // Send to worker

@@ -17,8 +17,8 @@
   let workerLoaded = $state(false);
   let errorMessage = $state('');
 
-  let worker = null;
-  let workerApi = null;
+  let worker = $state(null);
+  let workerApi = $state(null);
 
   onMount(async () => {
     if (!browser) return;
