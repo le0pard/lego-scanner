@@ -19,7 +19,8 @@
     cameraResetDeviceId,
     cameraResetState,
     supportFlashState,
-    toggleFlashState
+    toggleFlashState,
+    setZoomSettings
   } from '$lib/states/camera.svelte';
 
   const { workerApi } = $props();
@@ -27,7 +28,11 @@
   const CAMERA_SETTINGS = {
     width: { ideal: 1280 },
     height: { ideal: 720 },
-    frameRate: { ideal: 12, max: 15 }
+    frameRate: { ideal: 12, max: 15 },
+    pan: true,
+    tilt: true,
+    zoom: true,
+    torch: true
   };
 
   let videoElement = $state(null);
@@ -77,7 +82,7 @@
     }
   };
 
-  const updateFlashStatus = async () => {
+  const updateFlashStatus = () => {
     if (!stream) {
       return;
     }
@@ -91,6 +96,25 @@
 
     supportFlashState();
   };
+
+  const updateZoomStatus = () => {
+    if (!stream) {
+      return;
+    }
+
+    const activeTrack = stream.getVideoTracks()[0];
+    const capabilities = activeTrack.getCapabilities();
+    const settings = activeTrack.getSettings();
+
+    if ('zoom' in capabilities) {
+      setZoomSettings({
+        min: capabilities.zoom.min,
+        max: capabilities.zoom.max,
+        step: capabilities.zoom.step || 0.1,
+        value: settings.zoom || capabilities.zoom.min
+      })
+    }
+  }
 
   const startCamera = async (explicitDeviceId = null) => {
     isCameraRequested = true;
@@ -148,14 +172,15 @@
 
   const startStreamInVideo = async () => {
     videoElement.srcObject = stream;
-    cameraReasyState();
-
-    await updateCameraList();
-    updateFlashStatus();
+    videoElement.onloadedmetadata = () => {
+      updateCameraList();
+      updateFlashStatus();
+      updateZoomStatus();
+      cameraReasyState();
+      requestAnimationFrame(processingLoop);
+    };
 
     videoElement.play().catch((err) => console.warn('Video waiting on interaction context:', err));
-
-    requestAnimationFrame(processingLoop);
   };
 
   const processingLoop = async () => {
@@ -166,7 +191,7 @@
       return;
     }
 
-    if (!processingFrame && videoElement.readyState >= 2) {
+    if (!processingFrame && videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
       processingFrame = true;
       try {
         const bitmap = await createImageBitmap(videoElement);
@@ -206,7 +231,7 @@
 
   const handleTourchBtn = (e) => {
     e.preventDefault();
-    if (!stream || !cameraState.isHaveFlash) {
+    if (!stream || !cameraState.haveFlash) {
       return;
     }
 
@@ -221,6 +246,22 @@
       ]
     });
   };
+
+  const handleZoomChange = (e) => {
+    if (!stream || !cameraState.haveZoom) {
+      return;
+    }
+
+    const zoomValue = parseFloat(e.target.value);
+    if (zoomValue < 0) {
+      return
+    }
+
+    const activeTrack = stream.getVideoTracks()[0];
+    activeTrack.applyConstraints({
+      advanced:  [{ zoom: zoomValue }]
+    });
+  }
 
   onMount(async () => {
     if (!browser) return;
@@ -245,14 +286,14 @@
   >
     <div class="flex justify-between gap-2 m-1 md:m-2">
       <div class="flex-1 justify-center items-center">
-        <div class="inline-block text-base font-medium bg-black/70 text-white backdrop-blur-md px-3 py-1.5 rounded-lg">Point camera at barcode</div>
+        <input type="range" min={cameraState.zoom.min} max={cameraState.zoom.max} step={cameraState.zoom.step} value={cameraState.zoom.value} oninput={handleZoomChange} class:hidden={!cameraState.haveZoom} />
       </div>
       <button
         onclick={handleTourchBtn}
         class="flex icoms-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 z-10"
         aria-label="Toggle Camera Flash"
         aria-pressed={cameraState.isFlashOn}
-        class:hidden={!cameraState.isHaveFlash}
+        class:hidden={!cameraState.haveFlash}
       >
         <i
           class={classnames('iconify lucide--zap w-5 h-5 transition-all', {

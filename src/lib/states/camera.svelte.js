@@ -1,13 +1,22 @@
-export const cameraState = $state({
+const INITIAL_VALUE = {
   // Permission Tracking: 'checking' | 'prompt' | 'granted' | 'denied' | 'no-camera'
   permission: 'checking',
   ready: false,
   selectedCameraId: null,
   cameras: [],
-  isHaveFlash: false,
+  haveFlash: true,
   isFlashOn: false,
+  haveZoom: true,
+  zoom: {
+    min: 0,
+    max: 0,
+    step: 0.1,
+    value: 0
+  },
   errorMessage: ''
-});
+}
+
+export const cameraState = $state(INITIAL_VALUE);
 
 export const noCameraPermission = (errorMessage) => {
   cameraState.permission = 'no-camera';
@@ -37,12 +46,17 @@ export const cameraResetDeviceId = () => cameraSetDeviceId(null);
 export const cameraSetList = (cameras = []) => {
   cameraState.cameras = cameras;
 };
-export const supportFlashState = () => (cameraState.isHaveFlash = true);
+export const supportFlashState = () => (cameraState.haveFlash = true);
 export const toggleFlashState = () => (cameraState.isFlashOn = !cameraState.isFlashOn);
+export const setZoomSettings = (settings = {}) => {
+  cameraState.zoom.min = settings.min;
+  cameraState.zoom.max = settings.max;
+  cameraState.zoom.step = settings.step;
+  cameraState.zoom.value = settings.value;
+  cameraState.haveZoom = true;
+};
 export const cameraResetState = () => {
-  cameraState.cameras = [];
-  cameraState.permission = 'checking';
-  cameraState.ready = false;
-  cameraState.selectedCameraId = null;
-  cameraState.errorMessage = '';
+  INITIAL_VALUE.forEach((key, val) => {
+    cameraState[key] = val
+  })
 };
