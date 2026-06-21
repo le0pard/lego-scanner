@@ -34,12 +34,7 @@ const api = {
 
           const collectionData = await dataResponse.json();
 
-          const dbData = collectionData.minifigures.map((item) => ({
-            ...item,
-            series: collectionData.series,
-            displayName: collectionData.displayName,
-            releaseYear: collectionData.releaseYear
-          }))
+          const dbData = collectionData.minifigures;
 
           // Save JSON data to IndexedDB
           await db.minifigures.bulkPut(dbData);

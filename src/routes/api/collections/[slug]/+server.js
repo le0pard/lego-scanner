@@ -45,9 +45,6 @@ export const GET = async ({ params }) => {
     });
 
     const responsePayload = {
-      series: jsonData.series,
-      displayName: jsonData.displayName,
-      releaseYear: jsonData.releaseYear,
       minifigures: processedMinifigures
     };
 
