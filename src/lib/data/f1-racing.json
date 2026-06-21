@@ -4,9 +4,8 @@
   "releaseYear": 2025,
   "minifigures": [
     {
-      "id": "f1_ferrari",
+      "slug": "f1_ferrari",
       "name": "Ferrari Driver & Car",
-      "imagePath": "/assets/images/f1-racing/ferrari-driver.webp",
       "identifiers": [
         {
           "code": "6538305",
