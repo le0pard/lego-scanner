@@ -10,7 +10,13 @@ export default defineConfig({
       compilerOptions: {
         runes: true
       },
-      adapter: adapter()
+      adapter: adapter({
+        pages: 'build',
+        assets: 'build',
+        fallback: '404.html',
+        strict: true,
+        precompress: false
+      })
     })
   ]
 });
