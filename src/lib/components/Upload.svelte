@@ -2,7 +2,7 @@
   import classnames from 'classnames';
   import { transfer } from 'comlink';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { setScanResult } from '$lib/states/scanResult.svelte';
+  import { scanResultState, setScanResult } from '$lib/states/scanResult.svelte';
 
   const { getScanner } = $props();
 
@@ -16,7 +16,6 @@
     isProcessing = true;
 
     try {
-      // 1. Load image into memory
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
       await new Promise((resolve, reject) => {
@@ -26,61 +25,71 @@
       });
       URL.revokeObjectURL(objectUrl);
 
-      // 2. Define our Multi-Pass Strategy
-      // The engine will try these one by one. WASM is so fast you won't even notice the loop.
-      const scanPasses = [
-        { dim: 1024, filter: 'none', name: 'Standard (1024px)' },
-        { dim: 2048, filter: 'none', name: 'High-Res (2048px)' },
-        { dim: 800, filter: 'grayscale(100%) contrast(200%)', name: 'High Contrast' },
-        // THE LEGO FIX: A 1px blur physically smudges the inkjet dots together,
-        // and 300% contrast hardens the smudge into solid black barcode squares.
-        { dim: 800, filter: 'blur(1px) grayscale(100%) contrast(300%)', name: 'Dot-Smudge Filter' }
-      ];
+      const w = img.width;
+      const h = img.height;
 
       let result = null;
-
       console.group('🔍 Scanner Debug Info');
 
-      for (const pass of scanPasses) {
-        console.log(`Trying pass: ${pass.name}...`);
+      // OPTIMIZED ORDER: Put the most likely fixes first!
+      for (let i = 0; i < 4; i++) {
+        let bmp;
+        let passName;
 
-        let width = img.width;
-        let height = img.height;
+        try {
+          if (i === 0) {
+            passName = '1. Smartphone Fix (600px Downscale)';
+            const max = 600;
+            const ratio = Math.min(max / w, max / h);
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(w * ratio);
+            canvas.height = Math.round(h * ratio);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            bmp = await createImageBitmap(canvas);
 
-        if (width > pass.dim || height > pass.dim) {
-          const ratio = Math.min(pass.dim / width, pass.dim / height);
-          width = Math.round(width * ratio);
-          height = Math.round(height * ratio);
-        }
+          } else if (i === 1) {
+            passName = '2. Native Raw File';
+            bmp = await createImageBitmap(file);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
+          } else if (i === 2) {
+            passName = '3. Center Zoom (For far-away photos)';
+            const cx = Math.floor(w * 0.2);
+            const cy = Math.floor(h * 0.2);
+            const cw = Math.floor(w * 0.6);
+            const ch = Math.floor(h * 0.6);
+            bmp = await createImageBitmap(file, cx, cy, cw, ch);
 
-        ctx.filter = pass.filter;
-        ctx.drawImage(img, 0, 0, width, height);
+          } else if (i === 3) {
+            passName = '4. Cropped High-Contrast (For bad lighting)';
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.floor(w * 0.5);
+            canvas.height = Math.floor(h * 0.5);
+            const ctx = canvas.getContext('2d');
+            ctx.filter = 'grayscale(100%) contrast(250%)';
+            ctx.drawImage(img, -Math.floor(w * 0.25), -Math.floor(h * 0.25), w, h);
+            bmp = await createImageBitmap(canvas);
+          }
 
-        // Generate bitmap for this specific pass
-        const bitmap = await createImageBitmap(canvas);
+          console.log(`Trying: ${passName}`);
 
-        // Pass to WASM
-        result = await getScanner().detect(transfer(bitmap, [bitmap]));
+          result = await getScanner().detect(transfer(bmp, [bmp]));
 
-        if (result) {
-          console.log(`✅ Success on pass: ${pass.name} | Result: ${result}`);
-          break; // Stop looping! We found the barcode.
+          if (result) {
+            console.log(`✅ Success! Engine locked on using: ${passName}`);
+            break;
+          }
+        } catch (e) {
+          console.warn(`Pass ${passName} failed internally:`, e);
         }
       }
 
       console.groupEnd();
 
-      // 3. Handle Final Result
-      if (result) {
-        if (setScanResult(result)) {
-          successTick();
-        }
-      } else {
+      if (result && setScanResult(result)) {
+        console.log('🎯 Match found! Triggering success audio clip:', scanResultState.result);
+        successTick();
+      } else if (!result) {
         errorTick();
         console.warn('❌ WASM Engine failed to read Data Matrix on all passes.');
       }
