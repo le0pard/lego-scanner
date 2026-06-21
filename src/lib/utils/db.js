@@ -5,7 +5,7 @@ const DB_VERSION = 1;
 export const db = new Dexie('LegoScannerDB');
 
 db.version(DB_VERSION).stores({
-  minifigures: '++id, series, *searchKeys',
+  minifigures: '&slug, series, *searchKeys',
   syncMeta: '&series'
 });
 

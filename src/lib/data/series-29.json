@@ -1,0 +1,211 @@
+{
+  "series": "series-29",
+  "displayName": "LEGO Minifigures Series 29",
+  "releaseYear": 2026,
+  "minifigures": [
+    {
+      "slug": "s29_football_goalkeeper",
+      "name": "Football Goalkeeper",
+      "imagePath": "/assets/images/series-29/football-goalkeeper.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_marine_biologist",
+      "name": "Marine Biologist",
+      "imagePath": "/assets/images/series-29/marine-biologist.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_tuba_player",
+      "name": "Tuba Player",
+      "imagePath": "/assets/images/series-29/tuba-player.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_unicorn_elf",
+      "name": "Unicorn Elf",
+      "imagePath": "/assets/images/series-29/unicorn-elf.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_monster_hunter",
+      "name": "Monster Hunter",
+      "imagePath": "/assets/images/series-29/monster-hunter.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_robot_t_rex",
+      "name": "Robot T. rex",
+      "imagePath": "/assets/images/series-29/robot-t-rex.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_chocolatier",
+      "name": "Chocolatier",
+      "imagePath": "/assets/images/series-29/chocolatier.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_boba_cup_fan",
+      "name": "Boba Cup Fan",
+      "imagePath": "/assets/images/series-29/boba-cup-fan.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_bionicle_cosplayer",
+      "name": "Bionicle Cosplayer",
+      "imagePath": "/assets/minifigures/series-29/bionicle-cosplayer.jpg",
+      "identifiers": [
+        {
+          "code": "6605251",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603325",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_mysterious_ronin",
+      "name": "Mysterious Ronin",
+      "imagePath": "/assets/images/series-29/mysterious-ronin.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_cute_witch",
+      "name": "Cute Witch",
+      "imagePath": "/assets/images/series-29/cute-witch.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "s29_trash_monster",
+      "name": "Trash Monster",
+      "imagePath": "/assets/images/series-29/trash-monster.webp",
+      "identifiers": [
+        {
+          "code": "REPLACE_ME",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "REPLACE_ME",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    }
+  ]
+}

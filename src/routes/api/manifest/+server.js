@@ -1,5 +1,4 @@
 import { json } from '@sveltejs/kit';
-import { extractJsonFileName } from '$lib/utils/files.js';
 
 export const prerender = true;
 
@@ -21,15 +20,13 @@ export const GET = async ({ url }) => {
     const seriesManifest = {};
 
     for (const filePath in rawFiles) {
-      const { filename, name } = extractJsonFileName(filePath);
-
       // Execute the import to get the raw text content
       const content = await rawFiles[filePath]();
       const hash = await getFileHash(content);
+      const jsonData = JSON.parse(content);
 
-      seriesManifest[name] = {
-        endpoint: new URL(`/api/collections/${name}`, url.origin).pathname,
-        filename,
+      seriesManifest[jsonData.series] = {
+        endpoint: new URL(`/api/collections/${jsonData.series}`, url.origin).pathname,
         hash
       };
     }

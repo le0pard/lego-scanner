@@ -1,6 +1,7 @@
 <script>
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte';
   import { useTiks } from '@rexa-developer/tiks/svelte';
+  import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
   import { db } from '$lib/utils/db';
 
   const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
@@ -8,17 +9,19 @@
   let minifig = $state(null);
   let searchCompleted = $state(false);
 
-  const getShortCode = (fullString) => {
-    return fullString ? fullString.split(' ')[0] : '';
-  };
-
   $effect(async () => {
     if (scanResultState.result) {
       console.log('State changed! Reacting to new scan:', scanResultState.result);
 
-      const shortCode = getShortCode(scanResultState.result);
+      const legoData = extractFieldsFromDataMatrix(scanResultState.result);
+      if (!legoData || !legoData.key) {
+        minifig = null;
+        errorTick();
+        return;
+      }
+
       try {
-        const found = await db.minifigures.where({ searchKeys: shortCode }).first();
+        const found = await db.minifigures.where({ searchKeys: legoData.key }).first();
         if (found) {
           minifig = found;
           successTick();
@@ -29,7 +32,6 @@
         }
       } catch (err) {
         console.error('Database query failed:', err);
-        searchCompleted = true;
         minifig = null;
         errorTick();
       } finally {
@@ -87,21 +89,20 @@
             class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
           >
             <img
-              src={minifig.image ||
-                'https://www.lego.com/cdn/cs/set/assets/blt5ce56b7c02b9e6e4/71046_0-Bionicle-1.png?format=png&height=300&dpr=1'}
-              alt={minifig.name || 'Minifigure'}
+              src={minifig.imagePath}
+              alt={minifig.name}
               class="max-h-full object-contain drop-shadow-lg"
             />
           </div>
           <div class="flex flex-col items-start justify-center">
             <span class="bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2">
-              Series {minifig.series || 'Unknown'}
+              {minifig.series || 'Unknown'}
             </span>
             <h2 class="text-xl sm:text-2xl font-black text-text-main leading-tight mb-1">
               {minifig.name || 'Unknown Figure'}
             </h2>
             <p class="text-sm font-medium text-text-muted">
-              QR Code: {getShortCode(scanResultState.result)}
+              QR Code: {scanResultState.result}
             </p>
           </div>
         </div>

@@ -1,15 +1,21 @@
 import { json, error } from '@sveltejs/kit';
-import { extractJsonFileName } from '$lib/utils/files.js';
 
 export const prerender = true;
 
 const jsonFiles = import.meta.glob('/src/lib/data/*.json');
 
+const extractJsonFromPath = async (filePath) => {
+  const module = await jsonFiles[filePath]();
+  return module.default;
+};
+
 export const entries = async () => {
-  return Object.keys(jsonFiles).map((filePath) => {
-    const { name } = extractJsonFileName(filePath);
-    return { slug: name };
+  const promises = Object.keys(jsonFiles).map(async (filePath) => {
+    const jsonData = await extractJsonFromPath(filePath);
+    return { slug: jsonData.series };
   });
+
+  return await Promise.all(promises);
 };
 
 export const GET = async ({ params }) => {
@@ -25,13 +31,9 @@ export const GET = async ({ params }) => {
   }
 
   try {
-    // Execute the dynamic import function for that specific file
-    const module = await jsonFiles[targetPath]();
+    const jsonData = await extractJsonFromPath(targetPath);
 
-    // Vite wraps JSON imports in a default export, so we extract it here
-    const rawData = module.default;
-
-    const processedMinifigures = rawData.minifigures.map((fig) => {
+    const processedMinifigures = jsonData.minifigures.map((fig) => {
       const generatedSearchKeys = fig.identifiers.map((id) =>
         [id.code, id.factory, id.year].filter(Boolean).join('_')
       );
@@ -43,9 +45,9 @@ export const GET = async ({ params }) => {
     });
 
     const responsePayload = {
-      collectionId: rawData.collectionId,
-      displayName: rawData.displayName,
-      releaseYear: rawData.releaseYear,
+      series: jsonData.series,
+      displayName: jsonData.displayName,
+      releaseYear: jsonData.releaseYear,
       minifigures: processedMinifigures
     };
 
