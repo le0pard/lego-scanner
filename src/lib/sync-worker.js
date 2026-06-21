@@ -40,7 +40,7 @@ const api = {
           // Pre-cache images using the CacheStorage API
           if ('caches' in self) {
             const cacheKeys = await caches.keys();
-            const activeCacheName = cacheKeys[0]; // Grab SvelteKit's active SW cache
+            const activeCacheName = cacheKeys[0];
 
             if (activeCacheName) {
               const cache = await caches.open(activeCacheName);

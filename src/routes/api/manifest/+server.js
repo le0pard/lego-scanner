@@ -7,7 +7,6 @@ const rawFiles = import.meta.glob('/src/lib/data/*.json', {
   import: 'default'
 });
 
-// Edge-compatible hashing function (No Node.js 'crypto' required)
 const getFileHash = async (content) => {
   const msgBuffer = new TextEncoder().encode(content);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
