@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
-@plugin "@iconify/tailwind4" {
- prefixes: lucide;
+@plugin '@iconify/tailwind4' {
+  prefixes: lucide;
 }
 
 @import './theme.css';

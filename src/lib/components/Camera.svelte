@@ -17,6 +17,7 @@
     cameraSetList,
     cameraSetDeviceId,
     cameraResetDeviceId,
+    resetCameraCapabilities,
     cameraResetState,
     supportFlashState,
     toggleFlashState,
@@ -28,11 +29,7 @@
   const CAMERA_SETTINGS = {
     width: { ideal: 1280 },
     height: { ideal: 720 },
-    frameRate: { ideal: 12, max: 15 },
-    pan: true,
-    tilt: true,
-    zoom: true,
-    torch: true
+    frameRate: { ideal: 12, max: 15 }
   };
 
   let videoElement = $state(null);
@@ -112,14 +109,15 @@
         max: capabilities.zoom.max,
         step: capabilities.zoom.step || 0.1,
         value: settings.zoom || capabilities.zoom.min
-      })
+      });
     }
-  }
+  };
 
   const startCamera = async (explicitDeviceId = null) => {
     isCameraRequested = true;
 
     streamTeardown();
+    resetCameraCapabilities();
 
     if (explicitDeviceId) {
       try {
@@ -254,14 +252,14 @@
 
     const zoomValue = parseFloat(e.target.value);
     if (zoomValue < 0) {
-      return
+      return;
     }
 
     const activeTrack = stream.getVideoTracks()[0];
     activeTrack.applyConstraints({
-      advanced:  [{ zoom: zoomValue }]
+      advanced: [{ zoom: zoomValue }]
     });
-  }
+  };
 
   onMount(async () => {
     if (!browser) return;
@@ -284,13 +282,27 @@
     id="workspace-camera"
     class="flex flex-col w-full aspect-square relative overflow-hidden rounded-2xl bg-black border border-border shadow-lg"
   >
-    <div class="flex justify-between gap-2 m-1 md:m-2">
-      <div class="flex-1 justify-center items-center">
-        <input type="range" min={cameraState.zoom.min} max={cameraState.zoom.max} step={cameraState.zoom.step} value={cameraState.zoom.value} oninput={handleZoomChange} class:hidden={!cameraState.haveZoom} />
+    <div class="flex justify-between gap-2 m-1 min-h-10">
+      <div
+        class="flex-1 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-lg transition-opacity"
+        class:hidden={!cameraState.haveZoom}
+      >
+        <i class="iconify lucide--minus size-4 text-neutral-400 shrink-0"></i>
+        <input
+          type="range"
+          min={cameraState.zoom.min}
+          max={cameraState.zoom.max}
+          step={cameraState.zoom.step}
+          value={cameraState.zoom.value}
+          oninput={handleZoomChange}
+          class="flex-1 w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary/50 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md"
+        />
+        <i class="iconify lucide--plus size-4 text-neutral-400 shrink-0"></i>
       </div>
+
       <button
         onclick={handleTourchBtn}
-        class="flex icoms-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 z-10"
+        class="flex items-center justify-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 shrink-0"
         aria-label="Toggle Camera Flash"
         aria-pressed={cameraState.isFlashOn}
         class:hidden={!cameraState.haveFlash}
@@ -313,7 +325,7 @@
       class="w-full relative bg-black/60 backdrop-blur-md rounded-xl border border-white/10 p-1 flex items-center gap-2"
     >
       <select
-        class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0 appearance-none"
+        class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0 select-arrow"
         value={cameraState.selectedCameraId}
         onchange={handleCameraChange}
       >
@@ -329,7 +341,9 @@
   <div
     class="w-full aspect-square flex flex-col items-center justify-center border border-border bg-card-bg shadow-lg rounded-2xl p-6 text-center"
   >
-    <div class="flex items-center justify-center p-4 bg-app-bg rounded-full border border-border mb-4">
+    <div
+      class="flex items-center justify-center p-4 bg-app-bg rounded-full border border-border mb-4"
+    >
       <i class="iconify lucide--camera size-8 text-text-muted"></i>
     </div>
     <p class="text-sm font-bold text-text-main mb-1">Camera Access Required</p>

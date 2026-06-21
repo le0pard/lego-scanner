@@ -4,9 +4,9 @@ const INITIAL_VALUE = {
   ready: false,
   selectedCameraId: null,
   cameras: [],
-  haveFlash: true,
+  haveFlash: false,
   isFlashOn: false,
-  haveZoom: true,
+  haveZoom: false,
   zoom: {
     min: 0,
     max: 0,
@@ -14,7 +14,7 @@ const INITIAL_VALUE = {
     value: 0
   },
   errorMessage: ''
-}
+};
 
 export const cameraState = $state(INITIAL_VALUE);
 
@@ -55,8 +55,13 @@ export const setZoomSettings = (settings = {}) => {
   cameraState.zoom.value = settings.value;
   cameraState.haveZoom = true;
 };
+export const resetCameraCapabilities = () => {
+  cameraState.haveZoom = false;
+  cameraState.haveFlash = false;
+  cameraState.isFlashOn = false;
+};
 export const cameraResetState = () => {
-  INITIAL_VALUE.forEach((key, val) => {
-    cameraState[key] = val
-  })
+  Object.keys(INITIAL_VALUE).forEach((key) => {
+    cameraState[key] = INITIAL_VALUE[key];
+  });
 };

@@ -4,11 +4,11 @@
   <div class="space-y-1">
     <div class="flex justify-between items-start">
       <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
-      <span class="text-xs font-mono text-text-muted">READY [cite: 31]</span>
+      <span class="text-xs font-mono text-text-muted">READY</span>
     </div>
     <p class="text-sm text-text-muted">
       Select input mode above. Flash control helps resolve specular glare reflections on slick
-      plastic bricks. [cite: 32]
+      plastic bricks.
     </p>
   </div>
 
