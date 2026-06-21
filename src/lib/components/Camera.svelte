@@ -42,11 +42,11 @@
 
   const streamActiveTrack = () => {
     if (stream) {
-      return stream.getVideoTracks()[0]
+      return stream.getVideoTracks()[0];
     }
 
-    return null
-  }
+    return null;
+  };
 
   const evaluateCameraPermissions = async () => {
     try {
