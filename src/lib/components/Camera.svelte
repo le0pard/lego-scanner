@@ -24,7 +24,7 @@
     setZoomSettings
   } from '$lib/states/camera.svelte';
 
-  const { workerApi } = $props();
+  const { getScanner } = $props();
 
   const CAMERA_SETTINGS = {
     width: { ideal: 1280 },
@@ -201,7 +201,7 @@
       processingFrame = true;
       try {
         const bitmap = await createImageBitmap(videoElement);
-        const result = await workerApi.detect(transfer(bitmap, [bitmap]));
+        const result = await getScanner().detect(transfer(bitmap, [bitmap]));
 
         if (result && setScanResult(result)) {
           console.log('🎯 Match found! Triggering success audio clip:', scanResultState.result);

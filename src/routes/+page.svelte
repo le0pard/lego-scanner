@@ -17,8 +17,10 @@
   let workerLoaded = $state(false);
   let errorMessage = $state('');
 
-  let worker = $state(null);
-  let workerApi = $state(null);
+  let worker = null;
+  let workerApi = null;
+
+  const getScanner = () => workerApi;
 
   onMount(async () => {
     if (!browser) return;
@@ -64,9 +66,9 @@
         <WorkerLoading />
       {:else}
         {#if uploadTabState()}
-          <Upload {workerApi} />
+          <Upload {getScanner} />
         {:else}
-          <Camera {workerApi} />
+          <Camera {getScanner} />
         {/if}
       {/if}
     </div>

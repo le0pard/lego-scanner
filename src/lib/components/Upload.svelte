@@ -4,18 +4,19 @@
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { setScanResult } from '$lib/states/scanResult.svelte';
 
-  const { workerApi } = $props();
+  const { getScanner } = $props();
 
   const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
+
   let isProcessing = $state(false);
-  let isDragging = $state(false); // Track drag hover state
+  let isDragging = $state(false);
 
   const processFile = async (file) => {
     isProcessing = true;
 
     try {
-      // Load image into memory to get original dimensions
+      // 1. Load image into memory
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
       await new Promise((resolve, reject) => {
@@ -25,43 +26,65 @@
       });
       URL.revokeObjectURL(objectUrl);
 
-      // Increased Max Dimension to 2048 to preserve barcode dot density
-      const MAX_DIM = 2048;
-      let { width, height } = img;
+      // 2. Define our Multi-Pass Strategy
+      // The engine will try these one by one. WASM is so fast you won't even notice the loop.
+      const scanPasses = [
+        { dim: 1024, filter: 'none', name: 'Standard (1024px)' },
+        { dim: 2048, filter: 'none', name: 'High-Res (2048px)' },
+        { dim: 800, filter: 'grayscale(100%) contrast(200%)', name: 'High Contrast' },
+        // THE LEGO FIX: A 1px blur physically smudges the inkjet dots together,
+        // and 300% contrast hardens the smudge into solid black barcode squares.
+        { dim: 800, filter: 'blur(1px) grayscale(100%) contrast(300%)', name: 'Dot-Smudge Filter' }
+      ];
 
-      if (width > MAX_DIM || height > MAX_DIM) {
-        const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
+      let result = null;
+
+      console.group('🔍 Scanner Debug Info');
+
+      for (const pass of scanPasses) {
+        console.log(`Trying pass: ${pass.name}...`);
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > pass.dim || height > pass.dim) {
+          const ratio = Math.min(pass.dim / width, pass.dim / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.filter = pass.filter;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Generate bitmap for this specific pass
+        const bitmap = await createImageBitmap(canvas);
+
+        // Pass to WASM
+        result = await getScanner().detect(transfer(bitmap, [bitmap]));
+
+        if (result) {
+          console.log(`✅ Success on pass: ${pass.name} | Result: ${result}`);
+          break; // Stop looping! We found the barcode.
+        }
       }
 
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
+      console.groupEnd();
 
-      // COMPUTER VISION MAGIC:
-      // Force grayscale and massively boost contrast. This merges the individual
-      // printed inkjet dots into solid black squares, making it trivial for ZXing to read.
-      ctx.filter = 'grayscale(100%) contrast(200%)';
-
-      // Draw the filtered image
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Create the bitmap from our high-contrast canvas
-      const bitmap = await createImageBitmap(canvas);
-
-      // Send to worker
-      const result = await workerApi.detect(transfer(bitmap, [bitmap]));
-
+      // 3. Handle Final Result
       if (result) {
         if (setScanResult(result)) {
           successTick();
         }
       } else {
         errorTick();
-        console.warn('No Data Matrix found in the uploaded image.');
+        console.warn('❌ WASM Engine failed to read Data Matrix on all passes.');
       }
+
     } catch (err) {
       console.error('Failed to process image:', err);
       errorTick();
@@ -71,7 +94,7 @@
   };
 
   const handleFileInput = async (event) => {
-    const file = event.currentTarget.files?.[0];
+    const file = event.target.files?.[0];
     if (file) {
       await processFile(file);
       event.target.value = '';
