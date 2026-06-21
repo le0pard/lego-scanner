@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
+import { extractJsonFileName } from '$lib/utils/files.js';
 
 export const prerender = true;
 
@@ -21,8 +21,7 @@ export const GET = async ({ url }) => {
     const seriesManifest = {};
 
     for (const filePath in rawFiles) {
-      const filename = filePath.split('/').pop();
-      const name = filename.replace('.json', '');
+      const { filename, name } = extractJsonFileName(filePath);
 
       // Execute the import to get the raw text content
       const content = await rawFiles[filePath]();

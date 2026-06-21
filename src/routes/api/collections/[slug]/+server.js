@@ -1,8 +1,16 @@
 import { json, error } from '@sveltejs/kit';
+import { extractJsonFileName } from '$lib/utils/files.js';
 
 export const prerender = true;
 
 const jsonFiles = import.meta.glob('/src/lib/data/*.json');
+
+export const entries = async () => {
+  return Object.keys(jsonFiles).map((filePath) => {
+    const { name } = extractJsonFileName(filePath);
+    return { slug: name };
+  });
+};
 
 export const GET = async ({ params }) => {
   const { slug } = params;
