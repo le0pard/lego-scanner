@@ -32,23 +32,21 @@ export const GET = async ({ params }) => {
 
   try {
     const jsonData = await extractJsonFromPath(targetPath);
+    const { minifigures, ...rest } = jsonData;
 
-    const processedMinifigures = jsonData.minifigures.map((fig) => {
+    const processedMinifigures = minifigures.map((fig) => {
       const generatedSearchKeys = fig.identifiers.map((id) =>
         [id.code, id.factory, id.year].filter(Boolean).join('_')
       );
 
       return {
         ...fig,
+        ...rest,
         searchKeys: generatedSearchKeys
       };
     });
 
-    const responsePayload = {
-      minifigures: processedMinifigures
-    };
-
-    return json(responsePayload);
+    return json(processedMinifigures);
   } catch (err) {
     throw error(500, 'Error processing the JSON data.');
   }

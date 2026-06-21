@@ -32,9 +32,7 @@ const api = {
           const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`);
           if (!dataResponse.ok) continue;
 
-          const collectionData = await dataResponse.json();
-
-          const dbData = collectionData.minifigures;
+          const dbData = await dataResponse.json();
 
           // Save JSON data to IndexedDB
           await db.minifigures.bulkPut(dbData);
