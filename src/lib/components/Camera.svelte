@@ -40,6 +40,14 @@
 
   const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
+  const streamActiveTrack = () => {
+    if (stream) {
+      return stream.getVideoTracks()[0]
+    }
+
+    return null
+  }
+
   const evaluateCameraPermissions = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -68,7 +76,7 @@
       cameraSetList(devices.filter((device) => device.kind === 'videoinput'));
 
       if (stream && !cameraState.selectedCameraId) {
-        const activeTrack = stream.getVideoTracks()[0];
+        const activeTrack = streamActiveTrack();
         if (activeTrack) {
           const settings = activeTrack.getSettings();
           cameraSetDeviceId(settings.deviceId || null);
@@ -80,11 +88,11 @@
   };
 
   const updateFlashStatus = () => {
-    if (!stream) {
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) {
       return;
     }
 
-    const activeTrack = stream.getVideoTracks()[0];
     const settings = activeTrack.getSettings();
 
     if (!Object.hasOwn(settings, 'torch')) {
@@ -95,11 +103,11 @@
   };
 
   const updateZoomStatus = () => {
-    if (!stream) {
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) {
       return;
     }
 
-    const activeTrack = stream.getVideoTracks()[0];
     const capabilities = activeTrack.getCapabilities();
     const settings = activeTrack.getSettings();
 
@@ -229,13 +237,17 @@
 
   const handleTourchBtn = (e) => {
     e.preventDefault();
-    if (!stream || !cameraState.haveFlash) {
+
+    if (!cameraState.haveFlash) {
+      return;
+    }
+
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) {
       return;
     }
 
     toggleFlashState();
-
-    const activeTrack = stream.getVideoTracks()[0];
     activeTrack.applyConstraints({
       advanced: [
         {
@@ -246,7 +258,12 @@
   };
 
   const handleZoomChange = (e) => {
-    if (!stream || !cameraState.haveZoom) {
+    if (!cameraState.haveZoom) {
+      return;
+    }
+
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) {
       return;
     }
 
@@ -255,7 +272,6 @@
       return;
     }
 
-    const activeTrack = stream.getVideoTracks()[0];
     activeTrack.applyConstraints({
       advanced: [{ zoom: zoomValue }]
     });
@@ -272,8 +288,8 @@
   });
 
   onDestroy(() => {
-    streamTeardown();
     cameraResetState();
+    streamTeardown();
   });
 </script>
 
