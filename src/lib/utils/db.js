@@ -1,11 +1,12 @@
 import Dexie from 'dexie';
 
+const DB_VERSION = 1;
+
 export const db = new Dexie('LegoScannerDB');
 
-// Declare local IndexedDB store. We index elementId for instant scanning lookups
-db.version(1).stores({
-  minifigs: 'id, series',
-  syncMeta: 'key'
+db.version(DB_VERSION).stores({
+  minifigures: '++id, series, *searchKeys',
+  syncMeta: '&series'
 });
 
 export async function syncDatabase() {
@@ -19,7 +20,7 @@ export async function syncDatabase() {
     const data = await response.json();
 
     // Bulk put handles upserts gracefully (updates match, adds new rows)
-    await db.minifigs.bulkPut(data.figures);
+    await db.minifigures.bulkPut(data.figures);
     console.log('IndexedDB synchronized with cloud master file.');
     return true;
   } catch (error) {

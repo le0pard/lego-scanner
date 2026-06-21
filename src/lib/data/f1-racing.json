@@ -1,0 +1,24 @@
+{
+  "series": "f1-racing",
+  "displayName": "Formula 1 Race Cars",
+  "releaseYear": 2025,
+  "minifigures": [
+    {
+      "id": "f1_ferrari",
+      "name": "Ferrari Driver & Car",
+      "imagePath": "/assets/images/f1-racing/ferrari-driver.webp",
+      "identifiers": [
+        {
+          "code": "6538305",
+          "factory": "R",
+          "year": "5"
+        },
+        {
+          "code": "6538306",
+          "factory": "S",
+          "year": "5"
+        }
+      ]
+    }
+  ]
+}
