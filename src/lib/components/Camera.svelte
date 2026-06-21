@@ -3,8 +3,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { transfer } from 'comlink';
-  import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { setScanResult, resetScanResult } from '$lib/states/scanResult.svelte';
+  import { setScanResult, resetScanState } from '$lib/states/scanResult.svelte';
 
   import {
     cameraState,
@@ -18,7 +17,7 @@
     cameraSetDeviceId,
     cameraResetDeviceId,
     resetCameraCapabilities,
-    cameraResetState,
+    resetCameraState,
     supportFlashState,
     toggleFlashState,
     setZoomSettings
@@ -109,7 +108,7 @@
     const capabilities = activeTrack.getCapabilities();
 
     if (!Object.hasOwn(capabilities, 'zoom')) {
-      return
+      return;
     }
 
     const settings = activeTrack.getSettings();
@@ -180,7 +179,7 @@
     updateCameraList();
     updateFlashStatus();
     updateZoomStatus();
-  }
+  };
 
   const startStreamInVideo = async () => {
     videoElement.srcObject = stream;
@@ -203,6 +202,7 @@
 
     if (!processingFrame && videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
       processingFrame = true;
+
       try {
         const bitmap = await createImageBitmap(videoElement);
         const result = await getScanner().detect(transfer(bitmap, [bitmap]));
@@ -291,8 +291,8 @@
   });
 
   onDestroy(() => {
-    cameraResetState();
-    resetScanResult();
+    resetCameraState();
+    resetScanState();
     streamTeardown();
   });
 </script>

@@ -1,39 +1,71 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Brand/Primary: Lego Yellow-Gold (Highly visible, organic contrast) */
+  /* Brand/Primary: Lego Yellow-Gold */
   --color-primary: oklch(0.82 0.17 85);
   --color-primary-hover: oklch(0.76 0.17 82);
   --color-primary-focus: oklch(0.82 0.17 85 / 0.25);
 
   /* Scanner feedback overlays */
-  --color-scanner-line: oklch(0.86 0.29 142); /* Vivid neon green */
+  --color-scanner-line: oklch(0.86 0.29 142);
 
   /* --- LIGHT MODE --- */
-  --color-card-bg: oklch(0.97 0.01 240); /* Soft off-white */
-  --color-app-bg: oklch(1 0 0); /* Clean white base */
-  --color-text-main: oklch(0.25 0.02 240); /* Deep charcoal readable text */
-  --color-text-muted: oklch(0.5 0.02 240); /* Secondary text */
-  --color-border: oklch(0.88 0.01 240); /* Subtle hairline dividers */
+  --color-card-bg: oklch(0.97 0.01 240);
+  --color-app-bg: oklch(1 0 0);
+  --color-text-main: oklch(0.25 0.02 240);
+  --color-text-muted: oklch(0.5 0.02 240);
+  --color-border: oklch(0.88 0.01 240);
 
-  /* Safe Area paddings built-in for iOS/Android PWA viewports */
+  /* --- STATUS & BADGE COLORS (Light) --- */
+  --color-success-bg: oklch(0.982 0.018 155.85);
+  --color-success-border: oklch(0.925 0.084 155.99);
+  --color-success-icon-bg: oklch(0.962 0.044 156.12);
+  --color-success-text: oklch(0.428 0.105 152.76);
+  --color-success-text-muted: oklch(0.511 0.121 151.32);
+
+  /* NEW: Error/Missing Colors (Light) */
+  --color-error-bg: oklch(0.971 0.013 17.38);
+  --color-error-border: oklch(0.879 0.058 17.83);
+  --color-error-icon-bg: oklch(0.936 0.032 17.72);
+  --color-error-text: oklch(0.441 0.137 28.58);
+  --color-error-text-muted: oklch(0.516 0.163 28.5);
+
+  /* --- BADGE COLORS --- */
+  --color-badge-bg: oklch(0.93 0.034 272.79);
+  --color-badge-text: oklch(0.363 0.143 285.5);
+
+  /* Safe Area paddings */
   --spacing-pwa-top: env(safe-area-inset-top, 16px);
   --spacing-pwa-bottom: env(safe-area-inset-bottom, 16px);
 }
 
-/* --- DARK MODE (Dynamic Attribute Override) --- */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 [data-theme='dark'] {
-  /* Retain identical Chroma and Hue, scale only Lightness for perfect contrast pairing */
   --color-primary: oklch(0.78 0.16 85);
   --color-primary-hover: oklch(0.72 0.16 82);
 
-  --color-card-bg: oklch(0.18 0.02 240); /* Deep Slate background */
-  --color-app-bg: oklch(0.12 0.02 240); /* Pitch canvas black */
-  --color-text-main: oklch(0.92 0.01 240); /* Soft crisp light text */
-  --color-text-muted: oklch(0.65 0.01 240); /* Readably dimmed metadata */
-  --color-border: oklch(0.26 0.02 240); /* Night-optimized borders */
+  --color-card-bg: oklch(0.18 0.02 240);
+  --color-app-bg: oklch(0.12 0.02 240);
+  --color-text-main: oklch(0.92 0.01 240);
+  --color-text-muted: oklch(0.65 0.01 240);
+  --color-border: oklch(0.26 0.02 240);
+
+  /* --- STATUS & BADGE COLORS (Dark) --- */
+  /* Using OKLCH to create deep, dark-mode-safe greens and indigos */
+  --color-success-bg: oklch(0.2 0.04 142);
+  --color-success-border: oklch(0.3 0.05 142);
+  --color-success-icon-bg: oklch(0.25 0.05 142);
+  --color-success-text: oklch(0.9 0.04 142);
+  --color-success-text-muted: oklch(0.8 0.04 142);
+  --color-error-bg: oklch(0.2 0.05 20);
+  --color-error-border: oklch(0.3 0.06 20);
+  --color-error-icon-bg: oklch(0.25 0.06 20);
+  --color-error-text: oklch(0.9 0.04 20);
+  --color-error-text-muted: oklch(0.8 0.05 20);
+
+  --color-badge-bg: oklch(0.25 0.04 260);
+  --color-badge-text: oklch(0.9 0.04 260);
 }
 
 @layer base {

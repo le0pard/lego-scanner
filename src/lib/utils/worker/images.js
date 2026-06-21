@@ -14,7 +14,7 @@ const imageDownscaleProcessing = async (baseBmp) => {
   const canvas = new OffscreenCanvas(targetWidth, targetHeight);
   const ctx = canvas.getContext('2d');
 
-  if (!ctx) throw new Error("Could not get 2D context");
+  if (!ctx) throw new Error('Could not get 2D context');
 
   ctx.drawImage(baseBmp, 0, 0, targetWidth, targetHeight);
 
@@ -48,7 +48,7 @@ const imageHighContrastProcessing = async (baseBmp) => {
   const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
   const ctx = canvas.getContext('2d');
 
-  if (!ctx) throw new Error("Could not get 2D context");
+  if (!ctx) throw new Error('Could not get 2D context');
 
   ctx.filter = 'grayscale(100%) contrast(250%)';
 
@@ -58,8 +58,14 @@ const imageHighContrastProcessing = async (baseBmp) => {
 
   ctx.drawImage(
     baseBmp,
-    sourceX, sourceY, canvasWidth, canvasHeight, // Source clipping coordinates
-    0, 0, canvasWidth, canvasHeight              // Destination canvas coordinates
+    sourceX,
+    sourceY,
+    canvasWidth,
+    canvasHeight, // Source clipping coordinates
+    0,
+    0,
+    canvasWidth,
+    canvasHeight // Destination canvas coordinates
   );
 
   return await createImageBitmap(canvas);

@@ -2,19 +2,18 @@
   import { onDestroy } from 'svelte';
   import classnames from 'classnames';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { setScanResult, setScanError, resetScanResult } from '$lib/states/scanResult.svelte';
+  import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte';
 
   const { getScanner } = $props();
 
-  const {
-    warning: warningTick
-  } = useTiks({ theme: 'crisp', volume: 1.0 });
+  const { warning: warningTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
   let isProcessing = $state(false);
   let isDragging = $state(false);
 
   const processFile = async (file) => {
     isProcessing = true;
+    resetScanState();
 
     try {
       const result = await getScanner().detectFromFile(file);
@@ -70,8 +69,8 @@
   };
 
   onDestroy(() => {
-    resetScanResult();
-  })
+    resetScanState();
+  });
 </script>
 
 <label

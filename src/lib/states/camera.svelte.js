@@ -1,4 +1,4 @@
-const INITIAL_VALUE = {
+const INITIAL_STATE = {
   // Permission Tracking: 'checking' | 'prompt' | 'granted' | 'denied' | 'no-camera'
   permission: 'checking',
   ready: false,
@@ -16,7 +16,7 @@ const INITIAL_VALUE = {
   errorMessage: ''
 };
 
-export const cameraState = $state(INITIAL_VALUE);
+export const cameraState = $state(INITIAL_STATE);
 
 export const noCameraPermission = (errorMessage) => {
   cameraState.permission = 'no-camera';
@@ -60,8 +60,8 @@ export const resetCameraCapabilities = () => {
   cameraState.haveFlash = false;
   cameraState.isFlashOn = false;
 };
-export const cameraResetState = () => {
-  Object.keys(INITIAL_VALUE).forEach((key) => {
-    cameraState[key] = INITIAL_VALUE[key];
+export const resetCameraState = () => {
+  Object.keys(INITIAL_STATE).forEach((key) => {
+    cameraState[key] = INITIAL_STATE[key];
   });
 };

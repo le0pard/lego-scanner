@@ -1,6 +1,6 @@
 import { expose } from 'comlink';
 import { BarcodeDetector, ZXING_WASM_VERSION, prepareZXingModule } from 'barcode-detector';
-import { imageProcessingPipeline } from '$lib/utils/worker/images'
+import { imageProcessingPipeline } from '$lib/utils/worker/images';
 
 let detector = null;
 
