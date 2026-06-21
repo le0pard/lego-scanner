@@ -15,11 +15,40 @@
     isProcessing = true;
 
     try {
-      const bitmap = await createImageBitmap(file);
+      // Get original image dimensions using a temporary Image object
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = objectUrl;
+      });
+      URL.revokeObjectURL(objectUrl);
+
+      // Calculate downscaled dimensions (max 1024px) to prevent WASM overload
+      const MAX_DIM = 1024;
+      let { width, height } = img;
+
+      if (width > MAX_DIM || height > MAX_DIM) {
+        const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      // Create the ImageBitmap using the new scaled dimensions
+      const bitmap = await createImageBitmap(file, {
+        resizeWidth: width,
+        resizeHeight: height,
+        resizeQuality: 'medium' // 'medium' balances speed and sharpness
+      });
+
+      // Send to worker
       const result = await workerApi.detect(transfer(bitmap, [bitmap]));
 
-      if (result && setScanResult(result)) {
-        successTick();
+      if (result) {
+        if (setScanResult(result)) {
+          successTick();
+        }
       } else {
         errorTick();
         console.warn('No Data Matrix found in the uploaded image.');
