@@ -1,5 +1,6 @@
 <script>
   import { onDestroy } from 'svelte';
+  import classNames from 'classnames';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte';
 
@@ -75,11 +76,15 @@
   ondragleave={handleDragLeave}
   ondragover={handleDragOver}
   ondrop={handleDrop}
-  class="w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed shadow-lg rounded-2xl p-6 text-center transition-all duration-200 group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent
-    {isProcessing ? 'cursor-wait opacity-70' : 'cursor-pointer'}
-    {isDragging
-    ? 'border-primary bg-primary/5 scale-[0.98]'
-    : 'border-border bg-card-bg hover:border-primary'}"
+  class={classNames(
+    'w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed shadow-lg rounded-2xl p-6 text-center transition-all duration-200 group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent',
+    {
+      'cursor-wait opacity-70': isProcessing,
+      'cursor-pointer': !isProcessing,
+      'border-primary bg-primary/5 scale-[0.98]': isDragging,
+      'border-border bg-card-bg hover:border-primary': !isDragging
+    }
+  )}
 >
   <input
     type="file"
@@ -101,14 +106,16 @@
     <p class="text-xs text-text-muted mt-1">Scanning for Data Matrix codes</p>
   {:else}
     <div
-      class="p-4 rounded-full border mb-4 transition-transform duration-200 {isDragging
-        ? 'bg-primary/20 border-primary/50 scale-110'
-        : 'bg-app-bg border-border group-hover:scale-105'}"
+      class={classNames('p-4 rounded-full border mb-4 transition-transform duration-200', {
+        'bg-primary/20 border-primary/50 scale-110': isDragging,
+        'bg-app-bg border-border group-hover:scale-105': !isDragging
+      })}
     >
       <svg
-        class="w-8 h-8 transition-colors {isDragging
-          ? 'text-primary'
-          : 'text-text-muted group-hover:text-primary'}"
+        class={classNames('w-8 h-8 transition-colors', {
+          'text-primary': isDragging,
+          'text-text-muted group-hover:text-primary': !isDragging
+        })}
         fill="none"
         stroke="currentColor"
         stroke-width="2"
@@ -121,7 +128,12 @@
         />
       </svg>
     </div>
-    <p class="text-sm font-bold {isDragging ? 'text-primary' : 'text-text-main'}">
+    <p
+      class={classNames('text-sm font-bold', {
+        'text-primary': isDragging,
+        'text-text-main': !isDragging
+      })}
+    >
       {isDragging ? 'Release to Scan' : 'Drop Lego image here'}
     </p>
     <p class="text-xs text-text-muted mt-1">Supports PNG, JPG up to 10MB</p>

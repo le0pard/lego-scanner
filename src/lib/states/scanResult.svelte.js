@@ -1,9 +1,9 @@
-const INITIAL_STATE = {
+const createInitialState = () => ({
   result: null,
   errorMessage: ''
-};
+});
 
-export const scanResultState = $state(INITIAL_STATE);
+export const scanResultState = $state(createInitialState());
 
 export const setScanResult = (result) => {
   if (scanResultState.result === result) {
@@ -21,7 +21,8 @@ export const setScanError = (errorMessage) => {
 };
 
 export const resetScanState = () => {
-  Object.keys(INITIAL_STATE).forEach((key) => {
-    scanResultState[key] = INITIAL_STATE[key];
+  const freshState = createInitialState();
+  Object.keys(freshState).forEach((key) => {
+    scanResultState[key] = freshState[key];
   });
 };

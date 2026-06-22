@@ -1,73 +1,89 @@
+/* src/routes/css/theme.css */
 @import 'tailwindcss';
 
 @theme {
-  /* Brand/Primary: Lego Yellow-Gold */
-  --color-primary: oklch(0.82 0.17 85);
-  --color-primary-hover: oklch(0.76 0.17 82);
-  --color-primary-focus: oklch(0.82 0.17 85 / 0.25);
+  /* ==========================================================================
+     BRAND ACCENTS & INTERACTIVE SYSTEM TOKENS
+     ========================================================================== */
+  /* Brand/Primary: High-Chroma, Energetic Lego Yellow-Gold */
+  --color-primary: oklch(0.85 0.15 90);
+  --color-primary-hover: oklch(0.79 0.15 87);
+  --color-primary-focus: oklch(0.85 0.15 90 / 0.25);
 
-  /* Scanner feedback overlays */
-  --color-scanner-line: oklch(0.86 0.29 142);
+  /* Real-time laser reticle feedback overlay indicator */
+  --color-scanner-line: oklch(0.75 0.25 142);
 
-  /* --- LIGHT MODE --- */
-  --color-card-bg: oklch(0.97 0.01 240);
-  --color-app-bg: oklch(1 0 0);
-  --color-text-main: oklch(0.25 0.02 240);
-  --color-text-muted: oklch(0.5 0.02 240);
-  --color-border: oklch(0.88 0.01 240);
+  /* ==========================================================================
+     GLOBAL LIGHT MODE PALETTE (Refined Porcelain Slate)
+     ========================================================================== */
+  --color-app-bg: oklch(0.98 0.005 240); /* Soft off-white canvas backdrop */
+  --color-card-bg: oklch(1 0 0); /* Pure crisp white surface card elements */
+  --color-text-main: oklch(0.2 0.015 240); /* High-legibility obsidian body text */
+  --color-text-muted: oklch(0.48 0.02 240); /* Refined secondary contextual descriptions */
+  --color-border: oklch(0.92 0.01 240); /* Subtle bounding divider lines */
 
-  /* --- STATUS & BADGE COLORS (Light) --- */
-  --color-success-bg: oklch(0.982 0.018 155.85);
-  --color-success-border: oklch(0.925 0.084 155.99);
-  --color-success-icon-bg: oklch(0.962 0.044 156.12);
-  --color-success-text: oklch(0.428 0.105 152.76);
-  --color-success-text-muted: oklch(0.511 0.121 151.32);
+  /* --- STATUS PLATES (Light Mode) --- */
+  /* Safe/Verified State (Mint Emerald) */
+  --color-success-bg: oklch(0.95 0.04 145);
+  --color-success-border: oklch(0.84 0.07 145);
+  --color-success-icon-bg: oklch(0.9 0.05 145);
+  --color-success-text: oklch(0.28 0.08 145);
+  --color-success-text-muted: oklch(0.4 0.07 145);
 
-  /* NEW: Error/Missing Colors (Light) */
-  --color-error-bg: oklch(0.971 0.013 17.38);
-  --color-error-border: oklch(0.879 0.058 17.83);
-  --color-error-icon-bg: oklch(0.936 0.032 17.72);
-  --color-error-text: oklch(0.441 0.137 28.58);
-  --color-error-text-muted: oklch(0.516 0.163 28.5);
+  /* Action Deferred / Error Warning State (Crimson Rose) */
+  --color-error-bg: oklch(0.96 0.03 25);
+  --color-error-border: oklch(0.86 0.07 25);
+  --color-error-icon-bg: oklch(0.92 0.05 25);
+  --color-error-text: oklch(0.32 0.11 25);
+  --color-error-text-muted: oklch(0.44 0.09 25);
 
-  /* --- BADGE COLORS --- */
-  --color-badge-bg: oklch(0.93 0.034 272.79);
-  --color-badge-text: oklch(0.363 0.143 285.5);
+  /* Generic Informational Utility Badges (Cool Indigo Accent) */
+  --color-badge-bg: oklch(0.93 0.02 260);
+  --color-badge-text: oklch(0.32 0.07 260);
 
-  /* Safe Area paddings */
+  /* PWA System Safe Area Layout Paddings */
   --spacing-pwa-top: env(safe-area-inset-top, 16px);
   --spacing-pwa-bottom: env(safe-area-inset-bottom, 16px);
 }
 
+/* ==========================================================================
+   GLOBAL DARK MODE EXTENSIONS (High-Contrast Obsidian Carbon Slate)
+   ========================================================================== */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 [data-theme='dark'] {
-  --color-primary: oklch(0.78 0.16 85);
-  --color-primary-hover: oklch(0.72 0.16 82);
+  --color-primary: oklch(0.85 0.15 90);
+  --color-primary-hover: oklch(0.79 0.15 87);
 
-  --color-card-bg: oklch(0.18 0.02 240);
-  --color-app-bg: oklch(0.12 0.02 240);
-  --color-text-main: oklch(0.92 0.01 240);
-  --color-text-muted: oklch(0.65 0.01 240);
-  --color-border: oklch(0.26 0.02 240);
+  --color-app-bg: oklch(0.12 0.01 240); /* Deep charcoal canvas foundation */
+  --color-card-bg: oklch(0.17 0.015 240); /* Elevated lighter surface card structures */
+  --color-text-main: oklch(0.95 0.005 240); /* Soft high-contrast light grey readable text */
+  --color-text-muted: oklch(0.68 0.01 240); /* Clean auxiliary support text */
+  --color-border: oklch(0.25 0.015 240); /* Deep clean layout bounding boundaries */
 
-  /* --- STATUS & BADGE COLORS (Dark) --- */
-  /* Using OKLCH to create deep, dark-mode-safe greens and indigos */
-  --color-success-bg: oklch(0.2 0.04 142);
-  --color-success-border: oklch(0.3 0.05 142);
-  --color-success-icon-bg: oklch(0.25 0.05 142);
-  --color-success-text: oklch(0.9 0.04 142);
-  --color-success-text-muted: oklch(0.8 0.04 142);
-  --color-error-bg: oklch(0.2 0.05 20);
-  --color-error-border: oklch(0.3 0.06 20);
-  --color-error-icon-bg: oklch(0.25 0.06 20);
-  --color-error-text: oklch(0.9 0.04 20);
-  --color-error-text-muted: oklch(0.8 0.05 20);
+  /* --- STATUS PLATES (Dark Mode: Radiant Neon Overlays) --- */
+  /* Safe/Verified State (Electric Glowing Mint) */
+  --color-success-bg: oklch(0.18 0.04 145);
+  --color-success-border: oklch(0.32 0.08 145);
+  --color-success-icon-bg: oklch(0.24 0.06 145);
+  --color-success-text: oklch(0.9 0.14 145); /* Vivid glowing green text */
+  --color-success-text-muted: oklch(0.8 0.09 145); /* Clean readable secondary green text */
 
-  --color-badge-bg: oklch(0.25 0.04 260);
-  --color-badge-text: oklch(0.9 0.04 260);
+  /* Action Deferred / Error Warning State (Radiant Deep Coral Red) */
+  --color-error-bg: oklch(0.18 0.04 25);
+  --color-error-border: oklch(0.32 0.08 25);
+  --color-error-icon-bg: oklch(0.24 0.06 25);
+  --color-error-text: oklch(0.92 0.12 25); /* Vivid glowing red/coral text */
+  --color-error-text-muted: oklch(0.82 0.09 25);
+
+  /* Generic Informational Utility Badges (Bright Indigo Pill) */
+  --color-badge-bg: oklch(0.24 0.03 260);
+  --color-badge-text: oklch(0.88 0.05 260);
 }
 
+/* ==========================================================================
+   BASE ELEMENT RENDERING ENGINE CONFIGURATION
+   ========================================================================== */
 @layer base {
   body {
     background-color: var(--color-app-bg);
@@ -86,35 +102,5 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-5);
-    box-shadow: var(--shadow-md);
-  }
-
-  /* Unified mobile-first inputs */
-  input[type='text'],
-  input[type='number'],
-  select {
-    background-color: var(--color-app-bg);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-main);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-3) var(--spacing-4);
-    width: 100%;
-    outline: none;
-
-    &:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 4px var(--color-primary-focus);
-    }
-  }
-}
-
-@layer utilities {
-  .select-arrow {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a89984' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
-    padding-right: 2.25rem;
   }
 }

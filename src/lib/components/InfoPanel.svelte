@@ -1,4 +1,5 @@
 <script>
+  import classNames from 'classnames';
   import { syncState } from '$lib/states/sync.svelte.js';
   import { updateState, reloadApp } from '$lib/states/update.svelte.js';
 
@@ -17,7 +18,7 @@
   };
 </script>
 
-<div class="h-full flex flex-col justify-between gap-6">
+<div class="h-full flex flex-col justify-between gap-6 p-2 md:p-4">
   <div class="flex flex-col gap-1">
     <div class="flex justify-between items-start">
       <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
@@ -67,13 +68,15 @@
       </div>
 
       <span
-        class="font-mono text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border
-        {syncState.status === 'syncing' ? 'bg-primary/10 text-primary border-primary/20' : ''}
-        {syncState.status === 'synced' || syncState.status === 'idle'
-          ? 'bg-success-bg text-success-text border-success-border'
-          : ''}
-        {syncState.status === 'error' ? 'bg-error-bg text-error-text border-error-border' : ''}
-      "
+        class={classNames(
+          'font-mono text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border',
+          {
+            'bg-primary/10 text-primary border-primary/20': syncState.status === 'syncing',
+            'bg-success-bg text-success-text border-success-border':
+              syncState.status === 'synced' || syncState.status === 'idle',
+            'bg-error-bg text-error-text border-error-border': syncState.status === 'error'
+          }
+        )}
       >
         {syncState.status}
       </span>

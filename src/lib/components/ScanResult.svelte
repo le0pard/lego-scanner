@@ -6,25 +6,15 @@
 </script>
 
 {#if searchCompleted}
-  <div class="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
+  <div
+    class="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-2 duration-300 p-2 md:p-4"
+  >
     {#if minifig}
       <div
         class="bg-success-bg border border-success-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
       >
-        <div class="bg-success-icon-bg text-success-text p-2 rounded-xl shrink-0 z-10">
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+        <div class="bg-success-icon-bg text-success-text flex p-2 rounded-xl shrink-0 z-10">
+          <i class="iconify lucide--circle-check size-6"></i>
         </div>
         <div class="z-10">
           <h3 class="text-success-text font-bold text-lg leading-tight">Match Found!</h3>
@@ -35,10 +25,10 @@
       </div>
 
       <div
-        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex gap-5 items-center relative"
+        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex flex-col gap-5 items-center relative"
       >
         <div
-          class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
+          class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
         >
           <img
             src={minifig.imagePath}
@@ -62,20 +52,8 @@
       <div
         class="bg-error-bg border border-error-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
       >
-        <div class="bg-error-icon-bg text-error-text p-2 rounded-xl shrink-0 z-10">
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
+        <div class="bg-error-icon-bg text-error-text flex p-2 rounded-xl shrink-0 z-10">
+          <i class="iconify lucide--x size-6"></i>
         </div>
         <div class="z-10">
           <h3 class="text-error-text font-bold text-lg leading-tight">Code Not in Database</h3>
@@ -89,7 +67,7 @@
         class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex gap-5 items-center relative"
       >
         <div
-          class="w-28 h-28 sm:w-32 sm:h-32 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
+          class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
         >
           <svg
             class="w-12 h-12 text-text-muted opacity-50"

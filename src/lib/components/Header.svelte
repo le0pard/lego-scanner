@@ -1,4 +1,5 @@
 <script>
+  import classNames from 'classnames';
   import {
     cameraTabState,
     uploadTabState,
@@ -14,15 +15,19 @@
     <p class="text-[10px] sm:text-xs text-text-muted truncate">Barcode & Minifig</p>
   </div>
 
-  <div class="flex shrink-0 p-1 bg-card-bg/50 border border-border rounded-lg" role="tablist">
+  <!-- Solid Filled High-Contrast Tab Segment Controller -->
+  <div class="flex shrink-0 p-1 bg-card-bg border border-border rounded-xl" role="tablist">
     <button
       role="tab"
       aria-selected={cameraTabState()}
       onclick={activateCameraTabState}
-      class="px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98
-        {cameraTabState()
-        ? 'bg-app-bg text-primary shadow-sm border border-border/50'
-        : 'border border-transparent text-text-muted hover:text-text-main'}"
+      class={classNames(
+        'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+        {
+          'bg-primary text-neutral-950 shadow-sm': cameraTabState(),
+          'text-text-muted hover:text-text-main': !cameraTabState()
+        }
+      )}
     >
       Camera
     </button>
@@ -30,10 +35,13 @@
       role="tab"
       aria-selected={uploadTabState()}
       onclick={activateUploadTabState}
-      class="px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98
-        {uploadTabState()
-        ? 'bg-app-bg text-primary shadow-sm border border-border/50'
-        : 'border border-transparent text-text-muted hover:text-text-main'}"
+      class={classNames(
+        'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+        {
+          'bg-primary text-neutral-950 shadow-sm': uploadTabState(),
+          'text-text-muted hover:text-text-main': !uploadTabState()
+        }
+      )}
     >
       Upload
     </button>
@@ -48,26 +56,31 @@
       class="relative z-50 w-8 h-8 cursor-pointer flex flex-col justify-center items-end gap-1.5 p-1"
     >
       <span
-        class="block w-6 h-0.5 bg-text-main transition-transform duration-300 {isMenuOpen()
-          ? 'rotate-45 translate-y-2'
-          : ''}"
+        class={classNames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
+          'rotate-45 translate-y-2': isMenuOpen()
+        })}
       ></span>
       <span
-        class="block w-6 h-0.5 bg-text-main transition-opacity duration-300 {isMenuOpen()
-          ? 'opacity-0'
-          : ''}"
+        class={classNames('block w-6 h-0.5 bg-text-main transition-opacity duration-300', {
+          'opacity-0': isMenuOpen()
+        })}
       ></span>
       <span
-        class="block w-6 h-0.5 bg-text-main transition-transform duration-300 {isMenuOpen()
-          ? '-rotate-45 -translate-y-2'
-          : ''}"
+        class={classNames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
+          '-rotate-45 -translate-y-2': isMenuOpen()
+        })}
       ></span>
     </button>
 
     <div
       id="mobile-menu"
-      class="absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain
-        {isMenuOpen() ? 'translate-x-0' : '-translate-x-full'}"
+      class={classNames(
+        'absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain',
+        {
+          'translate-x-0': isMenuOpen(),
+          'translate-x-full': !isMenuOpen()
+        }
+      )}
     >
       <ul class="flex flex-col gap-4 text-lg font-bold">
         <li>

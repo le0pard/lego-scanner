@@ -1,5 +1,6 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
+  import classNames from 'classnames';
   import { browser } from '$app/environment';
   import { transfer } from 'comlink';
   import { setScanResult, resetScanState } from '$lib/states/scanResult.svelte';
@@ -9,7 +10,7 @@
     needCameraPermission,
     grantedCameraPermission,
     deniedCameraPermission,
-    cameraReasyState,
+    cameraReadyState,
     cameraUnreadyState,
     cameraSetList,
     cameraSetDeviceId,
@@ -137,26 +138,24 @@
         }
       }
     }
-
-    if (videoElement && stream) {
-      await startStreamInVideo();
-    }
   };
+
+  $effect(() => {
+    if (videoElement && stream) {
+      videoElement.srcObject = stream;
+      videoElement.onloadedmetadata = () => {
+        initCameraCapabilities();
+        cameraReadyState();
+        requestAnimationFrame(processingLoop);
+      };
+      videoElement.play().catch((err) => console.warn('Video interaction context deferred:', err));
+    }
+  });
 
   const initCameraCapabilities = () => {
     updateCameraList();
     updateFlashStatus();
     updateZoomStatus();
-  };
-
-  const startStreamInVideo = async () => {
-    videoElement.srcObject = stream;
-    videoElement.onloadedmetadata = () => {
-      initCameraCapabilities();
-      cameraReasyState();
-      requestAnimationFrame(processingLoop);
-    };
-    videoElement.play().catch((err) => console.warn('Video interaction context deferred:', err));
   };
 
   const processingLoop = async () => {
@@ -221,6 +220,7 @@
     const zoomValue = parseFloat(e.target.value);
     if (zoomValue < 0) return;
 
+    cameraState.zoom.value = zoomValue;
     activeTrack.applyConstraints({
       advanced: [{ zoom: zoomValue }]
     });
@@ -249,8 +249,12 @@
   >
     <div class="flex justify-between gap-2 m-1 min-h-10 z-20">
       <div
-        class="flex-1 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-lg transition-opacity"
-        class:hidden={!cameraState.haveZoom}
+        class={classNames(
+          'flex-1 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-lg transition-opacity',
+          {
+            hidden: !cameraState.haveZoom
+          }
+        )}
       >
         <i class="iconify lucide--minus size-4 text-neutral-400 shrink-0"></i>
         <input
@@ -267,15 +271,20 @@
 
       <button
         onclick={handleTorchBtn}
-        class="flex items-center justify-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 shrink-0"
+        class={classNames(
+          'flex items-center justify-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 shrink-0',
+          {
+            hidden: !cameraState.haveFlash
+          }
+        )}
         aria-label="Toggle Camera Flash"
         aria-pressed={cameraState.isFlashOn}
-        class:hidden={!cameraState.haveFlash}
       >
         <i
-          class="iconify lucide--zap w-5 h-5 transition-all {cameraState.isFlashOn
-            ? 'text-primary drop-shadow-[0_0_8px_var(--color-primary)]'
-            : 'text-neutral-400'}"
+          class={classNames('iconify lucide--zap w-5 h-5 transition-all', {
+            'text-primary drop-shadow-[0_0_8px_var(--color-primary)]': cameraState.isFlashOn,
+            'text-neutral-400': !cameraState.isFlashOn
+          })}
         ></i>
       </button>
     </div>
@@ -285,9 +294,8 @@
     >
       <video bind:this={videoElement} autoplay playsinline muted class="w-full h-full object-cover"
       ></video>
-
       <div
-        class="absolute w-40 h-40 border-3 border-dashed border-primary rounded-xl pointer-events-none z-10 before:content-[''] before:absolute before:-inset-[9999px] before:border-[9999px] before:border-black/50 before:rounded-none"
+        class="absolute size-40 border-3 border-dashed border-primary rounded-xl pointer-events-none z-10 shadow-[0_0_0_100vmax_rgba(0,0,0,0.5)]"
       ></div>
     </div>
 
