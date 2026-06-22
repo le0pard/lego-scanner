@@ -1,0 +1,65 @@
+<script>
+  import { scanResultState } from '$lib/states/scanResult.svelte';
+  import { useTiks } from '@rexa-developer/tiks/svelte';
+  import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
+  import { db } from '$lib/utils/db';
+  import ScanResult from './ScanResult.svelte';
+  import InfoPanel from './InfoPanel.svelte';
+  import ScanError from './ScanError.svelte';
+
+  const { success: successTick, error: errorTick } = useTiks({ theme: 'crisp', volume: 1.0 });
+
+  let minifig = $state(null);
+  let searchCompleted = $state(false);
+
+  $effect(() => {
+    if (scanResultState.result) {
+      const legoData = extractFieldsFromDataMatrix(scanResultState.result);
+      if (!legoData || !legoData.key) {
+        minifig = null;
+        errorTick();
+        searchCompleted = true;
+        return;
+      }
+
+      db.minifigures
+        .where({ searchKeys: legoData.key })
+        .first()
+        .then((found) => {
+          if (found) {
+            minifig = found;
+            successTick();
+          } else {
+            minifig = null;
+            errorTick();
+          }
+          searchCompleted = true;
+        })
+        .catch((err) => {
+          console.error('Database query failed:', err);
+          minifig = null;
+          errorTick();
+          searchCompleted = true;
+        });
+    } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
+      searchCompleted = false;
+      minifig = null;
+      errorTick();
+    } else {
+      searchCompleted = false;
+      minifig = null;
+    }
+  });
+</script>
+
+<article
+  class="mt-4 mb-0 landscape:mt-0 landscape:w-1/2 flex-1 min-h-70 landscape:min-h-0 landscape:h-fit flex flex-col justify-start"
+>
+  {#if scanResultState.errorMessage && scanResultState.errorMessage.length > 0}
+    <ScanError errorMessage={scanResultState.errorMessage} />
+  {:else if scanResultState.result}
+    <ScanResult {minifig} {searchCompleted} />
+  {:else}
+    <InfoPanel />
+  {/if}
+</article>

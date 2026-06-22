@@ -6,7 +6,7 @@
 
   import Camera from '$lib/components/Camera.svelte';
   import Header from '$lib/components/Header.svelte';
-  import ScanResult from '$lib/components/ScanResult.svelte';
+  import RightPanel from '$lib/components/RightPanel.svelte';
   import Upload from '$lib/components/Upload.svelte';
   import WorkerError from '$lib/components/WorkerError.svelte';
   import WorkerLoading from '$lib/components/WorkerLoading.svelte';
@@ -73,6 +73,6 @@
       {/if}
     </div>
 
-    <ScanResult />
+    <RightPanel />
   </div>
 </main>

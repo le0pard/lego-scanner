@@ -21,7 +21,7 @@
       if (result) {
         setScanResult(result);
       } else if (!result) {
-        setScanError('WASM Engine failed to read Data Matrix.');
+        setScanError('Failed to read Data Matrix');
       }
     } catch (err) {
       setScanError('Failed to process image');
