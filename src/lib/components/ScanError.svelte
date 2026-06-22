@@ -21,7 +21,7 @@
 
   <div class="flex-1 flex flex-col items-center justify-center text-center opacity-50 mb-6">
     <i class="iconify lucide--scan-line size-16 text-text-muted mb-4"></i>
-    <p class="text-text-muted font-medium max-w-[50">
+    <p class="text-text-muted font-medium max-w-50">
       Ensure the Data Matrix code is clearly visible and well-lit.
     </p>
   </div>
