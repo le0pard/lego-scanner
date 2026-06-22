@@ -1,10 +1,8 @@
 <script>
-  import classnames from 'classnames';
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { transfer } from 'comlink';
   import { setScanResult, resetScanState } from '$lib/states/scanResult.svelte';
-
   import {
     cameraState,
     noCameraPermission,
@@ -34,16 +32,9 @@
   let videoElement = $state(null);
   let stream = $state(null);
   let isCameraRequested = $state(false);
-
   let processingFrame = false;
 
-  const streamActiveTrack = () => {
-    if (stream) {
-      return stream.getVideoTracks()[0];
-    }
-
-    return null;
-  };
+  const streamActiveTrack = () => (stream ? stream.getVideoTracks()[0] : null);
 
   const evaluateCameraPermissions = async () => {
     try {
@@ -56,7 +47,6 @@
       }
 
       const needsPermission = videoDevices.every((camera) => !camera.label);
-
       if (needsPermission) {
         needCameraPermission();
       } else {
@@ -86,30 +76,18 @@
 
   const updateFlashStatus = () => {
     const activeTrack = streamActiveTrack();
-    if (!activeTrack) {
-      return;
-    }
-
+    if (!activeTrack) return;
     const settings = activeTrack.getSettings();
-
-    if (!Object.hasOwn(settings, 'torch')) {
-      return;
-    }
-
+    if (!Object.hasOwn(settings, 'torch')) return;
     supportFlashState();
   };
 
   const updateZoomStatus = () => {
     const activeTrack = streamActiveTrack();
-    if (!activeTrack) {
-      return;
-    }
+    if (!activeTrack) return;
 
     const capabilities = activeTrack.getCapabilities();
-
-    if (!Object.hasOwn(capabilities, 'zoom')) {
-      return;
-    }
+    if (!Object.hasOwn(capabilities, 'zoom')) return;
 
     const settings = activeTrack.getSettings();
     setZoomSettings({
@@ -122,17 +100,13 @@
 
   const startCamera = async (explicitDeviceId = null) => {
     isCameraRequested = true;
-
     streamTeardown();
     resetCameraCapabilities();
 
     if (explicitDeviceId) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            ...CAMERA_SETTINGS,
-            deviceId: { exact: explicitDeviceId }
-          },
+          video: { ...CAMERA_SETTINGS, deviceId: { exact: explicitDeviceId } },
           audio: false
         });
         cameraSetDeviceId(explicitDeviceId);
@@ -144,19 +118,13 @@
     if (!cameraState.selectedCameraId) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            ...CAMERA_SETTINGS,
-            facingMode: { exact: 'environment' }
-          },
+          video: { ...CAMERA_SETTINGS, facingMode: { exact: 'environment' } },
           audio: false
         });
       } catch {
         try {
           stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              ...CAMERA_SETTINGS,
-              facingMode: 'environment'
-            },
+            video: { ...CAMERA_SETTINGS, facingMode: 'environment' },
             audio: false
           });
         } catch {
@@ -188,13 +156,11 @@
       cameraReasyState();
       requestAnimationFrame(processingLoop);
     };
-
-    videoElement.play().catch((err) => console.warn('Video waiting on interaction context:', err));
+    videoElement.play().catch((err) => console.warn('Video interaction context deferred:', err));
   };
 
   const processingLoop = async () => {
     if (!cameraState.ready || !videoElement) return;
-
     if (videoElement.paused || videoElement.ended) {
       requestAnimationFrame(processingLoop);
       return;
@@ -202,16 +168,14 @@
 
     if (!processingFrame && videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
       processingFrame = true;
-
       try {
         const bitmap = await createImageBitmap(videoElement);
         const result = await getScanner().detect(transfer(bitmap, [bitmap]));
-
         if (result) {
           setScanResult(result);
         }
       } catch {
-        // Silent frame skip
+        // Drop standard frame processing errors silently
       } finally {
         processingFrame = false;
       }
@@ -228,9 +192,7 @@
 
   const handleCameraChange = (e) => {
     const targetId = e.currentTarget?.value;
-    if (targetId) {
-      startCamera(targetId);
-    }
+    if (targetId) startCamera(targetId);
   };
 
   const handleCameraRequestBtn = (e) => {
@@ -238,42 +200,26 @@
     startCamera();
   };
 
-  const handleTourchBtn = (e) => {
+  const handleTorchBtn = (e) => {
     e.preventDefault();
-
-    if (!cameraState.haveFlash) {
-      return;
-    }
+    if (!cameraState.haveFlash) return;
 
     const activeTrack = streamActiveTrack();
-    if (!activeTrack) {
-      return;
-    }
+    if (!activeTrack) return;
 
     toggleFlashState();
     activeTrack.applyConstraints({
-      advanced: [
-        {
-          torch: cameraState.isFlashOn
-        }
-      ]
+      advanced: [{ torch: cameraState.isFlashOn }]
     });
   };
 
   const handleZoomChange = (e) => {
-    if (!cameraState.haveZoom) {
-      return;
-    }
-
+    if (!cameraState.haveZoom) return;
     const activeTrack = streamActiveTrack();
-    if (!activeTrack) {
-      return;
-    }
+    if (!activeTrack) return;
 
     const zoomValue = parseFloat(e.target.value);
-    if (zoomValue < 0) {
-      return;
-    }
+    if (zoomValue < 0) return;
 
     activeTrack.applyConstraints({
       advanced: [{ zoom: zoomValue }]
@@ -282,11 +228,10 @@
 
   onMount(async () => {
     if (!browser) return;
-
     try {
       await evaluateCameraPermissions();
     } catch (err) {
-      deniedCameraPermission(err.message || 'Failed to boot scanner engine.');
+      deniedCameraPermission(err.message || 'Failed to initialize permission sub-layer.');
     }
   });
 
@@ -302,7 +247,7 @@
     id="workspace-camera"
     class="flex flex-col w-full aspect-square relative overflow-hidden rounded-2xl bg-black border border-border shadow-lg"
   >
-    <div class="flex justify-between gap-2 m-1 min-h-10">
+    <div class="flex justify-between gap-2 m-1 min-h-10 z-20">
       <div
         class="flex-1 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-lg transition-opacity"
         class:hidden={!cameraState.haveZoom}
@@ -321,28 +266,33 @@
       </div>
 
       <button
-        onclick={handleTourchBtn}
+        onclick={handleTorchBtn}
         class="flex items-center justify-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 shrink-0"
         aria-label="Toggle Camera Flash"
         aria-pressed={cameraState.isFlashOn}
         class:hidden={!cameraState.haveFlash}
       >
         <i
-          class={classnames('iconify lucide--zap w-5 h-5 transition-all', {
-            'text-primary drop-shadow-[0_0_8px_var(--color-primary)]': cameraState.isFlashOn,
-            'text-neutral-400': !cameraState.isFlashOn
-          })}
+          class="iconify lucide--zap w-5 h-5 transition-all {cameraState.isFlashOn
+            ? 'text-primary drop-shadow-[0_0_8px_var(--color-primary)]'
+            : 'text-neutral-400'}"
         ></i>
       </button>
     </div>
 
-    <div class="viewport-box">
-      <video bind:this={videoElement} autoplay playsinline muted></video>
-      <div class="reticle"></div>
+    <div
+      class="absolute inset-0 w-full h-full bg-neutral-900 flex items-center justify-center overflow-hidden"
+    >
+      <video bind:this={videoElement} autoplay playsinline muted class="w-full h-full object-cover"
+      ></video>
+
+      <div
+        class="absolute w-40 h-40 border-3 border-dashed border-primary rounded-xl pointer-events-none z-10 before:content-[''] before:absolute before:-inset-[9999px] before:border-[9999px] before:border-black/50 before:rounded-none"
+      ></div>
     </div>
 
     <div
-      class="w-full relative bg-black/60 backdrop-blur-md rounded-xl border border-white/10 p-1 flex items-center gap-2"
+      class="w-[calc(100%-8px)] absolute bottom-1 left-1 bg-black/60 backdrop-blur-md rounded-xl border border-white/10 p-1 flex items-center gap-2 z-20"
     >
       <select
         class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0 select-arrow"
@@ -350,7 +300,7 @@
         onchange={handleCameraChange}
       >
         {#each cameraState.cameras as camera, index}
-          <option value={camera.deviceId}>
+          <option value={camera.deviceId} class="bg-neutral-900 text-white">
             {camera.label || `Camera ${index + 1}`}
           </option>
         {/each}
@@ -359,15 +309,15 @@
   </div>
 {:else}
   <div
-    class="w-full aspect-square flex flex-col items-center justify-center border border-border bg-card-bg shadow-lg rounded-2xl p-6 text-center"
+    class="w-full aspect-square flex flex-col items-center justify-center border border-border bg-card-bg shadow-lg rounded-2xl p-6 text-center gap-1"
   >
     <div
-      class="flex items-center justify-center p-4 bg-app-bg rounded-full border border-border mb-4"
+      class="flex items-center justify-center p-4 bg-app-bg rounded-full border border-border mb-3"
     >
       <i class="iconify lucide--camera size-8 text-text-muted"></i>
     </div>
-    <p class="text-sm font-bold text-text-main mb-1">Camera Access Required</p>
-    <p class="text-xs text-text-muted mb-6">
+    <p class="text-sm font-bold text-text-main">Camera Access Required</p>
+    <p class="text-xs text-text-muted mb-5 max-w-60">
       Tap below to allow device camera access for scanning.
     </p>
 
@@ -379,32 +329,3 @@
     </button>
   </div>
 {/if}
-
-<style>
-  .viewport-box {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: #1a1a1a;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #333;
-  }
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .reticle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 160px;
-    height: 160px;
-    border: 3px dashed #e1b12c;
-    border-radius: 6px;
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-  }
-</style>

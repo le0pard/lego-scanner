@@ -1,5 +1,4 @@
 <script>
-  import classnames from 'classnames';
   import {
     cameraTabState,
     uploadTabState,
@@ -20,13 +19,10 @@
       role="tab"
       aria-selected={cameraTabState()}
       onclick={activateCameraTabState}
-      class={classnames(
-        'px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98',
-        {
-          'bg-app-bg text-primary shadow-sm border border-border/50': cameraTabState(),
-          'text-text-muted border border-transparent hover:text-text-main': !cameraTabState()
-        }
-      )}
+      class="px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98
+        {cameraTabState()
+        ? 'bg-app-bg text-primary shadow-sm border border-border/50'
+        : 'border border-transparent text-text-muted hover:text-text-main'}"
     >
       Camera
     </button>
@@ -34,13 +30,10 @@
       role="tab"
       aria-selected={uploadTabState()}
       onclick={activateUploadTabState}
-      class={classnames(
-        'px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98',
-        {
-          'bg-app-bg text-primary shadow-sm border border-border/50': uploadTabState(),
-          'text-text-muted border border-transparent hover:text-text-main': !uploadTabState()
-        }
-      )}
+      class="px-4 py-1.5 text-xs sm:text-sm font-bold rounded-md transition-all active:scale-98
+        {uploadTabState()
+        ? 'bg-app-bg text-primary shadow-sm border border-border/50'
+        : 'border border-transparent text-text-muted hover:text-text-main'}"
     >
       Upload
     </button>
@@ -52,36 +45,31 @@
       aria-controls="mobile-menu"
       aria-label="Toggle navigation menu"
       onclick={toggleMenu}
-      class="relative z-50 w-8 h-8 cursor-pointer flex flex-col justify-center items-end space-y-1.5 p-1"
+      class="relative z-50 w-8 h-8 cursor-pointer flex flex-col justify-center items-end gap-1.5 p-1"
     >
       <span
-        class={classnames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
-          'rotate-45 translate-y-2': isMenuOpen()
-        })}
+        class="block w-6 h-0.5 bg-text-main transition-transform duration-300 {isMenuOpen()
+          ? 'rotate-45 translate-y-2'
+          : ''}"
       ></span>
       <span
-        class={classnames('block w-6 h-0.5 bg-text-main transition-opacity duration-300', {
-          'opacity-0': isMenuOpen()
-        })}
+        class="block w-6 h-0.5 bg-text-main transition-opacity duration-300 {isMenuOpen()
+          ? 'opacity-0'
+          : ''}"
       ></span>
       <span
-        class={classnames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
-          '-rotate-45 -translate-y-2': isMenuOpen()
-        })}
+        class="block w-6 h-0.5 bg-text-main transition-transform duration-300 {isMenuOpen()
+          ? '-rotate-45 -translate-y-2'
+          : ''}"
       ></span>
     </button>
 
     <div
       id="mobile-menu"
-      class={classnames(
-        'absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain',
-        {
-          'translate-x-0': isMenuOpen(),
-          '-translate-x-full': !isMenuOpen()
-        }
-      )}
+      class="absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain
+        {isMenuOpen() ? 'translate-x-0' : '-translate-x-full'}"
     >
-      <ul class="space-y-4 text-lg font-bold">
+      <ul class="flex flex-col gap-4 text-lg font-bold">
         <li>
           <a href="/" class="block py-2 text-text-main hover:text-primary transition-colors"
             >Scanner Dashboard</a
@@ -110,8 +98,10 @@
             href="https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set-figure"
             class="block py-2 text-sm text-text-muted hover:text-text-main transition-colors"
             target="_blank"
-            rel="noopener noreferrer">Report Missing Brick Set</a
+            rel="noopener noreferrer"
           >
+            Report Missing Brick Set
+          </a>
         </li>
       </ul>
       <div class="mt-auto text-xs text-text-muted border-t border-border pt-4">

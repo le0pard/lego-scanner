@@ -1,11 +1,9 @@
 <script>
   import { onDestroy } from 'svelte';
-  import classnames from 'classnames';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte';
 
   const { getScanner } = $props();
-
   const { warning: warningTick } = useTiks({ theme: 'crisp', volume: 1.0 });
 
   let isProcessing = $state(false);
@@ -14,13 +12,11 @@
   const processFile = async (file) => {
     isProcessing = true;
     resetScanState();
-
     try {
       const result = await getScanner().detectFromFile(file);
-
       if (result) {
         setScanResult(result);
-      } else if (!result) {
+      } else {
         setScanError('Failed to read Data Matrix');
       }
     } catch (err) {
@@ -59,11 +55,10 @@
     isDragging = false;
 
     const file = e.dataTransfer?.files?.[0];
-
     if (file && file.type.startsWith('image/')) {
       await processFile(file);
     } else if (file) {
-      console.warn('Dropped file is not an image.');
+      console.warn('Dropped file payload is invalid.');
       warningTick();
     }
   };
@@ -80,15 +75,11 @@
   ondragleave={handleDragLeave}
   ondragover={handleDragOver}
   ondrop={handleDrop}
-  class={classnames(
-    'w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed shadow-lg rounded-2xl p-6 text-center transition-all duration-200 group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent',
-    {
-      'cursor-wait opacity-70': isProcessing,
-      'cursor-pointer': !isProcessing,
-      'border-primary bg-primary/5 scale-[0.98]': isDragging,
-      'border-border bg-card-bg hover:border-primary': !isDragging
-    }
-  )}
+  class="w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed shadow-lg rounded-2xl p-6 text-center transition-all duration-200 group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent
+    {isProcessing ? 'cursor-wait opacity-70' : 'cursor-pointer'}
+    {isDragging
+    ? 'border-primary bg-primary/5 scale-[0.98]'
+    : 'border-border bg-card-bg hover:border-primary'}"
 >
   <input
     type="file"
@@ -110,16 +101,14 @@
     <p class="text-xs text-text-muted mt-1">Scanning for Data Matrix codes</p>
   {:else}
     <div
-      class={classnames('p-4 rounded-full border mb-4 transition-transform duration-200', {
-        'bg-primary/20 border-primary/50 scale-110': isDragging,
-        'bg-app-bg border-border group-hover:scale-105': !isDragging
-      })}
+      class="p-4 rounded-full border mb-4 transition-transform duration-200 {isDragging
+        ? 'bg-primary/20 border-primary/50 scale-110'
+        : 'bg-app-bg border-border group-hover:scale-105'}"
     >
       <svg
-        class={classnames('w-8 h-8 transition-colors', {
-          'text-primary': isDragging,
-          'text-text-muted group-hover:text-primary': !isDragging
-        })}
+        class="w-8 h-8 transition-colors {isDragging
+          ? 'text-primary'
+          : 'text-text-muted group-hover:text-primary'}"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
@@ -132,12 +121,7 @@
         />
       </svg>
     </div>
-    <p
-      class={classnames('text-sm font-bold', {
-        'text-primary': isDragging,
-        'text-text-main': !isDragging
-      })}
-    >
+    <p class="text-sm font-bold {isDragging ? 'text-primary' : 'text-text-main'}">
       {isDragging ? 'Release to Scan' : 'Drop Lego image here'}
     </p>
     <p class="text-xs text-text-muted mt-1">Supports PNG, JPG up to 10MB</p>

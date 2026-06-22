@@ -10,13 +10,11 @@
   import Upload from '$lib/components/Upload.svelte';
   import WorkerError from '$lib/components/WorkerError.svelte';
   import WorkerLoading from '$lib/components/WorkerLoading.svelte';
-
   import { isMenuOpen } from '$lib/states/menu.svelte';
   import { uploadTabState } from '$lib/states/tabs.svelte';
 
   let workersLoaded = $state(false);
   let errorMessage = $state('');
-
   let scannerWorker = null;
   let scannerWorkerApi = null;
 
@@ -42,18 +40,19 @@
     }
   });
 
-  // Lock body scroll when drawer is open
+  // Dynamic lock controls optimizing layout interaction surfaces
   $effect(() => {
-    if (document?.body?.style) {
+    if (typeof document !== 'undefined' && document.body?.style) {
       document.body.style.overflow = isMenuOpen() ? 'hidden' : 'auto';
     }
   });
 </script>
 
 <main
-  class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt--pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
+  class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt-pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
 >
   <Header />
+
   <div
     class="flex flex-col landscape:flex-row landscape:items-start landscape:gap-6 flex-1 w-full pb-2 mt-2"
   >
