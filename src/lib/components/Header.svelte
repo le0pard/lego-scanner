@@ -15,7 +15,6 @@
     <p class="text-[10px] sm:text-xs text-text-muted truncate">Barcode & Minifig</p>
   </div>
 
-  <!-- Solid Filled High-Contrast Tab Segment Controller -->
   <div class="flex shrink-0 p-1 bg-card-bg border border-border rounded-xl" role="tablist">
     <button
       role="tab"

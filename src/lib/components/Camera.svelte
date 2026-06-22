@@ -303,7 +303,7 @@
       class="w-[calc(100%-8px)] absolute bottom-1 left-1 bg-black/60 backdrop-blur-md rounded-xl border border-white/10 p-1 flex items-center gap-2 z-20"
     >
       <select
-        class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0 select-arrow"
+        class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0"
         value={cameraState.selectedCameraId}
         onchange={handleCameraChange}
       >
