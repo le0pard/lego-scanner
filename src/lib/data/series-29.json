@@ -1,20 +1,25 @@
 {
   "series": "series-29",
-  "displayName": "LEGO Minifigures Series 29",
+  "displayName": "Series 29",
   "releaseYear": 2026,
   "minifigures": [
     {
-      "slug": "s29_football_goalkeeper",
-      "name": "Football Goalkeeper",
-      "imagePath": "/assets/images/series-29/football-goalkeeper.webp",
+      "slug": "s29_soccer_goalkeeper",
+      "name": "Soccer Goalkeeper",
+      "imagePath": "/assets/minifigures/series-29/soccer-goalkeeper.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605259",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6603320",
+          "factory": "S",
+          "year": "6"
+        },
+        {
+          "code": "6605246",
           "factory": "S",
           "year": "6"
         }
@@ -23,15 +28,15 @@
     {
       "slug": "s29_marine_biologist",
       "name": "Marine Biologist",
-      "imagePath": "/assets/images/series-29/marine-biologist.webp",
+      "imagePath": "/assets/minifigures/series-29/marine-biologist.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6603321",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605247",
           "factory": "S",
           "year": "6"
         }
@@ -40,15 +45,15 @@
     {
       "slug": "s29_tuba_player",
       "name": "Tuba Player",
-      "imagePath": "/assets/images/series-29/tuba-player.webp",
+      "imagePath": "/assets/minifigures/series-29/tuba-player.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6603322",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605248",
           "factory": "S",
           "year": "6"
         }
@@ -57,15 +62,20 @@
     {
       "slug": "s29_unicorn_elf",
       "name": "Unicorn Elf",
-      "imagePath": "/assets/images/series-29/unicorn-elf.webp",
+      "imagePath": "/assets/minifigures/series-29/unicorn-elf.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605252",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605267",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603326",
           "factory": "S",
           "year": "6"
         }
@@ -74,15 +84,20 @@
     {
       "slug": "s29_monster_hunter",
       "name": "Monster Hunter",
-      "imagePath": "/assets/images/series-29/monster-hunter.webp",
+      "imagePath": "/assets/minifigures/series-29/monster-hunter.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605254",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605265",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603328",
           "factory": "S",
           "year": "6"
         }
@@ -91,15 +106,20 @@
     {
       "slug": "s29_robot_t_rex",
       "name": "Robot T. rex",
-      "imagePath": "/assets/images/series-29/robot-t-rex.webp",
+      "imagePath": "/assets/minifigures/series-29/robot-t-rex.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605257",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605270",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603331",
           "factory": "S",
           "year": "6"
         }
@@ -108,15 +128,15 @@
     {
       "slug": "s29_chocolatier",
       "name": "Chocolatier",
-      "imagePath": "/assets/images/series-29/chocolatier.webp",
+      "imagePath": "/assets/minifigures/series-29/chocolatier.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605249",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6603323",
           "factory": "S",
           "year": "6"
         }
@@ -125,15 +145,20 @@
     {
       "slug": "s29_boba_cup_fan",
       "name": "Boba Cup Fan",
-      "imagePath": "/assets/images/series-29/boba-cup-fan.webp",
+      "imagePath": "/assets/minifigures/series-29/boba-cup-fan.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605250",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605263",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603324",
           "factory": "S",
           "year": "6"
         }
@@ -150,6 +175,11 @@
           "year": "6"
         },
         {
+          "code": "6605264",
+          "factory": "R",
+          "year": "6"
+        },
+        {
           "code": "6603325",
           "factory": "S",
           "year": "6"
@@ -159,15 +189,20 @@
     {
       "slug": "s29_mysterious_ronin",
       "name": "Mysterious Ronin",
-      "imagePath": "/assets/images/series-29/mysterious-ronin.webp",
+      "imagePath": "/assets/minifigures/series-29/mysterious-ronin.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605253",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605266",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603327",
           "factory": "S",
           "year": "6"
         }
@@ -176,15 +211,20 @@
     {
       "slug": "s29_cute_witch",
       "name": "Cute Witch",
-      "imagePath": "/assets/images/series-29/cute-witch.webp",
+      "imagePath": "/assets/minifigures/series-29/cute-witch.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605255",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6605268",
+          "factory": "R",
+          "year": "6"
+        },
+        {
+          "code": "6603329",
           "factory": "S",
           "year": "6"
         }
@@ -193,15 +233,15 @@
     {
       "slug": "s29_trash_monster",
       "name": "Trash Monster",
-      "imagePath": "/assets/images/series-29/trash-monster.webp",
+      "imagePath": "/assets/minifigures/series-29/trash-monster.jpg",
       "identifiers": [
         {
-          "code": "REPLACE_ME",
+          "code": "6605256",
           "factory": "R",
           "year": "6"
         },
         {
-          "code": "REPLACE_ME",
+          "code": "6603330",
           "factory": "S",
           "year": "6"
         }

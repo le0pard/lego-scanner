@@ -3,6 +3,25 @@
 
   // Receive the processed data from RightPanel
   let { minifig, searchCompleted } = $props();
+
+  const optimizedImageModules = import.meta.glob(
+    '/src/lib/assets/minifigures/**/*.{avif,AVIF,gif,GIF,heif,HEIF,jpeg,JPEG,jpg,JPG,png,PNG,tiff,TIFF,webp,WEBP}',
+    {
+      query: {
+        // Generates 1x (160px), 2x (320px), and 3x (480px) asset variations
+        enhanced: true, w: '160;320;480'
+			},
+      import: 'default',
+      eager: true
+    }
+  );
+
+  let optimizedImage = $derived.by(() => {
+    if (!minifig?.imagePath) return null;
+
+    const resolvedSourceKey = minifig.imagePath.replace('/assets/', '/src/lib/assets/');
+    return optimizedImageModules[resolvedSourceKey] || null;
+  });
 </script>
 
 {#if searchCompleted}
@@ -28,13 +47,22 @@
         class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex flex-col gap-5 items-center relative"
       >
         <div
-          class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
+          class="image-box size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
         >
-          <img
-            src={minifig.imagePath}
-            alt={minifig.name}
-            class="max-h-full object-contain drop-shadow-lg"
-          />
+          {#if optimizedImage}
+            <enhanced:img
+              src={optimizedImage}
+              alt={minifig.name}
+              sizes="(min-width: 640px) 160px, 144px"
+              class="max-w-full max-h-full object-contain drop-shadow-lg"
+            />
+          {:else}
+            <img
+              src={minifig.imagePath}
+              alt={minifig.name}
+              class="max-w-full max-h-full object-contain drop-shadow-lg"
+            />
+          {/if}
         </div>
         <div class="flex flex-col items-start justify-center">
           <span class="bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2">
@@ -105,3 +133,17 @@
     </button>
   </div>
 {/if}
+
+<style>
+  /**
+   * Style the precompiled picture wrapper as a standard layout block.
+   * This allows the child image to safely scale to 100% height.
+   */
+  .image-box :global(picture) {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

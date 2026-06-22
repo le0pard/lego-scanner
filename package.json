@@ -19,6 +19,7 @@
     "@iconify/tailwind4": "^1.2.3",
     "@rexa-developer/tiks": "^0.3.0",
     "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/enhanced-img": "^0.11.0",
     "@sveltejs/kit": "^2.66.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/typography": "^0.5.20",
