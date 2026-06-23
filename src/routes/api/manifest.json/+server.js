@@ -25,7 +25,7 @@ export const GET = async ({ url }) => {
       const jsonData = JSON.parse(content);
 
       seriesManifest[jsonData.series] = {
-        endpoint: new URL(`/api/collections/${jsonData.series}`, url.origin).pathname,
+        endpoint: new URL(`/api/collections/${jsonData.series}.json`, url.origin).pathname,
         hash
       };
     }

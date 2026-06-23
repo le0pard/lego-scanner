@@ -12,7 +12,7 @@ const api = {
 
     try {
       // Fetch the latest manifest to check for updates
-      const manifestResponse = await fetch(`${cleanBase}/api/manifest?t=${Date.now()}`);
+      const manifestResponse = await fetch(`${cleanBase}/api/manifest.json?t=${Date.now()}`);
       if (!manifestResponse.ok) throw new Error('Could not fetch remote manifest');
       const { seriesManifest } = await manifestResponse.json();
 
