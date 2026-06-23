@@ -10,7 +10,8 @@
       "identifiers": [
         { "code": "6603320" },
         { "code": "6605246" },
-        { "code": "6605259" }
+        { "code": "6605259" },
+        { "code": "6605246", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -28,11 +29,7 @@
       "slug": "s29_tuba_player",
       "name": "Tuba Player",
       "imagePath": "/assets/minifigures/series-29/tuba-player.jpg",
-      "identifiers": [
-        { "code": "6603322" },
-        { "code": "6605248" },
-        { "code": "6605261" }
-      ]
+      "identifiers": [{ "code": "6603322" }, { "code": "6605248" }, { "code": "6605261" }]
     },
     {
       "slug": "s29_unicorn_elf",
@@ -52,38 +49,27 @@
       "identifiers": [
         { "code": "6603328" },
         { "code": "6605254" },
-        { "code": "6605267" }
+        { "code": "6605267" },
+        { "code": "6603328", "factory": "S", "year": "6" }
       ]
     },
     {
       "slug": "s29_robot_t_rex",
       "name": "Robot T. rex",
       "imagePath": "/assets/minifigures/series-29/robot-t-rex.jpg",
-      "identifiers": [
-        { "code": "6603331" },
-        { "code": "6605257" },
-        { "code": "6605270" }
-      ]
+      "identifiers": [{ "code": "6603331" }, { "code": "6605257" }, { "code": "6605270" }]
     },
     {
       "slug": "s29_chocolatier",
       "name": "Chocolatier",
       "imagePath": "/assets/minifigures/series-29/chocolatier.jpg",
-      "identifiers": [
-        { "code": "6603323" },
-        { "code": "6605249" },
-        { "code": "6605262" }
-      ]
+      "identifiers": [{ "code": "6603323" }, { "code": "6605249" }, { "code": "6605262" }]
     },
     {
       "slug": "s29_boba_cup_fan",
       "name": "Boba Cup Fan",
       "imagePath": "/assets/minifigures/series-29/boba-cup-fan.jpg",
-      "identifiers": [
-        { "code": "6603324" },
-        { "code": "6605250" },
-        { "code": "6605263" }
-      ]
+      "identifiers": [{ "code": "6603324" }, { "code": "6605250" }, { "code": "6605263" }]
     },
     {
       "slug": "s29_bionicle_cosplayer",
@@ -100,21 +86,13 @@
       "slug": "s29_mysterious_ronin",
       "name": "Mysterious Ronin",
       "imagePath": "/assets/minifigures/series-29/mysterious-ronin.jpg",
-      "identifiers": [
-        { "code": "6603327" },
-        { "code": "6605253" },
-        { "code": "6605266" }
-      ]
+      "identifiers": [{ "code": "6603327" }, { "code": "6605253" }, { "code": "6605266" }]
     },
     {
       "slug": "s29_cute_witch",
       "name": "Cute Witch",
       "imagePath": "/assets/minifigures/series-29/cute-witch.jpg",
-      "identifiers": [
-        { "code": "6603329" },
-        { "code": "6605255" },
-        { "code": "6605268" }
-      ]
+      "identifiers": [{ "code": "6603329" }, { "code": "6605255" }, { "code": "6605268" }]
     },
     {
       "slug": "s29_trash_monster",
@@ -123,7 +101,8 @@
       "identifiers": [
         { "code": "6603330" },
         { "code": "6605256" },
-        { "code": "6605269" }
+        { "code": "6605269" },
+        { "code": "6603330", "factory": "S", "year": "6" }
       ]
     }
   ]

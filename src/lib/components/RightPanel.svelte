@@ -26,20 +26,20 @@
         const [fullSearchRes, codeSearchRes] = await Promise.all([
           db.minifigures.where({ searchKeys: legoData.key }).first(),
           db.minifigures.where({ searchKeys: legoData.code }).first()
-        ])
+        ]);
 
         const found = fullSearchRes || codeSearchRes;
         if (found) {
-            minifig = found;
-            successTick();
-          } else {
-            minifig = null;
-            errorTick();
-          }
-      } catch(err) {
-        console.error('Database query failed:', err);
+          minifig = found;
+          successTick();
+        } else {
           minifig = null;
           errorTick();
+        }
+      } catch (err) {
+        console.error('Database query failed:', err);
+        minifig = null;
+        errorTick();
       } finally {
         searchCompleted = true;
       }

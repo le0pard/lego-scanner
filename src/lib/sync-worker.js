@@ -21,15 +21,13 @@ const api = {
       const localMetaMap = Object.fromEntries(localMetaArray.map((m) => [m.series, m.hash]));
       let didUpdate = false;
 
-      // 1. Synchronize and prune inside active remote collections
+      // Synchronize and prune inside active remote collections
       for (const [seriesId, remoteInfo] of Object.entries(seriesManifest)) {
         const localHash = localMetaMap[seriesId];
-
         if (localHash !== remoteInfo.hash) {
           console.log(`Sync Worker: Downloading updated data for Series ${seriesId}...`);
           const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`);
           if (!dataResponse.ok) continue;
-
           const dbData = await dataResponse.json();
 
           // Prune obsolete figures within this series
@@ -40,27 +38,14 @@ const api = {
             .filter((slug) => !remoteSlugs.has(slug));
 
           if (slugsToDelete.length > 0) {
-            console.log(`Sync Worker: Pruning ${slugsToDelete.length} stale figures from ${seriesId}`);
+            console.log(
+              `Sync Worker: Pruning ${slugsToDelete.length} stale figures from ${seriesId}`
+            );
             await db.minifigures.bulkDelete(slugsToDelete);
           }
 
-          // Save fresh JSON data snapshot to IndexedDB
+          // Save fresh JSON data snapshot directly to IndexedDB
           await db.minifigures.bulkPut(dbData);
-
-          // Pre-cache images using the CacheStorage API
-          if ('caches' in self) {
-            const cacheKeys = await caches.keys();
-            const activeCacheName = cacheKeys[0];
-            if (activeCacheName) {
-              const cache = await caches.open(activeCacheName);
-              const imageUrls = dbData
-                .map((fig) => fig.imagePath)
-                .filter(Boolean)
-                .map((path) => `${cleanBase}${path}`);
-
-              await cache.addAll(imageUrls);
-            }
-          }
 
           // Update hash tracking in DB so we don't download it again next time
           await db.syncMeta.put({
@@ -68,28 +53,24 @@ const api = {
             hash: remoteInfo.hash,
             lastSynced: new Date().toISOString()
           });
-
           didUpdate = true;
         }
       }
 
       // Full Series Purge: Remove entire series missing from remote manifest
       const remoteSeriesKeys = new Set(Object.keys(seriesManifest));
-
       for (const localMeta of localMetaArray) {
         if (!remoteSeriesKeys.has(localMeta.series)) {
-          console.log(`  Sync Worker: Purging discontinued collection "${localMeta.series}" from local storage.`);
-
+          console.log(
+            `Sync Worker: Purging discontinued collection "${localMeta.series}" from local storage.`
+          );
           // Delete all figures matched to this discontinued series index
           await db.minifigures.where({ series: localMeta.series }).delete();
-
           // Drop the tracking signature block
           await db.syncMeta.delete(localMeta.series);
-
           didUpdate = true;
         }
       }
-
       return didUpdate;
     } catch (error) {
       console.warn('Sync Worker: Sync deferred. Running fully local offline mode.', error);

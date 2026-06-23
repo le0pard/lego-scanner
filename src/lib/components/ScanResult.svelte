@@ -9,8 +9,9 @@
     {
       query: {
         // Generates 1x (160px), 2x (320px), and 3x (480px) asset variations
-        enhanced: true, w: '160;320;480'
-			},
+        enhanced: true,
+        w: '160;320;480'
+      },
       import: 'default',
       eager: true
     }
@@ -92,7 +93,7 @@
       </div>
 
       <div
-        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex gap-5 items-center relative"
+        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex flex-col gap-5 items-center relative"
       >
         <div
           class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
