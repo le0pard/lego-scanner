@@ -1,5 +1,6 @@
 <script>
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte';
+  import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
 
   // Receive the processed data from RightPanel
   let { minifig, searchCompleted } = $props();
@@ -23,6 +24,8 @@
     const resolvedSourceKey = minifig.imagePath.replace('/assets/', '/src/lib/assets/');
     return optimizedImageModules[resolvedSourceKey] || null;
   });
+
+  const legoData = extractFieldsFromDataMatrix(scanResultState.result);
 
   // Local interactive clipboard copy feedback states
   let copyStatus = $state('idle'); // 'idle' | 'success'
@@ -119,11 +122,20 @@
           <h2 class="text-xl sm:text-2xl font-black text-text-main leading-tight mb-1">
             {minifig.name || 'Unknown Figure'}
           </h2>
-          <p class="text-sm font-medium text-text-muted">
-            QR Code: {scanResultState.result}
-          </p>
+          {#if legoData?.code}
+            <p class="text-sm font-medium text-text-muted">
+              Code: {legoData?.code}
+            </p>
+          {/if}
         </div>
       </div>
+
+      <button
+        onclick={resetScanState}
+        class="mt-4 w-full bg-app-bg border-2 border-border hover:border-primary text-text-main font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-[0.99]"
+      >
+        Scan Another Box
+      </button>
     {:else}
       <div
         class="bg-error-bg border border-error-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
@@ -179,14 +191,14 @@
           </p>
         </div>
       </div>
-    {/if}
 
-    <button
-      onclick={resetScanState}
-      class="mt-4 w-full bg-app-bg border-2 border-border hover:border-primary text-text-main font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-[0.99]"
-    >
-      Scan Another Box
-    </button>
+      <button
+        onclick={resetScanState}
+        class="mt-4 w-full bg-app-bg border-2 border-border hover:border-primary text-text-main font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-[0.99]"
+      >
+        Help with missing figure
+      </button>
+    {/if}
   </div>
 {/if}
 
