@@ -12,7 +12,7 @@
   let minifig = $state(null);
   let searchCompleted = $state(false);
 
-  $effect(() => {
+  $effect(async () => {
     if (scanResultState.result) {
       const legoData = extractFieldsFromDataMatrix(scanResultState.result);
       if (!legoData || !legoData.key) {
@@ -22,25 +22,27 @@
         return;
       }
 
-      db.minifigures
-        .where({ searchKeys: legoData.key })
-        .first()
-        .then((found) => {
-          if (found) {
+      try {
+        const [fullSearchRes, codeSearchRes] = await Promise.all([
+          db.minifigures.where({ searchKeys: legoData.key }).first(),
+          db.minifigures.where({ searchKeys: legoData.code }).first()
+        ])
+
+        const found = fullSearchRes || codeSearchRes;
+        if (found) {
             minifig = found;
             successTick();
           } else {
             minifig = null;
             errorTick();
           }
-          searchCompleted = true;
-        })
-        .catch((err) => {
-          console.error('Database query failed:', err);
+      } catch(err) {
+        console.error('Database query failed:', err);
           minifig = null;
           errorTick();
-          searchCompleted = true;
-        });
+      } finally {
+        searchCompleted = true;
+      }
     } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
       searchCompleted = false;
       minifig = null;

@@ -8,21 +8,9 @@
       "name": "Soccer Goalkeeper",
       "imagePath": "/assets/minifigures/series-29/soccer-goalkeeper.jpg",
       "identifiers": [
-        {
-          "code": "6605259",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603320",
-          "factory": "S",
-          "year": "6"
-        },
-        {
-          "code": "6605246",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603320" },
+        { "code": "6605246" },
+        { "code": "6605259" }
       ]
     },
     {
@@ -30,16 +18,10 @@
       "name": "Marine Biologist",
       "imagePath": "/assets/minifigures/series-29/marine-biologist.jpg",
       "identifiers": [
-        {
-          "code": "6603321",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605247",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603321" },
+        { "code": "6605247" },
+        { "code": "6605260" },
+        { "code": "6605247", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -47,16 +29,9 @@
       "name": "Tuba Player",
       "imagePath": "/assets/minifigures/series-29/tuba-player.jpg",
       "identifiers": [
-        {
-          "code": "6603322",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605248",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603322" },
+        { "code": "6605248" },
+        { "code": "6605261" }
       ]
     },
     {
@@ -64,21 +39,10 @@
       "name": "Unicorn Elf",
       "imagePath": "/assets/minifigures/series-29/unicorn-elf.jpg",
       "identifiers": [
-        {
-          "code": "6605252",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605267",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603326",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603326" },
+        { "code": "6605252" },
+        { "code": "6605265" },
+        { "code": "6603326", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -86,21 +50,9 @@
       "name": "Monster Hunter",
       "imagePath": "/assets/minifigures/series-29/monster-hunter.jpg",
       "identifiers": [
-        {
-          "code": "6605254",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605265",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603328",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603328" },
+        { "code": "6605254" },
+        { "code": "6605267" }
       ]
     },
     {
@@ -108,21 +60,9 @@
       "name": "Robot T. rex",
       "imagePath": "/assets/minifigures/series-29/robot-t-rex.jpg",
       "identifiers": [
-        {
-          "code": "6605257",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605270",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603331",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603331" },
+        { "code": "6605257" },
+        { "code": "6605270" }
       ]
     },
     {
@@ -130,16 +70,9 @@
       "name": "Chocolatier",
       "imagePath": "/assets/minifigures/series-29/chocolatier.jpg",
       "identifiers": [
-        {
-          "code": "6605249",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603323",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603323" },
+        { "code": "6605249" },
+        { "code": "6605262" }
       ]
     },
     {
@@ -147,21 +80,9 @@
       "name": "Boba Cup Fan",
       "imagePath": "/assets/minifigures/series-29/boba-cup-fan.jpg",
       "identifiers": [
-        {
-          "code": "6605250",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605263",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603324",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603324" },
+        { "code": "6605250" },
+        { "code": "6605263" }
       ]
     },
     {
@@ -169,21 +90,10 @@
       "name": "Bionicle Cosplayer",
       "imagePath": "/assets/minifigures/series-29/bionicle-cosplayer.jpg",
       "identifiers": [
-        {
-          "code": "6605251",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605264",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603325",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603325" },
+        { "code": "6605251" },
+        { "code": "6605264" },
+        { "code": "6603325", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -191,21 +101,9 @@
       "name": "Mysterious Ronin",
       "imagePath": "/assets/minifigures/series-29/mysterious-ronin.jpg",
       "identifiers": [
-        {
-          "code": "6605253",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605266",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603327",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603327" },
+        { "code": "6605253" },
+        { "code": "6605266" }
       ]
     },
     {
@@ -213,21 +111,9 @@
       "name": "Cute Witch",
       "imagePath": "/assets/minifigures/series-29/cute-witch.jpg",
       "identifiers": [
-        {
-          "code": "6605255",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6605268",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603329",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603329" },
+        { "code": "6605255" },
+        { "code": "6605268" }
       ]
     },
     {
@@ -235,16 +121,9 @@
       "name": "Trash Monster",
       "imagePath": "/assets/minifigures/series-29/trash-monster.jpg",
       "identifiers": [
-        {
-          "code": "6605256",
-          "factory": "R",
-          "year": "6"
-        },
-        {
-          "code": "6603330",
-          "factory": "S",
-          "year": "6"
-        }
+        { "code": "6603330" },
+        { "code": "6605256" },
+        { "code": "6605269" }
       ]
     }
   ]
