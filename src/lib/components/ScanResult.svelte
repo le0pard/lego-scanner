@@ -23,6 +23,33 @@
     const resolvedSourceKey = minifig.imagePath.replace('/assets/', '/src/lib/assets/');
     return optimizedImageModules[resolvedSourceKey] || null;
   });
+
+  // Local interactive clipboard copy feedback states
+  let copyStatus = $state('idle'); // 'idle' | 'success'
+  let timeoutId;
+
+  /**
+   * Copies the raw Data Matrix token into the system clipboard buffer
+   * and triggers a localized transient state change for visual icon tracking.
+   * @param {string} text
+   */
+  const copyToClipboard = async (text) => {
+    if (!text) return;
+    if (timeoutId) clearTimeout(timeoutId);
+
+    try {
+      await navigator.clipboard.writeText(text);
+      copyStatus = 'success';
+    } catch (err) {
+      console.warn('Clipboard buffer operation failed:', err);
+      copyStatus = 'idle';
+    } finally {
+      // Revert the icon state back to normal after 2 seconds
+      timeoutId = setTimeout(() => {
+        copyStatus = 'idle';
+      }, 2000);
+    }
+  };
 </script>
 
 {#if searchCompleted}
@@ -36,11 +63,31 @@
         <div class="bg-success-icon-bg text-success-text flex p-2 rounded-xl shrink-0 z-10">
           <i class="iconify lucide--circle-check size-6"></i>
         </div>
-        <div class="z-10">
-          <h3 class="text-success-text font-bold text-lg leading-tight">Match Found!</h3>
-          <p class="text-success-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all">
-            {scanResultState.result}
-          </p>
+        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <h3 class="text-success-text font-bold text-lg leading-tight">Match Found!</h3>
+            <p
+              class="text-success-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all select-all"
+            >
+              {scanResultState.result}
+            </p>
+          </div>
+          <button
+            type="button"
+            aria-label="Copy scanned string data to clipboard"
+            onclick={() => copyToClipboard(scanResultState.result)}
+            class="bg-success-icon-bg/40 hover:bg-success-icon-bg text-success-text p-2 rounded-xl transition-all cursor-pointer shrink-0 active:scale-95 border border-success-border/30 flex items-center justify-center min-w-9 min-h-9"
+          >
+            {#if copyStatus === 'success'}
+              <i
+                class="iconify lucide--check size-5 text-success-text animate-in scale-in duration-200"
+              ></i>
+            {:else}
+              <i
+                class="iconify lucide--copy size-5 opacity-80 hover:opacity-100 animate-in scale-in duration-200"
+              ></i>
+            {/if}
+          </button>
         </div>
       </div>
 
@@ -84,11 +131,31 @@
         <div class="bg-error-icon-bg text-error-text flex p-2 rounded-xl shrink-0 z-10">
           <i class="iconify lucide--x size-6"></i>
         </div>
-        <div class="z-10">
-          <h3 class="text-error-text font-bold text-lg leading-tight">Code Not in Database</h3>
-          <p class="text-error-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all">
-            {scanResultState.result}
-          </p>
+        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <h3 class="text-error-text font-bold text-lg leading-tight">Code Not in Database</h3>
+            <p
+              class="text-error-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all select-all"
+            >
+              {scanResultState.result}
+            </p>
+          </div>
+          <button
+            type="button"
+            aria-label="Copy scanned string data to clipboard"
+            onclick={() => copyToClipboard(scanResultState.result)}
+            class="bg-error-icon-bg/40 hover:bg-error-icon-bg text-error-text p-2 rounded-xl transition-all cursor-pointer shrink-0 active:scale-95 border border-error-border/30 flex items-center justify-center min-w-9 min-h-9"
+          >
+            {#if copyStatus === 'success'}
+              <i
+                class="iconify lucide--check size-5 text-error-text animate-in scale-in duration-200"
+              ></i>
+            {:else}
+              <i
+                class="iconify lucide--copy size-5 opacity-80 hover:opacity-100 animate-in scale-in duration-200"
+              ></i>
+            {/if}
+          </button>
         </div>
       </div>
 
@@ -98,19 +165,7 @@
         <div
           class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
         >
-          <svg
-            class="w-12 h-12 text-text-muted opacity-50"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <i class="iconify lucide--package-search size-12 text-text-muted opacity-50"></i>
         </div>
         <div class="flex flex-col items-start justify-center">
           <span class="bg-error-bg text-error-text text-xs font-bold px-3 py-1 rounded-full mb-2">

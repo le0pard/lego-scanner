@@ -84,7 +84,7 @@
       <ul class="flex flex-col gap-4 text-lg font-bold">
         <li>
           <a href="/" class="block py-2 text-text-main hover:text-primary transition-colors"
-            >Scanner Dashboard</a
+            >Scanner</a
           >
         </li>
         <li><hr class="border-border my-2" /></li>
