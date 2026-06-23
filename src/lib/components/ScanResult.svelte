@@ -8,8 +8,8 @@
     '/src/lib/assets/minifigures/**/*.{avif,AVIF,gif,GIF,heif,HEIF,jpeg,JPEG,jpg,JPG,png,PNG,tiff,TIFF,webp,WEBP}',
     {
       query: {
-        // Generates 1x (160px), 2x (320px), and 3x (480px) asset variations
         enhanced: true,
+        // Generates 1x (160px), 2x (320px), and 3x (480px) asset variations
         w: '160;320;480'
       },
       import: 'default',
