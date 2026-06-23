@@ -1,0 +1,144 @@
+{
+  "series": "series-28",
+  "displayName": "Animals Series 28",
+  "releaseYear": 2026,
+  "minifigures": [
+    {
+      "slug": "s28_peacock",
+      "name": "Peacock",
+      "imagePath": "/assets/minifigures/series-28/peacock.jpg",
+      "identifiers": [
+        { "code": "6584394" },
+        { "code": "6584381" },
+        { "code": "6576503" },
+        { "code": "6584394", "factory": "R", "year": "5" },
+        { "code": "6576503", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_fluffy_cat",
+      "name": "Fluffy Cat",
+      "imagePath": "/assets/minifigures/series-28/fluffy-cat.jpg",
+      "identifiers": [
+        { "code": "6584395" },
+        { "code": "6584382" },
+        { "code": "6576504" },
+        { "code": "6576504", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_goldfish",
+      "name": "Goldfish",
+      "imagePath": "/assets/minifigures/series-28/goldfish.jpg",
+      "identifiers": [
+        { "code": "6584392" },
+        { "code": "6584379" },
+        { "code": "6576501" },
+        { "code": "6584392", "factory": "R", "year": "5" },
+        { "code": "6576501", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_monkey",
+      "name": "Monkey",
+      "imagePath": "/assets/minifigures/series-28/monkey.jpg",
+      "identifiers": [
+        { "code": "6584398" },
+        { "code": "6584385" },
+        { "code": "6576507" },
+        { "code": "6576507", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_frog",
+      "name": "Frog",
+      "imagePath": "/assets/minifigures/series-28/frog.jpg",
+      "identifiers": [
+        { "code": "6584390" },
+        { "code": "6584377" },
+        { "code": "6576499" },
+        { "code": "6576499", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_koala",
+      "name": "Koala",
+      "imagePath": "/assets/minifigures/series-28/koala.jpg",
+      "identifiers": [
+        { "code": "6584396" },
+        { "code": "6584383" },
+        { "code": "6576505" },
+        { "code": "6584396", "factory": "R", "year": "5" },
+        { "code": "6576505", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_dalmation",
+      "name": "Dalmation",
+      "imagePath": "/assets/minifigures/series-28/dalmation.jpg",
+      "identifiers": [
+        { "code": "6584391" },
+        { "code": "6584378" },
+        { "code": "6576500" },
+        { "code": "6576500", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_crocodile",
+      "name": "Crocodile",
+      "imagePath": "/assets/minifigures/series-28/crocodile.jpg",
+      "identifiers": [
+        { "code": "6584389" },
+        { "code": "6584376" },
+        { "code": "6576498" },
+        { "code": "6584389", "factory": "R", "year": "5" },
+        { "code": "6576498", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_dolphin",
+      "name": "Dolphin",
+      "imagePath": "/assets/minifigures/series-28/dolphin.jpg",
+      "identifiers": [
+        { "code": "6584397" },
+        { "code": "6584384" },
+        { "code": "6576506" },
+        { "code": "6576506", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_cute_bunny",
+      "name": "Cute Bunny",
+      "imagePath": "/assets/minifigures/series-28/cute-bunny.jpg",
+      "identifiers": [
+        { "code": "6584393" },
+        { "code": "6584380" },
+        { "code": "6576502" },
+        { "code": "6576502", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_lion",
+      "name": "Lion",
+      "imagePath": "/assets/minifigures/series-28/lion.jpg",
+      "identifiers": [
+        { "code": "6584388" },
+        { "code": "6584375" },
+        { "code": "6576497" },
+        { "code": "6584388", "factory": "R", "year": "5" },
+        { "code": "6576497", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "s28_parrot",
+      "name": "Parrot",
+      "imagePath": "/assets/minifigures/series-28/parrot.jpg",
+      "identifiers": [
+        { "code": "6584387" },
+        { "code": "6584374" },
+        { "code": "6576496" },
+        { "code": "6576496", "factory": "S", "year": "5" }
+      ]
+    }
+  ]
+}
