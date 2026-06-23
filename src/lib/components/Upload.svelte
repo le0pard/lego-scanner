@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import classNames from 'classnames';
-  import { dev } from '$app/environment';
+  import { dev, browser } from '$app/environment';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte';
 
@@ -97,16 +97,21 @@
 
   // Bind window events when the user opens the Upload dashboard view context
   onMount(() => {
+    if (!browser) return;
+
     if (typeof window !== 'undefined') {
       window.addEventListener('paste', handlePaste);
     }
   });
 
   onDestroy(() => {
+    resetScanState();
+
+    if (!browser) return;
+
     if (typeof window !== 'undefined') {
       window.removeEventListener('paste', handlePaste);
     }
-    resetScanState();
   });
 </script>
 

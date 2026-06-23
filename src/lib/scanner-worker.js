@@ -2,7 +2,8 @@ import { expose } from 'comlink';
 import { readBarcodes, prepareZXingModule, ZXING_WASM_VERSION } from 'zxing-wasm/reader';
 import {
   imageProcessingPipeline,
-  imageScratchRepairFullProcessing
+  imageScratchRepairFullProcessing,
+  imageMacroCropScratchRepairProcessing
 } from '$lib/utils/worker/images';
 
 const BINARIZER_TIERS = ['LocalAverage', 'GlobalHistogram'];
@@ -48,7 +49,10 @@ const api = {
   },
 
   /**
-   * Process a single transferred ImageBitmap frame
+   * Balanced real-time video stream processor with a 4-phase frame cycle.
+   * Phase 0 & 2: Lightning fast raw frame paths.
+   * Phase 1: Full-frame morphological closing pass.
+   * Phase 3: Zoomed macro-crop morphological closing pass.
    * @param {ImageBitmap} imageBitmap
    */
   async detect(imageBitmap) {
@@ -56,26 +60,33 @@ const api = {
     let separateTextureGenerated = false;
 
     try {
-      liveFrameSequenceCounter++;
+      // Bounds the value between 0 and 3 immediately so it never grows infinitely
+      liveFrameSequenceCounter = (liveFrameSequenceCounter + 1) % 4;
+      const framePhase = liveFrameSequenceCounter;
 
-      // Interleave modes: Odd frames trigger the morphological line repair pass
-      if (liveFrameSequenceCounter % 2 === 1) {
+      if (framePhase === 1) {
+        // Run full-frame line repair on close up boxes
         try {
           processedFrameBitmap = await imageScratchRepairFullProcessing(imageBitmap);
           separateTextureGenerated = true;
-        } catch (filterError) {
-          // Fall back to the raw image frame if the GPU context is busy
+        } catch {
           processedFrameBitmap = imageBitmap;
-          separateTextureGenerated = false;
+        }
+      } else if (framePhase === 3) {
+        // Run zoomed macro center repair on distant boxes
+        try {
+          processedFrameBitmap = await imageMacroCropScratchRepairProcessing(imageBitmap);
+          separateTextureGenerated = true;
+        } catch {
+          processedFrameBitmap = imageBitmap;
         }
       }
 
-      // Safe input structure conversion for zxing-wasm
       const targetImageData = convertBitmapToImageData(processedFrameBitmap);
 
       const results = await readBarcodes(targetImageData, {
         formats: ['DataMatrix'],
-        tryHarder: liveFrameSequenceCounter % 2 === 1, // Devote more CPU cycles only on repair frames
+        tryHarder: framePhase === 1 || framePhase === 3, // Enable deep engine validation only on repair passes
         tryRotate: true,
         maxNumberOfSymbols: 1,
         binarizer: 'LocalAverage'

@@ -14,6 +14,8 @@
 
   // Auto-detect and set theme based on system preference
   $effect(() => {
+    if (!browser) return;
+
     if (typeof window !== 'undefined') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (prefersDark) {

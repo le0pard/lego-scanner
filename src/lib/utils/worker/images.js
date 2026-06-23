@@ -3,9 +3,8 @@
 const DOWNSCALE_MAX_SIZE = 700;
 
 /**
- * Advanced Morphological Vertical Closing Filter
- * Specifically tuned to heal thick factory print-head line dropouts (up to 6px wide).
- * Uses a deep hardware-accelerated composite chain to bridge gaps without module blooming.
+ * Advanced Morphological Vertical Closing Filter (Full Frame)
+ * Tuned to heal thick factory print-head line dropouts on close-up boxes.
  */
 export const imageScratchRepairFullProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -30,7 +29,6 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
   // Shift image vertically up to 5px. Dark pixels bleed into the thick white scratch line.
   ctx.filter = 'none';
   ctx.globalCompositeOperation = 'darken';
-
   const dilationOffsets = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
   for (const offset of dilationOffsets) {
     ctx.drawImage(contrastSnapshot, 0, offset);
@@ -42,7 +40,6 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
   // EROSION PHASE (Lighten)
   // Shift back slightly using 'lighten' to restore original vertical module spaces
   ctx.globalCompositeOperation = 'lighten';
-
   const erosionOffsets = [-2, -1, 1, 2];
   for (const offset of erosionOffsets) {
     ctx.drawImage(dilatedSnapshot, 0, offset);
@@ -64,7 +61,65 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
 };
 
 /**
- * Adaptive local sharpening threshold filter (Fuses micro hairline splits)
+ * Enhanced Digital Zoom + Morphological Closing Filter
+ * Emulates a hardware zoom lens by cropping the center 55% of the frame first.
+ * Magnifies small, distant barcodes so the stitch loops can repair them cleanly.
+ */
+export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+
+  // Perform a 55% center area crop to execute a pristine digital zoom step
+  const cropWidth = Math.floor(width * 0.55);
+  const cropHeight = Math.floor(height * 0.55);
+  const cropX = Math.floor((width - cropWidth) / 2);
+  const cropY = Math.floor((height - cropHeight) / 2);
+
+  const ratio = Math.min(DOWNSCALE_MAX_SIZE / cropWidth, DOWNSCALE_MAX_SIZE / cropHeight);
+  const canvasWidth = Math.round(cropWidth * ratio);
+  const canvasHeight = Math.round(cropHeight * ratio);
+
+  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate zoom canvas context');
+
+  // Draw the tight cropped area while applying grayscale and contrast curves
+  ctx.filter = 'grayscale(100%) contrast(180%) brightness(95%)';
+  ctx.drawImage(baseBmp, cropX, cropY, cropWidth, cropHeight, 0, 0, canvasWidth, canvasHeight);
+
+  const contrastSnapshot = await createImageBitmap(canvas);
+
+  // DILATION PHASE: Stitch separate elements back together vertically
+  ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'darken';
+  const dilationOffsets = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+  for (const offset of dilationOffsets) {
+    ctx.drawImage(contrastSnapshot, 0, offset);
+  }
+
+  const dilatedSnapshot = await createImageBitmap(canvas);
+
+  // EROSION PHASE: Trim module edges back to original widths
+  ctx.globalCompositeOperation = 'lighten';
+  const erosionOffsets = [-2, -1, 1, 2];
+  for (const offset of erosionOffsets) {
+    ctx.drawImage(dilatedSnapshot, 0, offset);
+  }
+
+  contrastSnapshot.close();
+  dilatedSnapshot.close();
+
+  const finalCanvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const finalCtx = finalCanvas.getContext('2d');
+  if (!finalCtx) throw new Error('Could not allocate final zoom context');
+
+  finalCtx.filter = 'contrast(300%)';
+  finalCtx.drawImage(canvas, 0, 0);
+
+  return await createImageBitmap(finalCanvas);
+};
+
+/**
+ * Adaptive local sharpening threshold filter
  */
 export const imageAdaptiveThresholdProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -166,14 +221,15 @@ const imageRawProcessing = async (baseBmp) => {
 
 /**
  * Processing priority hierarchy.
- * The expanded morphological close filter sits near the top to catch and repair
- * broken factory codes immediately before falling back to alternative scales.
+ * Zoomed morphological closing added immediately following full-frame repair
+ * to process distant defective barcodes.
  */
 export const imageProcessingPipeline = [
   imageDownscaleProcessing,
-  imageScratchRepairFullProcessing, // Handles thick printer lines dropouts
-  imageAdaptiveThresholdProcessing, // Handles fine-line scratches
-  imageMacroCropProcessing, // Wide crop preserving outer orientation tracks
+  imageScratchRepairFullProcessing,
+  imageMacroCropScratchRepairProcessing,
+  imageAdaptiveThresholdProcessing,
+  imageMacroCropProcessing,
   imageDotSmudgeProcessing,
   imageHighContrastProcessing,
   imageRawProcessing
