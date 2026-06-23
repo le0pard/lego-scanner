@@ -25,7 +25,6 @@
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.1",
     "@types/node": "^24.13.2",
-    "barcode-detector": "^3.2.0",
     "classnames": "^2.5.1",
     "comlink": "^4.4.2",
     "dexie": "^4.4.4",
@@ -40,7 +39,8 @@
     "svelte-check": "^4.6.0",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "vite": "^8.0.16",
+    "zxing-wasm": "^3.1.0"
   },
   "packageManager": "yarn@4.17.0"
 }

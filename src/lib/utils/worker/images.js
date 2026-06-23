@@ -1,125 +1,180 @@
-const DOWNSCALE_MAX_SIZE = 600;
-const CENTER_START_PERCENTAGE = 0.2;
-const CENTER_CROP_SIZE_PERCENTAGE = 0.6;
-const HIGH_CONTRAST_CROP_COEFFICIENT = 0.5;
+// src/lib/utils/worker/images.js
 
-// Extreme downscale
-const imageDownscaleProcessing = async (baseBmp) => {
+const DOWNSCALE_MAX_SIZE = 700;
+
+/**
+ * Advanced Morphological Vertical Closing Filter
+ * Specifically tuned to heal thick factory print-head line dropouts (up to 6px wide).
+ * Uses a deep hardware-accelerated composite chain to bridge gaps without module blooming.
+ */
+export const imageScratchRepairFullProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
 
+  // Downscale slightly to optimize worker processing speeds
+  const ratio = Math.min(DOWNSCALE_MAX_SIZE / width, DOWNSCALE_MAX_SIZE / height);
+  const canvasWidth = Math.round(width * ratio);
+  const canvasHeight = Math.round(height * ratio);
+
+  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate execution canvas context');
+
+  // Boost initial contrast to isolate dark ink modules from cardstock
+  ctx.filter = 'grayscale(100%) contrast(180%) brightness(95%)';
+  ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+
+  // Cache a clean snapshot blueprint of our high-contrast foundation
+  const contrastSnapshot = await createImageBitmap(canvas);
+
+  // DILATION PHASE (Darken)
+  // Shift image vertically up to 5px. Dark pixels bleed into the thick white scratch line.
+  ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'darken';
+
+  const dilationOffsets = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+  for (const offset of dilationOffsets) {
+    ctx.drawImage(contrastSnapshot, 0, offset);
+  }
+
+  // Cache the dilated frame state
+  const dilatedSnapshot = await createImageBitmap(canvas);
+
+  // EROSION PHASE (Lighten)
+  // Shift back slightly using 'lighten' to restore original vertical module spaces
+  ctx.globalCompositeOperation = 'lighten';
+
+  const erosionOffsets = [-2, -1, 1, 2];
+  for (const offset of erosionOffsets) {
+    ctx.drawImage(dilatedSnapshot, 0, offset);
+  }
+
+  // Clean up all texture handles from RAM instantly to avoid garbage collection stutters
+  contrastSnapshot.close();
+  dilatedSnapshot.close();
+
+  // Final hardening pass to sharpen newly repaired block edges
+  const finalCanvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const finalCtx = finalCanvas.getContext('2d');
+  if (!finalCtx) throw new Error('Could not allocate final context');
+
+  finalCtx.filter = 'contrast(300%)';
+  finalCtx.drawImage(canvas, 0, 0);
+
+  return await createImageBitmap(finalCanvas);
+};
+
+/**
+ * Adaptive local sharpening threshold filter (Fuses micro hairline splits)
+ */
+export const imageAdaptiveThresholdProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const ratio = Math.min(DOWNSCALE_MAX_SIZE / width, DOWNSCALE_MAX_SIZE / height);
+  const canvasWidth = Math.round(width * ratio);
+  const canvasHeight = Math.round(height * ratio);
+
+  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate threshold canvas');
+
+  ctx.filter = 'grayscale(100%) blur(0.6px) contrast(250%) brightness(90%)';
+  ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+
+  return await createImageBitmap(canvas);
+};
+
+/**
+ * Standard downscale pass for clear, undamaged boxes
+ */
+export const imageDownscaleProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const ratio = Math.min(600 / width, 600 / height);
+  const targetWidth = Math.round(width * ratio);
+  const targetHeight = Math.round(height * ratio);
+
+  const canvas = new OffscreenCanvas(targetWidth, targetHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get normal canvas context');
+
+  ctx.drawImage(baseBmp, 0, 0, targetWidth, targetHeight);
+  return await createImageBitmap(canvas);
+};
+
+/**
+ * High-performance full-frame contrast maximizer
+ */
+export const imageHighContrastProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
   const ratio = Math.min(DOWNSCALE_MAX_SIZE / width, DOWNSCALE_MAX_SIZE / height);
   const targetWidth = Math.round(width * ratio);
   const targetHeight = Math.round(height * ratio);
 
   const canvas = new OffscreenCanvas(targetWidth, targetHeight);
   const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get contrast canvas context');
 
-  if (!ctx) throw new Error('Could not get 2D context');
-
-  ctx.drawImage(baseBmp, 0, 0, targetWidth, targetHeight);
+  ctx.filter = 'grayscale(100%) contrast(300%)';
+  ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, targetWidth, targetHeight);
 
   return await createImageBitmap(canvas);
 };
 
-// Tight Macro Crop (For high-res close-ups)
-const imageMacroCropProcessing = async (baseBmp) => {
+/**
+ * Soft smudge blur filter designed to unify dot-matrix style patterns
+ */
+export const imageDotSmudgeProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const ratio = Math.min(550 / width, 550 / height);
+  const canvasWidth = Math.round(width * ratio);
+  const canvasHeight = Math.round(height * ratio);
+
+  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get smudge context');
+
+  ctx.filter = 'grayscale(100%) blur(1.2px) contrast(200%)';
+  ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+
+  return await createImageBitmap(canvas);
+};
+
+/**
+ * Safe macro-crop targeting a wide 65% center frame to keep border lines safe
+ */
+export const imageMacroCropProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
 
-  // Extract just the dead center 30% of the image
-  const cropWidth = Math.floor(width * 0.3);
-  const cropHeight = Math.floor(height * 0.3);
+  const cropWidth = Math.floor(width * 0.65);
+  const cropHeight = Math.floor(height * 0.65);
   const cropX = Math.floor((width - cropWidth) / 2);
   const cropY = Math.floor((height - cropHeight) / 2);
 
-  // Downscale the cropped barcode so the WASM engine isn't overwhelmed
-  const ratio = Math.min(500 / cropWidth, 500 / cropHeight);
+  const ratio = Math.min(600 / cropWidth, 600 / cropHeight);
   const targetWidth = Math.round(cropWidth * ratio);
   const targetHeight = Math.round(cropHeight * ratio);
 
   const canvas = new OffscreenCanvas(targetWidth, targetHeight);
   const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get crop canvas context');
 
-  // Draw the cropped section onto the downscaled canvas
   ctx.drawImage(baseBmp, cropX, cropY, cropWidth, cropHeight, 0, 0, targetWidth, targetHeight);
   return await createImageBitmap(canvas);
 };
 
-// Advanced Dot Smudge (Crop + Downscale + Blur + Contrast)
-const imageDotSmudgeProcessing = async (baseBmp) => {
-  const { width, height } = baseBmp;
-
-  // Crop center 50%
-  const cropW = Math.floor(width * 0.5);
-  const cropH = Math.floor(height * 0.5);
-  const startX = Math.floor((width - cropW) / 2);
-  const startY = Math.floor((height - cropH) / 2);
-
-  // Squish to 600px max. This physically pushes the inkjet dots closer together!
-  const ratio = Math.min(600 / cropW, 600 / cropH);
-  const canvasWidth = Math.round(cropW * ratio);
-  const canvasHeight = Math.round(cropH * ratio);
-
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-
-  // Because the dots are now adjacent from downscaling, a 1.5px blur bridges
-  // the gap perfectly. 400% contrast hardens it into a solid black barcode.
-  ctx.filter = 'grayscale(100%) blur(1.5px) contrast(400%)';
-
-  ctx.drawImage(baseBmp, startX, startY, cropW, cropH, 0, 0, canvasWidth, canvasHeight);
-
-  return await createImageBitmap(canvas);
-};
-
-// Native raw file
 const imageRawProcessing = async (baseBmp) => {
   return baseBmp;
 };
 
-// Center Zoom
-const imageZoomCenterProcessing = async (baseBmp) => {
-  const { width, height } = baseBmp;
-  const cropX = Math.floor(width * CENTER_START_PERCENTAGE);
-  const cropY = Math.floor(height * CENTER_START_PERCENTAGE);
-  const cropWidth = Math.floor(width * CENTER_CROP_SIZE_PERCENTAGE);
-  const cropHeight = Math.floor(height * CENTER_CROP_SIZE_PERCENTAGE);
-  return await createImageBitmap(baseBmp, cropX, cropY, cropWidth, cropHeight);
-};
-
-// High Contrast
-const imageHighContrastProcessing = async (baseBmp) => {
-  const { width, height } = baseBmp;
-  const canvasWidth = Math.floor(width * HIGH_CONTRAST_CROP_COEFFICIENT);
-  const canvasHeight = Math.floor(height * HIGH_CONTRAST_CROP_COEFFICIENT);
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-
-  if (!ctx) throw new Error('Could not get 2D context');
-  ctx.filter = 'grayscale(100%) contrast(250%)';
-
-  const sourceX = Math.floor((width - canvasWidth) / 2);
-  const sourceY = Math.floor((height - canvasHeight) / 2);
-
-  ctx.drawImage(
-    baseBmp,
-    sourceX,
-    sourceY,
-    canvasWidth,
-    canvasHeight,
-    0,
-    0,
-    canvasWidth,
-    canvasHeight
-  );
-
-  return await createImageBitmap(canvas);
-};
-
+/**
+ * Processing priority hierarchy.
+ * The expanded morphological close filter sits near the top to catch and repair
+ * broken factory codes immediately before falling back to alternative scales.
+ */
 export const imageProcessingPipeline = [
-  imageDownscaleProcessing, // Catches medium distance shots
-  imageMacroCropProcessing, // Catches raw high-res closeups
-  imageDotSmudgeProcessing, // Catches inkjet-dotted closeups
-  imageRawProcessing, // Catches digital screenshots
-  imageZoomCenterProcessing, // Catches tiny barcodes far away
-  imageHighContrastProcessing // Catches poor lighting
+  imageDownscaleProcessing,
+  imageScratchRepairFullProcessing, // Handles thick printer lines dropouts
+  imageAdaptiveThresholdProcessing, // Handles fine-line scratches
+  imageMacroCropProcessing, // Wide crop preserving outer orientation tracks
+  imageDotSmudgeProcessing,
+  imageHighContrastProcessing,
+  imageRawProcessing
 ];

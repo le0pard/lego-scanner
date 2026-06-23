@@ -1,8 +1,29 @@
 import { expose } from 'comlink';
-import { BarcodeDetector, ZXING_WASM_VERSION, prepareZXingModule } from 'barcode-detector';
-import { imageProcessingPipeline } from '$lib/utils/worker/images';
+import { readBarcodes, prepareZXingModule, ZXING_WASM_VERSION } from 'zxing-wasm/reader';
+import {
+  imageProcessingPipeline,
+  imageScratchRepairFullProcessing
+} from '$lib/utils/worker/images';
 
-let detector = null;
+const BINARIZER_TIERS = ['LocalAverage', 'GlobalHistogram'];
+
+// Global stream sequence tracker for interleaving execution modes
+let liveFrameSequenceCounter = 0;
+
+/**
+ * Utility helper converting an active ImageBitmap into standard ImageData
+ * to conform perfectly with zxing-wasm's required memory allocation types.
+ * @param {ImageBitmap} bitmap
+ * @returns {ImageData}
+ */
+const convertBitmapToImageData = (bitmap) => {
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate temporary transformation context');
+
+  ctx.drawImage(bitmap, 0, 0);
+  return ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+};
 
 const api = {
   /**
@@ -24,13 +45,6 @@ const api = {
       },
       fireImmediately: true
     });
-
-    const supportedFormats = await BarcodeDetector.getSupportedFormats();
-    if (!supportedFormats.includes('data_matrix')) {
-      throw new Error('Data Matrix format is not supported on this device/browser.');
-    }
-
-    detector = new BarcodeDetector({ formats: ['data_matrix'] });
   },
 
   /**
@@ -38,56 +52,85 @@ const api = {
    * @param {ImageBitmap} imageBitmap
    */
   async detect(imageBitmap) {
-    if (!detector) {
-      throw new Error('Worker scanner not initialized.');
-    }
+    let processedFrameBitmap = imageBitmap;
+    let separateTextureGenerated = false;
 
     try {
-      const barcodes = await detector.detect(imageBitmap);
-      if (barcodes.length > 0) {
-        return barcodes[0].rawValue;
+      liveFrameSequenceCounter++;
+
+      // Interleave modes: Odd frames trigger the morphological line repair pass
+      if (liveFrameSequenceCounter % 2 === 1) {
+        try {
+          processedFrameBitmap = await imageScratchRepairFullProcessing(imageBitmap);
+          separateTextureGenerated = true;
+        } catch (filterError) {
+          // Fall back to the raw image frame if the GPU context is busy
+          processedFrameBitmap = imageBitmap;
+          separateTextureGenerated = false;
+        }
       }
 
+      // Safe input structure conversion for zxing-wasm
+      const targetImageData = convertBitmapToImageData(processedFrameBitmap);
+
+      const results = await readBarcodes(targetImageData, {
+        formats: ['DataMatrix'],
+        tryHarder: liveFrameSequenceCounter % 2 === 1, // Devote more CPU cycles only on repair frames
+        tryRotate: true,
+        maxNumberOfSymbols: 1,
+        binarizer: 'LocalAverage'
+      });
+
+      if (results && results.length > 0) {
+        return results[0].text;
+      }
       return null;
     } catch (err) {
-      console.error('Worker extraction failure:', err);
+      console.error('Live camera scan error:', err);
       return null;
     } finally {
-      // Close the bitmap inside the worker to immediately free system memory
+      // Prevent web worker memory leaks by clearing generated resources
+      if (separateTextureGenerated && processedFrameBitmap) {
+        processedFrameBitmap.close();
+      }
       imageBitmap.close();
     }
   },
 
   /**
-   * Process a file
+   * Deep file analysis combining your custom canvas morphological pipeline
+   * with variable engine binarization profiles for extreme resilience.
    * @param {File} file
    */
   async detectFromFile(file) {
-    if (!detector) {
-      throw new Error('Worker scanner not initialized.');
-    }
-
     const baseBmp = await createImageBitmap(file);
     let result = null;
 
     try {
-      // Loop through pipeline sequentially (saves RAM, stops early if found)
       for (const processingMethod of imageProcessingPipeline) {
         let currentBmp = null;
 
         try {
           currentBmp = await processingMethod(baseBmp);
-          const barcodes = await detector.detect(currentBmp);
 
-          if (barcodes.length > 0) {
-            result = barcodes[0].rawValue;
-            break;
+          const imageData = convertBitmapToImageData(currentBmp);
+          for (const binarizer of BINARIZER_TIERS) {
+            const results = await readBarcodes(imageData, {
+              formats: ['DataMatrix'],
+              tryHarder: true,
+              tryRotate: true,
+              maxNumberOfSymbols: 1,
+              binarizer
+            });
+
+            if (results && results.length > 0) {
+              result = results[0].text;
+              return result;
+            }
           }
         } catch (err) {
-          console.warn('Worker pass failed:', err);
+          // Fall back gracefully to the next filter pipeline stage
         } finally {
-          // Close the intermediate bitmap to prevent GPU memory leaks.
-          // (Make sure we don't close the baseBmp by accident if the pass returned it)
           if (currentBmp && currentBmp !== baseBmp) {
             currentBmp.close();
           }
@@ -98,6 +141,58 @@ const api = {
     }
 
     return result;
+  },
+
+  /**
+   * Interactive Vision Diagnostics Engine
+   * Keeps your layout debugging tray operational with advanced settings active.
+   */
+  async runDiagnosticSuite(file) {
+    const baseBmp = await createImageBitmap(file);
+    const diagnosticReport = [];
+
+    for (const processingMethod of imageProcessingPipeline) {
+      let currentBmp = null;
+      try {
+        currentBmp = await processingMethod(baseBmp);
+
+        // Snapshot texture context into visual data URLs
+        const debugCanvas = new OffscreenCanvas(currentBmp.width, currentBmp.height);
+        const debugCtx = debugCanvas.getContext('2d');
+        debugCtx.drawImage(currentBmp, 0, 0);
+
+        const blob = await debugCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
+        const reader = new FileReaderSync();
+        const dataUrl = reader.readAsDataURL(blob);
+        const imageData = debugCtx.getImageData(0, 0, currentBmp.width, currentBmp.height);
+
+        let testScan = [];
+        for (const binarizer of BINARIZER_TIERS) {
+          testScan = await readBarcodes(imageData, {
+            formats: ['DataMatrix'],
+            tryHarder: true,
+            tryRotate: true,
+            maxNumberOfSymbols: 1,
+            binarizer
+          });
+          if (testScan.length > 0) break;
+        }
+
+        diagnosticReport.push({
+          name: processingMethod.name.replace('image', '').replace('Processing', ''),
+          preview: dataUrl,
+          success: testScan.length > 0,
+          decodedValue: testScan.length > 0 ? testScan[0].text : null
+        });
+      } catch (err) {
+        console.warn(`Diagnostic pass error under ${processingMethod.name}:`, err);
+      } finally {
+        if (currentBmp && currentBmp !== baseBmp) currentBmp.close();
+      }
+    }
+
+    baseBmp.close();
+    return diagnosticReport;
   }
 };
 

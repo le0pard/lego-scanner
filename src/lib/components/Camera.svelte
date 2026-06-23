@@ -27,13 +27,16 @@
   const CAMERA_SETTINGS = {
     width: { ideal: 1280 },
     height: { ideal: 720 },
-    frameRate: { ideal: 12, max: 15 }
+    frameRate: { ideal: 30 }
   };
 
   let videoElement = $state(null);
   let stream = $state(null);
   let isCameraRequested = $state(false);
   let processingFrame = false;
+
+  let lastProcessedTimestamp = 0;
+  const PROCESSING_THROTTLE_MS = 200;
 
   const streamActiveTrack = () => (stream ? stream.getVideoTracks()[0] : null);
 
@@ -165,8 +168,16 @@
       return;
     }
 
-    if (!processingFrame && videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    const now = performance.now();
+
+    if (
+      !processingFrame &&
+      now - lastProcessedTimestamp >= PROCESSING_THROTTLE_MS &&
+      videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
+    ) {
       processingFrame = true;
+      lastProcessedTimestamp = now;
+
       try {
         const bitmap = await createImageBitmap(videoElement);
         const result = await getScanner().detect(transfer(bitmap, [bitmap]));

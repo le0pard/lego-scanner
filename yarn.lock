@@ -1095,15 +1095,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"barcode-detector@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "barcode-detector@npm:3.2.0"
-  dependencies:
-    zxing-wasm: "npm:3.1.0"
-  checksum: 10c0/85bfe65abe88a8191ffd8224171418a70db6a725bc9824047a9dc4918688a1b343683f02aabf9801c0a9e17802ddcee8ee19207940225889c45bbdad45a83649
-  languageName: node
-  linkType: hard
-
 "boolbase@npm:^1.0.0":
   version: 1.0.0
   resolution: "boolbase@npm:1.0.0"
@@ -1828,7 +1819,6 @@ __metadata:
     "@tailwindcss/typography": "npm:^0.5.20"
     "@tailwindcss/vite": "npm:^4.3.1"
     "@types/node": "npm:^24.13.2"
-    barcode-detector: "npm:^3.2.0"
     classnames: "npm:^2.5.1"
     comlink: "npm:^4.4.2"
     dexie: "npm:^4.4.4"
@@ -1844,6 +1834,7 @@ __metadata:
     tailwindcss: "npm:^4.3.1"
     typescript: "npm:^6.0.3"
     vite: "npm:^8.0.16"
+    zxing-wasm: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
 
@@ -2961,7 +2952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zxing-wasm@npm:3.1.0":
+"zxing-wasm@npm:^3.1.0":
   version: 3.1.0
   resolution: "zxing-wasm@npm:3.1.0"
   dependencies:
