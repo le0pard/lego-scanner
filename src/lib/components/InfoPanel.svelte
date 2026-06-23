@@ -19,6 +19,33 @@
 </script>
 
 <div class="h-full flex flex-col justify-between gap-6 p-2 md:p-4">
+  {#if updateState.available}
+    <div class="flex flex-col text-left">
+      <div class="p-4 bg-primary/10 border border-primary/20 rounded-xl flex flex-col gap-3">
+        <div class="flex items-start gap-3">
+          <div class="flex bg-primary text-black p-1 rounded-lg shrink-0">
+            <i class="iconify lucide--circle-arrow-down size-6"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-text-main leading-snug">
+              Application Update Available!
+            </h4>
+            <p class="text-xs text-text-muted mt-0.5">
+              New Lego set indexes and scanning enhancements have been downloaded for offline use.
+            </p>
+          </div>
+        </div>
+        <button
+          onclick={reloadApp}
+          class="w-full bg-primary hover:bg-primary-hover text-black text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 active:scale-[0.98]"
+        >
+          <i class="iconify lucide--refresh-cw size-4"></i>
+          Reload & Update App
+        </button>
+      </div>
+    </div>
+  {/if}
+
   <div class="flex flex-col gap-1">
     <div class="flex justify-between items-start">
       <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
@@ -27,6 +54,9 @@
       >
         READY
       </span>
+    </div>
+    <div class="w-full bg-border text-text-muted font-bold py-3.5 px-4 text-sm">
+      Waiting for Code...
     </div>
     <p class="text-sm text-text-muted">
       Select input mode above. Flash control helps resolve specular glare reflections on slick
@@ -82,42 +112,4 @@
       </span>
     </div>
   </div>
-
-  {#if updateState.available}
-    <div
-      class="border-t border-border pt-4 animate-in fade-in slide-in-from-bottom-2 duration-300 text-left"
-    >
-      <div class="p-4 bg-primary/10 border border-primary/20 rounded-xl flex flex-col gap-3">
-        <div class="flex items-start gap-3">
-          <div class="bg-primary text-black p-1.5 rounded-lg shrink-0">
-            <i class="iconify lucide--sparkles size-4"></i>
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-text-main leading-snug">
-              Application Update Available!
-            </h4>
-            <p class="text-xs text-text-muted mt-0.5">
-              New Lego set indexes and scanning enhancements have been downloaded for offline use.
-            </p>
-          </div>
-        </div>
-        <button
-          onclick={reloadApp}
-          class="w-full bg-primary hover:bg-primary-hover text-black text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 active:scale-[0.98]"
-        >
-          <i class="iconify lucide--refresh-cw size-3.5"></i>
-          Reload & Update App
-        </button>
-      </div>
-    </div>
-  {/if}
-
-  <footer class="mt-auto pt-4 border-t border-border">
-    <button
-      disabled
-      class="w-full bg-border text-text-muted font-bold py-3.5 px-4 rounded-xl shadow-sm cursor-not-allowed opacity-50 text-sm"
-    >
-      Waiting for Code...
-    </button>
-  </footer>
 </div>
