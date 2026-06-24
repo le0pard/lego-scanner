@@ -61,12 +61,12 @@
   >
     {#if minifig}
       <div
-        class="bg-success-bg border border-success-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
+        class="bg-success-bg border border-success-border rounded-xl py-4 px-2 flex items-center gap-2 shadow-sm relative overflow-hidden"
       >
         <div class="bg-success-icon-bg text-success-text flex p-2 rounded-xl shrink-0 z-10">
           <i class="iconify lucide--circle-check size-6"></i>
         </div>
-        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-3">
+        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-2">
           <div class="min-w-0 flex-1">
             <h3 class="text-success-text font-bold text-lg leading-tight">Match Found!</h3>
             <p
@@ -138,13 +138,13 @@
       </button>
     {:else}
       <div
-        class="bg-error-bg border border-error-border rounded-xl p-4 flex items-center gap-4 shadow-sm relative overflow-hidden"
+        class="bg-error-bg border border-error-border rounded-xl py-4 px-2 flex items-center gap-2 shadow-sm relative overflow-hidden"
       >
         <div class="bg-error-icon-bg text-error-text flex p-2 rounded-xl shrink-0 z-10">
           <i class="iconify lucide--x size-6"></i>
         </div>
-        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-3">
-          <div class="min-w-0 flex-1">
+        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-2">
+          <div class="min-w-0 flex-1 flex flex-col gap-1">
             <h3 class="text-error-text font-bold text-lg leading-tight">Code Not in Database</h3>
             <p
               class="text-error-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all select-all"

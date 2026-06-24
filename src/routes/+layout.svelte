@@ -28,22 +28,6 @@
   onMount(async () => {
     if (!browser) return;
 
-    if ('serviceWorker' in navigator) {
-      const handleMessage = (event) => {
-        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
-          setUpdateAvailable(true);
-        }
-      };
-
-      // add the listener
-      navigator.serviceWorker.addEventListener('message', handleMessage);
-
-      // return the cleanup function that Svelte will run on component unmount
-      return () => {
-        navigator.serviceWorker.removeEventListener('message', handleMessage);
-      };
-    }
-
     try {
       const localMetaArray = await db.syncMeta.toArray();
       if (localMetaArray.length > 0) {
@@ -88,6 +72,26 @@
       }
     }
   });
+
+  onMount(() => {
+    if (!browser) return;
+
+    if ('serviceWorker' in navigator) {
+      const handleMessage = (event) => {
+        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+          setUpdateAvailable(true);
+        }
+      };
+
+      // add the listener
+      navigator.serviceWorker.addEventListener('message', handleMessage);
+
+      // return the cleanup function that Svelte will run on component unmount
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleMessage);
+      };
+    }
+  })
 </script>
 
 {@render children()}
