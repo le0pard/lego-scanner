@@ -151,10 +151,13 @@
       <p class="text-xs text-text-muted mt-1">Scanning for Data Matrix codes</p>
     {:else}
       <div
-        class={classNames('p-4 rounded-full border mb-4 transition-transform duration-200', {
-          'bg-primary/20 border-primary/50 scale-110': isDragging,
-          'bg-app-bg border-border group-hover:scale-105': !isDragging
-        })}
+        class={classNames(
+          'flex justify-center p-4 rounded-full border mb-4 transition-transform duration-200',
+          {
+            'bg-primary/20 border-primary/50 scale-110': isDragging,
+            'bg-app-bg border-border group-hover:scale-105': !isDragging
+          }
+        )}
       >
         <i
           class={classNames('iconify size-8 transition-colors', {
