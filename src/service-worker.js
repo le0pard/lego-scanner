@@ -60,8 +60,9 @@ self.addEventListener('fetch', (event) => {
       }
 
       const isSameOrigin = url.origin === self.location.origin;
+      const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(url.pathname);
 
-      if (response.status === 200 && isSameOrigin) {
+      if (response.status === 200 && isSameOrigin && !isOptimizedImage) {
         cache.put(event.request, response.clone());
       }
 
