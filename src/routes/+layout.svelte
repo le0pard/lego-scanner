@@ -91,7 +91,7 @@
         navigator.serviceWorker.removeEventListener('message', handleMessage);
       };
     }
-  })
+  });
 </script>
 
 {@render children()}
