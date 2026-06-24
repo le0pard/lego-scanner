@@ -1,9 +1,12 @@
 import { build, files, version } from '$service-worker';
 
+const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i
 const self = globalThis.self;
 const CACHE = `cache-${version}`;
 
-const ASSETS = [...build, ...files];
+const ASSETS = [...build, ...files].filter((path) => {
+  return !OPTIMIZED_ASSETS_REGEX.test(path);
+});
 
 self.addEventListener('install', (event) => {
   const addFilesToCache = async () => {
