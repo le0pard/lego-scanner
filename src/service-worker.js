@@ -1,72 +1,84 @@
-// src/worker.js
 import { build, files, version } from '$service-worker';
 
-const CACHE_NAME = `cache-v${version}`;
-const ASSETS_TO_CACHE = [...build, ...files];
+const self = globalThis.self;
+const CACHE = `cache-${version}`;
 
-// Install Event: Cache app shell assets
+const ASSETS = [...build, ...files];
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
-      .then(() => self.skipWaiting())
-  );
+  const addFilesToCache = async () => {
+    const cache = await caches.open(CACHE);
+    await cache.addAll(ASSETS);
+
+    // broadcast to all open tabs that a new version is downloaded and waiting
+    const clientsList = await self.clients.matchAll({ includeUncontrolled: true });
+    for (const client of clientsList) {
+      client.postMessage({ type: 'UPDATE_AVAILABLE' });
+    }
+  };
+
+  event.waitUntil(addFilesToCache());
 });
 
-// Activate Event: Clean up old versions of caches
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) => {
-        return Promise.all(
-          keys.map((key) => {
-            if (key !== CACHE_NAME) return caches.delete(key);
-          })
-        );
-      })
-      .then(() => self.clients.claim())
-  );
+  const deleteOldCaches = async () => {
+    for (const key of await caches.keys()) {
+      if (key !== CACHE) await caches.delete(key);
+    }
+  };
+
+  event.waitUntil(deleteOldCaches());
 });
 
-// Fetch Event: Intercept image requests and manage cache dynamically
 self.addEventListener('fetch', (event) => {
+  // ignore POST requests etc
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+  if (!url.protocol.startsWith('http')) return;
 
-  // Only intercept local requests (like your Lego images)
-  if (url.origin === self.location.origin) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse; // Return instantly from offline cache
-        }
+  const respond = async () => {
+    const url = new URL(event.request.url);
+    const cache = await caches.open(CACHE);
 
-        // If not cached, fetch from network
-        return fetch(event.request)
-          .then((networkResponse) => {
-            // Modernized Filter: Intercept both SvelteKit immutable assets and general image formats
-            const isOptimizedImage =
-              /\.(webp|avif|jpg|jpeg|png|svg)$/i.test(url.pathname) ||
-              url.pathname.includes('/_app/immutable/assets/');
+    // `build`/`files` can always be served from the cache
+    if (ASSETS.includes(url.pathname)) {
+      const response = await cache.match(url.pathname);
 
-            if (isOptimizedImage && networkResponse.status === 200) {
-              const responseClone = networkResponse.clone();
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, responseClone);
-              });
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            // Fallback if network fails completely and asset isn't cached
-            return new Response('Offline image unavailable', { status: 503 });
-          });
-      })
-    );
+      if (response) {
+        return response;
+      }
+    }
+
+    try {
+      const response = await fetch(event.request);
+      if (!(response instanceof Response)) {
+        throw new Error('invalid response from fetch');
+      }
+
+      const isSameOrigin = url.origin === self.location.origin;
+
+      if (response.status === 200 && isSameOrigin) {
+        cache.put(event.request, response.clone());
+      }
+
+      return response;
+    } catch (err) {
+      const response = await cache.match(event.request);
+
+      if (response) {
+        return response;
+      }
+
+      throw err;
+    }
+  };
+
+  event.respondWith(respond());
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });

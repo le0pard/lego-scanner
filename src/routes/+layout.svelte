@@ -4,7 +4,6 @@
   import { browser } from '$app/environment';
   import { resolve } from '$app/paths';
   import { wrap } from 'comlink';
-  import favicon from '$lib/assets/favicon.svg';
 
   import { db } from '$lib/utils/db.js';
   import { setSyncStatus } from '$lib/states/sync.svelte.js';
@@ -91,5 +90,4 @@
   });
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
 {@render children()}
