@@ -1,6 +1,6 @@
 import { build, files, version } from '$service-worker';
 
-const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i
+const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
 const self = globalThis.self;
 const CACHE = `cache-${version}`;
 
