@@ -9,10 +9,3 @@ export const updateState = $state({
 export function setUpdateAvailable(isAvailable) {
   updateState.available = isAvailable;
 }
-
-/**
- * Triggers a full browser window refresh to load the latest active cached assets.
- */
-export function reloadApp() {
-  window.location.reload();
-}

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   import classNames from 'classnames';
   import { dev, browser } from '$app/environment';
   import { useTiks } from '@rexa-developer/tiks/svelte';
@@ -102,16 +102,14 @@
     if (typeof window !== 'undefined') {
       window.addEventListener('paste', handlePaste);
     }
-  });
 
-  onDestroy(() => {
-    resetScanState();
+    return () => {
+      if (!browser) return;
 
-    if (!browser) return;
-
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('paste', handlePaste);
-    }
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('paste', handlePaste);
+      }
+    };
   });
 </script>
 

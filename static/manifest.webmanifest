@@ -1,0 +1,27 @@
+{
+  "short_name": "LegoScanner",
+  "name": "LegoScanner",
+  "description": "LegoScanner - Lego Minifigures Scanner",
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#f4c946",
+  "background_color": "#f4c946",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/maskable_icon.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "maskable"
+    }
+  ]
+}

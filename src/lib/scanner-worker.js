@@ -139,7 +139,7 @@ const api = {
               return result;
             }
           }
-        } catch (err) {
+        } catch {
           // Fall back gracefully to the next filter pipeline stage
         } finally {
           if (currentBmp && currentBmp !== baseBmp) {

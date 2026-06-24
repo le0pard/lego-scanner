@@ -1,20 +1,31 @@
 <script>
   import classNames from 'classnames';
   import { syncState } from '$lib/states/sync.svelte.js';
-  import { updateState, reloadApp } from '$lib/states/update.svelte.js';
+  import { formatTime } from '$lib/utils/date.js';
+  import { updateState } from '$lib/states/update.svelte.js';
 
-  /**
-   * Helper to present standard reader-friendly timestamp representations
-   * @param {string} isoString
-   */
-  const formatTime = (isoString) => {
-    if (!isoString) return 'Never';
-    try {
-      const date = new Date(isoString);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } catch {
-      return 'Pending';
+  const reloadApp = async () => {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration();
+
+      if (registration && registration.waiting) {
+        // Listen for the new service worker to take control of the page
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
+
+        // Tell the waiting service worker to activate immediately
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        return; // Exit early, the controllerchange listener will handle the reload
+      }
     }
+
+    // If no service worker is waiting or supported, just reload normally
+    window.location.reload();
   };
 </script>
 

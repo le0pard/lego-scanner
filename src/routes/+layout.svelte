@@ -29,34 +29,20 @@
   onMount(async () => {
     if (!browser) return;
 
-    // Service Worker Update Detection ---
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistration().then((reg) => {
-        if (!reg) return;
-
-        // If there is already a background installation waiting
-        if (reg.waiting) {
+      const handleMessage = (event) => {
+        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
           setUpdateAvailable(true);
         }
+      };
 
-        // Listen for newer service workers discovered during active session execution
-        reg.addEventListener('updatefound', () => {
-          const installingWorker = reg.installing;
-          if (!installingWorker) return;
+      // add the listener
+      navigator.serviceWorker.addEventListener('message', handleMessage);
 
-          installingWorker.addEventListener('statechange', () => {
-            // Once fully installed, indicate that the app can swap to the new build
-            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              setUpdateAvailable(true);
-            }
-          });
-        });
-      });
-
-      // Catch instant background update swaps
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        setUpdateAvailable(true);
-      });
+      // return the cleanup function that Svelte will run on component unmount
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleMessage);
+      };
     }
 
     try {
