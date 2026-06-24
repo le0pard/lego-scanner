@@ -1,0 +1,79 @@
+{
+  "series": "f1-race-cars",
+  "displayName": "F1 Race Cars",
+  "releaseYear": 2025,
+  "minifigures": [
+    {
+      "slug": "f1_red_bull",
+      "name": "Red Bull",
+      "imagePath": "/assets/minifigures/f1-race-cars/red-bull.jpg",
+      "identifiers": [{ "code": "6538426" }, { "code": "6536842" }, { "code": "6538306" }]
+    },
+    {
+      "slug": "f1_mercedes",
+      "name": "Mercedes",
+      "imagePath": "/assets/minifigures/f1-race-cars/mercedes.jpg",
+      "identifiers": [{ "code": "6538427" }, { "code": "6536843" }, { "code": "6538307" }]
+    },
+    {
+      "slug": "f1_ferrari",
+      "name": "Ferrari",
+      "imagePath": "/assets/minifigures/f1-race-cars/ferrari.jpg",
+      "identifiers": [{ "code": "6538425" }, { "code": "6536841" }, { "code": "6538305" }]
+    },
+    {
+      "slug": "f1_mclaren",
+      "name": "McLaren",
+      "imagePath": "/assets/minifigures/f1-race-cars/mc-laren.jpg",
+      "identifiers": [{ "code": "6538434" }, { "code": "6536850" }, { "code": "6538314" }]
+    },
+    {
+      "slug": "f1_aston_martin",
+      "name": "Aston Martin",
+      "imagePath": "/assets/minifigures/f1-race-cars/aston-martin.jpg",
+      "identifiers": [{ "code": "6538428" }, { "code": "6536844" }, { "code": "6538308" }]
+    },
+    {
+      "slug": "f1_alpine",
+      "name": "Alpine",
+      "imagePath": "/assets/minifigures/f1-race-cars/alpine.jpg",
+      "identifiers": [{ "code": "6538431" }, { "code": "6536847" }, { "code": "6538311" }]
+    },
+    {
+      "slug": "f1_williams",
+      "name": "Williams",
+      "imagePath": "/assets/minifigures/f1-race-cars/williams.jpg",
+      "identifiers": [{ "code": "6538432" }, { "code": "6536848" }, { "code": "6538312" }]
+    },
+    {
+      "slug": "f1_visa_cash_app",
+      "name": "Visa Cash App",
+      "imagePath": "/assets/minifigures/f1-race-cars/visa-cash-app.jpg",
+      "identifiers": [{ "code": "6538429" }, { "code": "6536845" }, { "code": "6538309" }]
+    },
+    {
+      "slug": "f1_sauber",
+      "name": "Sauber",
+      "imagePath": "/assets/minifigures/f1-race-cars/sauber.jpg",
+      "identifiers": [{ "code": "6538430" }, { "code": "6536846" }, { "code": "6538310" }]
+    },
+    {
+      "slug": "f1_haas",
+      "name": "Haas",
+      "imagePath": "/assets/minifigures/f1-race-cars/haas.jpg",
+      "identifiers": [{ "code": "6538433" }, { "code": "6536849" }, { "code": "6538313" }]
+    },
+    {
+      "slug": "f1_f1_academy",
+      "name": "F1 Academy",
+      "imagePath": "/assets/minifigures/f1-race-cars/f1-academy.jpg",
+      "identifiers": [{ "code": "6538436" }, { "code": "6536852" }, { "code": "6538316" }]
+    },
+    {
+      "slug": "f1_generic",
+      "name": "Generic",
+      "imagePath": "/assets/minifigures/f1-race-cars/generic.jpg",
+      "identifiers": [{ "code": "6538435" }, { "code": "6536851" }, { "code": "6538315" }]
+    }
+  ]
+}
