@@ -3,12 +3,19 @@
   import { resolve } from '$app/paths';
   import { syncState } from '$lib/states/sync.svelte.js';
   import { formatTime } from '$lib/utils/date.js';
+  import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced';
 </script>
 
 <div class="h-full flex flex-col justify-between gap-6 p-2 md:p-4">
   <div class="flex flex-col gap-3">
-    <div class="flex justify-between items-start">
-      <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
+    <div
+      class="w-full overflow-hidden border border-border bg-black aspect-video flex items-center justify-center"
+    >
+      <enhanced:img
+        src={dataMatrixCodeExampleImg}
+        alt="Lego Minifigure box bottom with Data Matrix highlighted"
+        class="w-full h-full object-cover"
+      />
     </div>
 
     <p class="text-sm text-text-muted leading-relaxed">

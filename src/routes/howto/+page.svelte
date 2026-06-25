@@ -75,12 +75,12 @@
         <p>Switch between your preferred scanning surfaces using the tabs in the interface:</p>
         <ul class="list-disc pl-5 flex flex-col gap-1 mt-1">
           <li>
-            <strong>Camera View:</strong> Grants peripheral access to your device camera to line up physical
+            <strong>Camera:</strong> Grants peripheral access to your device camera to line up physical
             boxes in real time for automatic rapid detection.
           </li>
           <li>
-            <strong>Upload Dashboard:</strong> Perfect for dragging-and-dropping photo prints, pasting
-            raw clipboard capture buffers, or selecting file attachments.
+            <strong>Upload:</strong> Perfect for dragging-and-dropping photo prints, pasting raw clipboard
+            capture buffers, or selecting file attachments.
           </li>
         </ul>
       </section>
