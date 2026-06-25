@@ -46,6 +46,7 @@
       >
         <enhanced:img
           src={scannerCodeImg}
+          fetchpriority="high"
           alt="Lego Minifigure box bottom with Data Matrix highlighted"
           class="w-full h-full object-cover"
         />
