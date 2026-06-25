@@ -128,7 +128,7 @@
           <a
             href="https://github.com/le0pard/lego-scanner"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="external noopener noreferrer"
             class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
           >
             <i class="iconify mdi--github size-8"></i>
@@ -137,10 +137,10 @@
         </li>
         <li>
           <a
-            href="https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set-figure"
+            href="https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set"
             class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="external noopener noreferrer"
           >
             <i class="iconify mdi--lego size-8"></i>
             Report Missing Brick Set

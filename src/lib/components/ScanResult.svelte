@@ -2,6 +2,8 @@
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte';
   import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
 
+  const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
+
   // Receive the processed data from RightPanel
   let { minifig, searchCompleted } = $props();
 
@@ -60,8 +62,6 @@
    * @returns {string} URL string
    */
   const generateReportUrl = (rawToken) => {
-    const repositoryUrl = 'https://github.com/le0pard/lego-scanner/issues/new';
-
     // Structure metadata information body payload
     const bodyContent =
       `### Scanned Token String\n` +
@@ -84,7 +84,7 @@
       body: bodyContent
     });
 
-    return `${repositoryUrl}?${urlParams.toString()}`;
+    return `${REPOSITORY_URL}?${urlParams.toString()}`;
   };
 </script>
 
@@ -228,7 +228,7 @@
       <a
         href={generateReportUrl(scanResultState.result)}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="external noopener noreferrer"
         class="bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-sm active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 text-sm select-none"
       >
         <i class="iconify mdi--github size-8"></i>
