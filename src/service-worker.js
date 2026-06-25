@@ -9,6 +9,19 @@ const ASSETS = [...build, ...files].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path);
 });
 
+const normalizeRequest = (request) => {
+  const url = new URL(request.url);
+  if (url.search.length > 0) {
+    return new Request(`${url.origin}${url.pathname}`, {
+      method: request.method,
+      headers: request.headers,
+      credentials: request.credentials,
+      mode: request.mode
+    });
+  }
+  return request;
+};
+
 const fetchWithTimeout = (request, timeoutMs) => {
   return Promise.race([
     fetch(request),
@@ -21,7 +34,23 @@ const fetchWithTimeout = (request, timeoutMs) => {
 self.addEventListener('install', (event) => {
   const addFilesToCache = async () => {
     const cache = await caches.open(CACHE);
-    await cache.addAll(ASSETS);
+    try {
+      // Attempt high-performance atomic bulk download pass
+      await cache.addAll(ASSETS);
+    } catch (bulkError) {
+      console.warn(
+        '[Service Worker] Bulk asset pre-cache failed. Switching to resilient individual layout extraction...'
+      );
+
+      // Fallback path loops over files individually so 404 dropouts don't halt the PWA lifecycle
+      for (const asset of ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (individualError) {
+          console.error(`[Service Worker] Critical 404 Dropout: Target missing -> ${asset}`);
+        }
+      }
+    }
 
     // broadcast to all open tabs that a new version is downloaded and waiting
     const clientsList = await self.clients.matchAll({ includeUncontrolled: true });
@@ -54,9 +83,12 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     const cache = await caches.open(CACHE);
 
+    const standardizedReq = normalizeRequest(event.request);
+    const sanitizedPath = new URL(standardizedReq.url).pathname;
+
     // `build`/`files` can always be served from the cache
-    if (ASSETS.includes(url.pathname)) {
-      const response = await cache.match(url.pathname);
+    if (ASSETS.includes(sanitizedPath)) {
+      const response = await cache.match(standardizedReq);
 
       if (response) {
         return response;
@@ -64,14 +96,14 @@ self.addEventListener('fetch', (event) => {
     }
 
     // Network-First with strict Timeout Fallback
-    if (url.pathname.startsWith('/api/')) {
+    if (sanitizedPath.startsWith('/api/')) {
       try {
         // Attempt fresh network fetch with our timeout constraint
         const response = await fetchWithTimeout(event.request, API_TIMEOUT_MS);
 
         // If successful and valid, update the cache snapshot for offline consistency
         if (response.status === 200) {
-          cache.put(event.request, response.clone());
+          cache.put(standardizedReq, response.clone());
         }
 
         return response;
@@ -82,7 +114,7 @@ self.addEventListener('fetch', (event) => {
         );
 
         // Fall back to the local cache if offline or timing out
-        const cachedResponse = await cache.match(event.request);
+        const cachedResponse = await cache.match(standardizedReq);
         if (cachedResponse) {
           return cachedResponse;
         }
@@ -102,12 +134,12 @@ self.addEventListener('fetch', (event) => {
       const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(url.pathname);
 
       if (response.status === 200 && isSameOrigin && !isOptimizedImage) {
-        cache.put(event.request, response.clone());
+        cache.put(standardizedReq, response.clone());
       }
 
       return response;
     } catch (err) {
-      const response = await cache.match(event.request);
+      const response = await cache.match(standardizedReq);
 
       if (response) {
         return response;
