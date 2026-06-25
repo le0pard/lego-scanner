@@ -3,10 +3,20 @@ import { build, files, version } from '$service-worker';
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
 const self = globalThis.self;
 const CACHE = `cache-${version}`;
+const API_TIMEOUT_MS = 3500;
 
 const ASSETS = [...build, ...files].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path);
 });
+
+const fetchWithTimeout = (request, timeoutMs) => {
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Network request timed out')), timeoutMs)
+    )
+  ]);
+};
 
 self.addEventListener('install', (event) => {
   const addFilesToCache = async () => {
@@ -50,6 +60,35 @@ self.addEventListener('fetch', (event) => {
 
       if (response) {
         return response;
+      }
+    }
+
+    // Network-First with strict Timeout Fallback
+    if (url.pathname.startsWith('/api/')) {
+      try {
+        // Attempt fresh network fetch with our timeout constraint
+        const response = await fetchWithTimeout(event.request, API_TIMEOUT_MS);
+
+        // If successful and valid, update the cache snapshot for offline consistency
+        if (response.status === 200) {
+          cache.put(event.request, response.clone());
+        }
+
+        return response;
+      } catch (err) {
+        console.warn(
+          `[Service Worker] API Network failed or timed out for ${url.pathname}. Using offline cache layer.`,
+          err
+        );
+
+        // Fall back to the local cache if offline or timing out
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // Re-throw if nothing is stored locally to let application handlers gracefully intercept it
+        throw err;
       }
     }
 

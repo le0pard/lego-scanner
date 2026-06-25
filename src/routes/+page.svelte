@@ -6,6 +6,7 @@
 
   import Camera from '$lib/components/Camera.svelte';
   import Header from '$lib/components/Header.svelte';
+  import UpdateBanner from '$lib/components/UpdateBanner.svelte'; // <-- NEW IMPORT
   import RightPanel from '$lib/components/RightPanel.svelte';
   import Upload from '$lib/components/Upload.svelte';
   import WorkerError from '$lib/components/WorkerError.svelte';
@@ -40,7 +41,6 @@
     }
   });
 
-  // Dynamic lock controls optimizing layout interaction surfaces
   $effect(() => {
     if (typeof document !== 'undefined' && document.body?.style) {
       document.body.style.overflow = isMenuOpen() ? 'hidden' : 'auto';
@@ -52,6 +52,7 @@
   class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt-pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
 >
   <Header />
+  <UpdateBanner />
 
   <div
     class="flex flex-col landscape:flex-row landscape:items-start landscape:gap-6 flex-1 w-full pb-2 mt-2"

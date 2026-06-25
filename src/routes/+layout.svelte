@@ -77,16 +77,38 @@
     if (!browser) return;
 
     if ('serviceWorker' in navigator) {
+      // Direct Inspection: Check if an update was already caught and is waiting from a prior session
+      navigator.serviceWorker.getRegistration().then((registration) => {
+        if (registration && registration.waiting) {
+          setUpdateAvailable(true);
+        }
+
+        // Active Lifecycle Listener: Detect if an update arrives and completes installation while app is running
+        if (registration) {
+          registration.addEventListener('updatefound', () => {
+            const installingWorker = registration.installing;
+            if (installingWorker) {
+              installingWorker.addEventListener('statechange', () => {
+                // Once it crosses from installing to installed, pop up the notification flag
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  setUpdateAvailable(true);
+                }
+              });
+            }
+          });
+        }
+      });
+
+      // Fallback Reactive Message Bus: Keep the postMessage broadcast listener functional
       const handleMessage = (event) => {
         if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
           setUpdateAvailable(true);
         }
       };
 
-      // add the listener
       navigator.serviceWorker.addEventListener('message', handleMessage);
 
-      // return the cleanup function that Svelte will run on component unmount
+      // Svelte structural lifecycle cleanup registration
       return () => {
         navigator.serviceWorker.removeEventListener('message', handleMessage);
       };
