@@ -9,9 +9,33 @@
   <Header showTabs={false} />
 
   <div
-    class="flex-1 w-full pb-6 mt-4 flex flex-col gap-6 animate-in fade-in duration-300 text-left"
+    class="flex-1 w-full pb-6 mt-4 flex flex-col gap-5 animate-in fade-in duration-300 text-left"
   >
-    <h2 class="text-2xl font-black tracking-tight text-text-main">How to Scan Minifigures</h2>
+    <div>
+      <h2 class="text-2xl font-black tracking-tight text-text-main">How to Scan Minifigures</h2>
+      <p class="text-xs text-text-muted mt-0.5">
+        Quick setup guide and peripheral hardware requirements
+      </p>
+    </div>
+
+    <section
+      class="p-4 bg-card-bg border border-border rounded-2xl flex gap-3.5 items-start shadow-sm"
+    >
+      <div
+        class="bg-primary/10 text-primary flex p-2.5 rounded-xl shrink-0 border border-primary/20"
+      >
+        <i class="iconify lucide--layers-3 size-5"></i>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <h3 class="font-bold text-text-main text-sm">Series Compatibility Notice</h3>
+        <p class="text-text-muted text-xs sm:text-sm leading-relaxed">
+          Data Matrix internal tracking codes are exclusively available on <strong
+            >LEGO Collectible Minifigures Series 25 and newer</strong
+          >. Earlier retail package configurations (Series 1 through 24) utilize historical box
+          prints and require traditional manual identification protocols.
+        </p>
+      </div>
+    </section>
 
     <article
       class="p-4 bg-card-bg border border-border rounded-2xl overflow-hidden flex flex-col gap-3"
@@ -25,12 +49,12 @@
           class="w-full h-full object-cover"
         />
       </div>
-      <p class="text-xs text-text-muted text-center italic mt-1">
+      <p class="text-xs text-text-muted text-center italic mt-0.5">
         Locate the small square Data Matrix code right next to the barcode on the bottom flap.
       </p>
     </article>
 
-    <div class="flex flex-col gap-5 text-sm text-text-muted leading-relaxed">
+    <div class="flex flex-col gap-5 text-sm text-text-muted leading-relaxed mt-1">
       <section class="flex flex-col gap-1.5">
         <h3 class="font-bold text-text-main text-base flex items-center gap-2">
           <i class="iconify lucide--box size-5 text-primary"></i> 1. Locate the Target Code
@@ -81,7 +105,7 @@
 
     <a
       href="/"
-      class="mt-auto w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-md active:scale-95 cursor-pointer"
+      class="mt-4 w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-md active:scale-95 cursor-pointer"
     >
       Return to Scanner
     </a>

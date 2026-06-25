@@ -18,7 +18,9 @@
 
 <header class="py-3 flex justify-between items-center gap-2">
   <div class="flex-1 min-w-0">
-    <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">L-Scan</h1>
+    <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">
+      <a href="/">L-Scan</a>
+    </h1>
     <p class="text-[10px] sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
   </div>
 

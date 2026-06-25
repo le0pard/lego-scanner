@@ -5,22 +5,31 @@
 </script>
 
 <div class="h-full flex flex-col justify-between gap-6 p-2 md:p-4">
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-3">
     <div class="flex justify-between items-start">
       <h2 class="text-lg font-bold leading-tight">Scanner Engine</h2>
-      <span
-        class="text-xs font-mono bg-success-bg text-success-text border border-success-border px-2 py-0.5 rounded-md font-bold animate-pulse"
-      >
-        READY
+    </div>
+
+    <p class="text-sm text-text-muted leading-relaxed">
+      Locate the bottom flap of any blind LEGO Minifigure mystery box. Next to the standard linear
+      barcode, you will see a tiny square <strong>Data Matrix</strong> code. Align this square code within
+      the camera frame or upload a snapshot to decode its signatures instantly.
+    </p>
+
+    <div
+      class="text-xs flex items-start gap-2 bg-badge-bg text-badge-text px-3 py-2.5 rounded-xl border border-border"
+    >
+      <i class="iconify lucide--info size-4 shrink-0 mt-0.5 opacity-80"></i>
+      <span class="leading-normal">
+        Works with <strong>Series 25 & newer</strong> boxes.
+        <a
+          href="/howto"
+          class="underline font-bold text-text-main hover:text-primary transition-colors ml-0.5"
+        >
+          View compatibility guide
+        </a>
       </span>
     </div>
-    <div class="w-full bg-border text-text-muted font-bold py-3.5 px-4 text-sm">
-      Waiting for Code...
-    </div>
-    <p class="text-sm text-text-muted">
-      Select input mode above. Flash control helps resolve specular glare reflections on slick
-      plastic bricks.
-    </p>
   </div>
 
   <div class="border-t border-border pt-4 flex flex-col gap-3">

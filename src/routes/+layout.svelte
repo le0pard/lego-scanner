@@ -11,6 +11,18 @@
 
   let { children } = $props();
 
+  const firstSortedMetaRecord = async () => {
+    const list = await db.syncMeta.toArray();
+
+    const sorted = list.sort((a, b) => new Date(b.lastSynced) - new Date(a.lastSynced));
+
+    if (sorted.length > 0) {
+      return sorted[0];
+    }
+
+    return null;
+  };
+
   // Auto-detect and set theme based on system preference
   $effect(() => {
     if (!browser) return;
@@ -29,13 +41,9 @@
     if (!browser) return;
 
     try {
-      const localMetaArray = await db.syncMeta.toArray();
-      if (localMetaArray.length > 0) {
-        // Sort to identify the most recently updated catalog series timestamp
-        const sorted = localMetaArray.sort(
-          (a, b) => new Date(b.lastSynced) - new Date(a.lastSynced)
-        );
-        setSyncStatus('idle', { lastSynced: sorted[0].lastSynced });
+      const sortedRecord = await firstSortedMetaRecord();
+      if (sortedRecord) {
+        setSyncStatus('idle', { lastSynced: sortedRecord.lastSynced });
       }
     } catch (e) {
       console.warn('Could not read local sync history metadata:', e);
@@ -53,10 +61,9 @@
       await syncApi.syncDatabase(resolve('/'));
 
       // Extract newly updated metadata timestamps upon successful completion
-      const updatedMeta = await db.syncMeta.toArray();
-      if (updatedMeta.length > 0) {
-        const sorted = updatedMeta.sort((a, b) => new Date(b.lastSynced) - new Date(a.lastSynced));
-        setSyncStatus('synced', { lastSynced: sorted[0].lastSynced });
+      const sortedRecord = await firstSortedMetaRecord();
+      if (sortedRecord) {
+        setSyncStatus('synced', { lastSynced: sortedRecord.lastSynced });
       } else {
         setSyncStatus('synced', { lastSynced: new Date().toISOString() });
       }
@@ -77,14 +84,13 @@
     if (!browser) return;
 
     if ('serviceWorker' in navigator) {
-      // Direct Inspection: Check if an update was already caught and is waiting from a prior session
       navigator.serviceWorker.getRegistration().then((registration) => {
-        if (registration && registration.waiting) {
-          setUpdateAvailable(true);
-        }
-
         // Active Lifecycle Listener: Detect if an update arrives and completes installation while app is running
         if (registration) {
+          if (registration.waiting) {
+            setUpdateAvailable(true);
+          }
+
           registration.addEventListener('updatefound', () => {
             const installingWorker = registration.installing;
             if (installingWorker) {
