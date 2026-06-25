@@ -178,6 +178,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/mdi@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@iconify-json/mdi@npm:1.2.3"
+  dependencies:
+    "@iconify/types": "npm:*"
+  checksum: 10c0/4d11426abba03464e5ebe4675c87cc39c720e54b7c28265ff9ccd93f229a51f7616bb0a8f1c01412eac3cc9a1ebdc0a122bbaa3395c14d30834d96f8a141e96d
+  languageName: node
+  linkType: hard
+
 "@iconify/tailwind4@npm:^1.2.3":
   version: 1.2.3
   resolution: "@iconify/tailwind4@npm:1.2.3"
@@ -1803,6 +1812,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@iconify-json/lucide": "npm:^1.2.114"
+    "@iconify-json/mdi": "npm:^1.2.3"
     "@iconify/tailwind4": "npm:^1.2.3"
     "@rexa-developer/tiks": "npm:^0.3.0"
     "@sveltejs/adapter-static": "npm:^3.0.10"

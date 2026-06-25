@@ -53,6 +53,39 @@
       }, 2000);
     }
   };
+
+  /**
+   * Generates a GitHub Issue Creation link pre-filled with raw tracking signatures.
+   * @param {string} rawToken - Scanned code sequence string
+   * @returns {string} URL string
+   */
+  const generateReportUrl = (rawToken) => {
+    const repositoryUrl = 'https://github.com/le0pard/lego-scanner/issues/new';
+
+    // Structure metadata information body payload
+    const bodyContent =
+      `### Scanned Token String\n` +
+      `\`\`\`\n` +
+      `${rawToken}\n` +
+      `\`\`\`\n\n` +
+      `### Identified Parameters (If Available)\n` +
+      `- **Extracted Base Code:** ${legoData?.code || 'Unknown'}\n` +
+      `- **Factory Identifier:** ${legoData?.factory || 'Unknown'}\n` +
+      `- **Production Year Stamp:** ${legoData?.year || 'Unknown'}\n\n` +
+      `### Missing Minifigure / Set Details\n` +
+      `- **LEGO Series Name:** (e.g., Series 29, Formula 1)\n` +
+      `- **Minifigure Character Name:** \n\n` +
+      `### Additional Context\n` +
+      `Provide any extra numerical codes printed near the box bottom flap or region details here.`;
+
+    const urlParams = new URLSearchParams({
+      template: 'missing_figure.md',
+      title: `[Missing Figure] Code: ${legoData?.code || rawToken}`,
+      body: bodyContent
+    });
+
+    return `${repositoryUrl}?${urlParams.toString()}`;
+  };
 </script>
 
 {#if searchCompleted}
@@ -192,12 +225,15 @@
         </div>
       </div>
 
-      <button
-        onclick={resetScanState}
-        class="mt-4 w-full bg-app-bg border-2 border-border hover:border-primary text-text-main font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-[0.99]"
+      <a
+        href={generateReportUrl(scanResultState.result)}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-sm active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 text-sm select-none"
       >
+        <i class="iconify mdi--github size-8"></i>
         Help with missing figure
-      </button>
+      </a>
     {/if}
   </div>
 {/if}
