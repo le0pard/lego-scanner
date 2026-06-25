@@ -12,6 +12,9 @@ export default defineConfig({
       compilerOptions: {
         runes: true
       },
+      paths: {
+        relative: false
+      },
       adapter: adapter({
         pages: 'build',
         assets: 'build',

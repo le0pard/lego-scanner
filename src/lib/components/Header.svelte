@@ -1,6 +1,7 @@
 <script>
   import classNames from 'classnames';
   import { afterNavigate } from '$app/navigation';
+  import pkg from '$lib/../../package.json' with { type: 'json' };
   import {
     cameraTabState,
     uploadTabState,
@@ -133,7 +134,7 @@
         </li>
       </ul>
       <div class="mt-auto text-xs text-text-muted border-t border-border pt-4">
-        v1.4.0-BETA • PWA Sandbox
+        v{pkg.version}
       </div>
     </div>
   </nav>
