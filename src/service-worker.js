@@ -39,7 +39,8 @@ self.addEventListener('install', (event) => {
       await cache.addAll(ASSETS);
     } catch (bulkError) {
       console.warn(
-        '[Service Worker] Bulk asset pre-cache failed. Switching to resilient individual layout extraction...'
+        '[Service Worker] Bulk asset pre-cache failed. Switching to resilient individual layout extraction...',
+        bulkError
       );
 
       // Fallback path loops over files individually so 404 dropouts don't halt the PWA lifecycle
@@ -47,7 +48,10 @@ self.addEventListener('install', (event) => {
         try {
           await cache.add(asset);
         } catch (individualError) {
-          console.error(`[Service Worker] Critical 404 Dropout: Target missing -> ${asset}`);
+          console.error(
+            `[Service Worker] Critical 404 Dropout: Target missing -> ${asset}`,
+            individualError
+          );
         }
       }
     }
