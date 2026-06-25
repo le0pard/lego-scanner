@@ -141,6 +141,34 @@
         }
       }
     }
+
+    // Deep Track Integration Layer
+    try {
+      const videoTrack = streamActiveTrack();
+      if (videoTrack && videoTrack.getCapabilities) {
+        const capabilities = videoTrack.getCapabilities();
+        const advancedConstraints = {};
+
+        // Force macro continuous autofocus if supported by hardware
+        if (capabilities.focusMode?.includes('continuous')) {
+          advancedConstraints.focusMode = 'continuous';
+        }
+
+        // Suppress rapid exposure adjustments when scanning light boxes
+        if (capabilities.exposureMode?.includes('continuous')) {
+          advancedConstraints.exposureMode = 'continuous';
+        }
+
+        if (Object.keys(advancedConstraints).length > 0) {
+          await videoTrack.applyConstraints({ advanced: [advancedConstraints] });
+        }
+      }
+    } catch (constraintsError) {
+      console.warn(
+        'Advanced hardware macro optimizations deferred on this device:',
+        constraintsError
+      );
+    }
   };
 
   $effect(() => {

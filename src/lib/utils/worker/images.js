@@ -119,6 +119,81 @@ export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
 };
 
 /**
+ * Hardware-Accelerated High-Pass Sharpening Filter
+ * Uses a digital unsharp mask curve to restore sharp module borders on out-of-focus captures.
+ */
+export const imageUnsharpMaskSharpenProcessing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const ratio = Math.min(DOWNSCALE_MAX_SIZE / width, DOWNSCALE_MAX_SIZE / height);
+  const canvasWidth = Math.round(width * ratio);
+  const canvasHeight = Math.round(height * ratio);
+
+  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get sharpen context');
+
+  // Step 1: Draw high-contrast sharp base frame
+  ctx.filter = 'grayscale(100%) contrast(150%)';
+  ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+
+  const sharpSnapshot = await createImageBitmap(canvas);
+
+  // Step 2: Superimpose inverted blurred overlay to boost edge contrast
+  ctx.globalCompositeOperation = 'overlay';
+  ctx.filter = 'blur(1.5px) invert(100%) brightness(90%)';
+  ctx.drawImage(sharpSnapshot, 0, 0);
+
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.filter = 'none';
+  sharpSnapshot.close();
+
+  return await createImageBitmap(canvas);
+};
+
+/**
+ * Rotational Multi-Angle Search Alignment Pass (+45 Degrees)
+ * Aligns skewed data grids with the main detection axes to fix perspective errors.
+ */
+export const imageRotate45Processing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const maxDim = Math.max(width, height);
+  const ratio = Math.min(500 / maxDim, 500 / maxDim);
+  const targetSize = Math.round(maxDim * ratio);
+
+  const canvas = new OffscreenCanvas(targetSize, targetSize);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate rotational context');
+
+  ctx.filter = 'grayscale(100%) contrast(140%)';
+  ctx.translate(targetSize / 2, targetSize / 2);
+  ctx.rotate((45 * Math.PI) / 180); // Rotate canvas exactly 45 degrees around center point
+  ctx.drawImage(baseBmp, -targetSize / 2, -targetSize / 2, targetSize, targetSize);
+
+  return await createImageBitmap(canvas);
+};
+
+/**
+ * Rotational Multi-Angle Search Alignment Pass (-30 Degrees)
+ */
+export const imageRotateMinus30Processing = async (baseBmp) => {
+  const { width, height } = baseBmp;
+  const maxDim = Math.max(width, height);
+  const ratio = Math.min(500 / maxDim, 500 / maxDim);
+  const targetSize = Math.round(maxDim * ratio);
+
+  const canvas = new OffscreenCanvas(targetSize, targetSize);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not allocate rotational context');
+
+  ctx.filter = 'grayscale(100%) contrast(140%)';
+  ctx.translate(targetSize / 2, targetSize / 2);
+  ctx.rotate((-30 * Math.PI) / 180);
+  ctx.drawImage(baseBmp, -targetSize / 2, -targetSize / 2, targetSize, targetSize);
+
+  return await createImageBitmap(canvas);
+};
+
+/**
  * Adaptive local sharpening threshold filter
  */
 export const imageAdaptiveThresholdProcessing = async (baseBmp) => {
@@ -228,7 +303,10 @@ export const imageProcessingPipeline = [
   imageDownscaleProcessing,
   imageScratchRepairFullProcessing,
   imageMacroCropScratchRepairProcessing,
+  imageUnsharpMaskSharpenProcessing,
   imageAdaptiveThresholdProcessing,
+  imageRotate45Processing,
+  imageRotateMinus30Processing,
   imageMacroCropProcessing,
   imageDotSmudgeProcessing,
   imageHighContrastProcessing,
