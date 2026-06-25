@@ -3,3 +3,4 @@ export const menuState = $state({
 });
 export const isMenuOpen = () => menuState.open;
 export const toggleMenu = () => (menuState.open = !menuState.open);
+export const closeMenu = () => (menuState.open = false);

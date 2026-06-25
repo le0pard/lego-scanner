@@ -1,12 +1,17 @@
 <script>
   import classNames from 'classnames';
+  import { afterNavigate } from '$app/navigation';
   import {
     cameraTabState,
     uploadTabState,
     activateCameraTabState,
     activateUploadTabState
   } from '$lib/states/tabs.svelte';
-  import { isMenuOpen, toggleMenu } from '$lib/states/menu.svelte';
+  import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte';
+
+  afterNavigate(() => {
+    closeMenu();
+  });
 </script>
 
 <header class="py-3 flex justify-between items-center gap-2">
@@ -85,6 +90,11 @@
         <li>
           <a href="/" class="block py-2 text-text-main hover:text-primary transition-colors"
             >Scanner</a
+          >
+        </li>
+        <li>
+          <a href="/howto" class="block py-2 text-text-main hover:text-primary transition-colors"
+            >How to Use</a
           >
         </li>
         <li><hr class="border-border my-2" /></li>

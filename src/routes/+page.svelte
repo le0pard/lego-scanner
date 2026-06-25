@@ -57,7 +57,7 @@
     class="flex flex-col landscape:flex-row landscape:items-start landscape:gap-6 flex-1 w-full pb-2 mt-2"
   >
     <div
-      class="w-full landscape:w-1/2 landscape:max-w-[75dvh] shrink-0 flex flex-col relative z-10 mx-auto"
+      class="w-full landscape:w-1/2 landscape:max-w-[75svh] shrink-0 flex flex-col relative z-10 mx-auto"
     >
       {#if errorMessage && errorMessage.length > 0}
         <WorkerError {errorMessage} />
