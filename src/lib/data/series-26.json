@@ -1,0 +1,163 @@
+{
+  "series": "series-26",
+  "displayName": "Series 26",
+  "releaseYear": 2024,
+  "minifigures": [
+    {
+      "slug": "s26_spacewalking_astronaut",
+      "name": "Spacewalking Astronaut",
+      "imagePath": "/assets/minifigures/series-26/spacewalking-astronaut.jpg",
+      "identifiers": [
+        { "code": "6484696" },
+        { "code": "6484916" },
+        { "code": "6484928" },
+        { "code": "6484928", "factory": "R", "year": "4" },
+        { "code": "6484696", "factory": "S", "year": "4" },
+        { "code": "6484916", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_imposter",
+      "name": "Imposter",
+      "imagePath": "/assets/minifigures/series-26/imposter.jpg",
+      "identifiers": [
+        { "code": "6484687" },
+        { "code": "6484906" },
+        { "code": "6484919" },
+        { "code": "6484919", "factory": "R", "year": "4" },
+        { "code": "6484687", "factory": "S", "year": "4" },
+        { "code": "6484906", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_alien_tourist",
+      "name": "Alien Tourist",
+      "imagePath": "/assets/minifigures/series-26/alien-tourist.jpg",
+      "identifiers": [
+        { "code": "6484694" },
+        { "code": "6484914" },
+        { "code": "6484926" },
+        { "code": "6484926", "factory": "R", "year": "4" },
+        { "code": "6484694", "factory": "S", "year": "4" },
+        { "code": "6484914", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_retro_space_heroine",
+      "name": "Retro Space Heroine",
+      "imagePath": "/assets/minifigures/series-26/retro-space-heroine.jpg",
+      "identifiers": [
+        { "code": "6484690" },
+        { "code": "6484909" },
+        { "code": "6484922" },
+        { "code": "6484922", "factory": "R", "year": "4" },
+        { "code": "6484690", "factory": "S", "year": "4" },
+        { "code": "6484909", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_m_tron_powerlifter",
+      "name": "M-Tron Powerlifter",
+      "imagePath": "/assets/minifigures/series-26/m-tron-powerlifter.jpg",
+      "identifiers": [
+        { "code": "6484693" },
+        { "code": "6484912" },
+        { "code": "6484925" },
+        { "code": "6484925", "factory": "R", "year": "4" },
+        { "code": "6484693", "factory": "S", "year": "4" },
+        { "code": "6484912", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_nurse_android",
+      "name": "Nurse Android",
+      "imagePath": "/assets/minifigures/series-26/nurse-android.jpg",
+      "identifiers": [
+        { "code": "6484691" },
+        { "code": "6484910" },
+        { "code": "6484923" },
+        { "code": "6484923", "factory": "R", "year": "4" },
+        { "code": "6484691", "factory": "S", "year": "4" },
+        { "code": "6484910", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_flying_saucer_costume_fan",
+      "name": "Flying Saucer Costume Fan",
+      "imagePath": "/assets/minifigures/series-26/flying-saucer-costume-fan.jpg",
+      "identifiers": [
+        { "code": "6484692" },
+        { "code": "6484911" },
+        { "code": "6484924" },
+        { "code": "6484924", "factory": "R", "year": "4" },
+        { "code": "6484692", "factory": "S", "year": "4" },
+        { "code": "6484911", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_ice_planet_explorer",
+      "name": "Ice Planet Explorer",
+      "imagePath": "/assets/minifigures/series-26/ice-planet-explorer.jpg",
+      "identifiers": [
+        { "code": "6484686" },
+        { "code": "6484905" },
+        { "code": "6484918" },
+        { "code": "6484918", "factory": "R", "year": "4" },
+        { "code": "6484686", "factory": "S", "year": "4" },
+        { "code": "6484905", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_robot_butler",
+      "name": "Robot Butler",
+      "imagePath": "/assets/minifigures/series-26/robot-butler.jpg",
+      "identifiers": [
+        { "code": "6484688" },
+        { "code": "6484907" },
+        { "code": "6484920" },
+        { "code": "6484920", "factory": "R", "year": "4" },
+        { "code": "6484688", "factory": "S", "year": "4" },
+        { "code": "6484907", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_alien_beetlezoid",
+      "name": "Alien Beetlezoid",
+      "imagePath": "/assets/minifigures/series-26/alien-beetlezoid.jpg",
+      "identifiers": [
+        { "code": "6484689" },
+        { "code": "6484908" },
+        { "code": "6484921" },
+        { "code": "6484921", "factory": "R", "year": "4" },
+        { "code": "6484689", "factory": "S", "year": "4" },
+        { "code": "6484908", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_orion",
+      "name": "Orion",
+      "imagePath": "/assets/minifigures/series-26/orion.jpg",
+      "identifiers": [
+        { "code": "6484695" },
+        { "code": "6484915" },
+        { "code": "6484927" },
+        { "code": "6484927", "factory": "R", "year": "4" },
+        { "code": "6484695", "factory": "S", "year": "4" },
+        { "code": "6484915", "factory": "S", "year": "4" }
+      ]
+    },
+    {
+      "slug": "s26_blacktron_mutant",
+      "name": "Blacktron Mutant",
+      "imagePath": "/assets/minifigures/series-26/blacktron-mutant.jpg",
+      "identifiers": [
+        { "code": "6484685" },
+        { "code": "6484904" },
+        { "code": "6484917" },
+        { "code": "6484917", "factory": "R", "year": "4" },
+        { "code": "6484685", "factory": "S", "year": "4" },
+        { "code": "6484904", "factory": "S", "year": "4" }
+      ]
+    }
+  ]
+}
