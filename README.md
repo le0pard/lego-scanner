@@ -4,12 +4,12 @@ L-Scan is a privacy-first, zero-overhead, fully client-side Progressive Web Appl
 
 ## 🚀 Key Features
 
-* **Multi-Threaded Edge Execution:** Heavy image manipulation, matrix tracking, and WebAssembly compilation occur strictly in isolated background Web Worker channels, keeping the browser UI fluid at a constant 60 FPS.
-* **Defective Print Auto-Healing:** Incorporates a custom, hardware-accelerated **Morphological Vertical Closing Filter** (composited dilation and erosion passes) designed to reconnect severed data modules caused by factory print-head line dropouts (e.g., the standard `444R5` batch errors).
-* **Intelligent Camera Frame Interleaving:** Alternates frame targets over a 4-phase cycle—combining high-speed raw extraction with localized macro zoom tracking tiers—to decode distant or minute barcodes without thermal throttling or performance drops.
-* **Resilient Offline Architecture:** Complete service worker integration and Dexie/IndexedDB tracking allow the entire application, catalog database, and asset engine to boot and operate with zero cellular connection inside retail stores.
-* **Real-Time Database Sync & Pruning:** Background micro-synchronization worker downloads current series catalogs, verifies file integrity via cryptographic SHA-256 hashes, and safely prunes retired items.
-* **Responsive Visual Diagnostics Trait:** Built-in development diagnostics drawer exposes the live pipeline canvas states to speed up local testing of computer vision filters.
+- **Multi-Threaded Edge Execution:** Heavy image manipulation, matrix tracking, and WebAssembly compilation occur strictly in isolated background Web Worker channels, keeping the browser UI fluid at a constant 60 FPS.
+- **Defective Print Auto-Healing:** Incorporates a custom, hardware-accelerated **Morphological Vertical Closing Filter** (composited dilation and erosion passes) designed to reconnect severed data modules caused by factory print-head line dropouts (e.g., the standard `444R5` batch errors).
+- **Intelligent Camera Frame Interleaving:** Alternates frame targets over a 4-phase cycle—combining high-speed raw extraction with localized macro zoom tracking tiers—to decode distant or minute barcodes without thermal throttling or performance drops.
+- **Resilient Offline Architecture:** Complete service worker integration and Dexie/IndexedDB tracking allow the entire application, catalog database, and asset engine to boot and operate with zero cellular connection inside retail stores.
+- **Real-Time Database Sync & Pruning:** Background micro-synchronization worker downloads current series catalogs, verifies file integrity via cryptographic SHA-256 hashes, and safely prunes retired items.
+- **Responsive Visual Diagnostics Trait:** Built-in development diagnostics drawer exposes the live pipeline canvas states to speed up local testing of computer vision filters.
 
 ---
 
