@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import classNames from 'classnames';
   import { dev, browser } from '$app/environment';
   import { useTiks } from '@rexa-developer/tiks/svelte';
@@ -111,6 +111,10 @@
       }
     };
   });
+
+  onDestroy(() => {
+    resetScanState();
+  })
 </script>
 
 <div class="w-full flex flex-col gap-4">
