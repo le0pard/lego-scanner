@@ -1,5 +1,6 @@
 <script>
   import { page } from '$app/state';
+  import { resolve } from '$app/paths';
   import Header from '$lib/components/Header.svelte';
 </script>
 
@@ -51,7 +52,7 @@
 
     <div class="w-full flex flex-col gap-2.5 max-w-xs">
       <a
-        href="/"
+        href={resolve('/')}
         class="w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-sm active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 text-sm"
       >
         <i class="iconify lucide--scan size-4"></i>
@@ -59,7 +60,7 @@
       </a>
 
       <a
-        href="/howto"
+        href={resolve('/howto')}
         class="w-full bg-card-bg border border-border hover:border-primary/50 text-text-main font-bold py-3 px-4 rounded-xl text-center transition-all active:scale-[0.98] cursor-pointer text-sm"
       >
         Read Documentation

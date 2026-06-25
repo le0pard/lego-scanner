@@ -1,5 +1,6 @@
 <script>
   import classNames from 'classnames';
+  import { resolve } from '$app/paths';
   import { syncState } from '$lib/states/sync.svelte.js';
   import { formatTime } from '$lib/utils/date.js';
 </script>
@@ -23,7 +24,7 @@
       <span class="leading-normal">
         Works with <strong>Series 25 & newer</strong> boxes.
         <a
-          href="/howto"
+          href={resolve('/howto')}
           class="underline font-bold text-text-main hover:text-primary transition-colors ml-0.5"
         >
           View compatibility guide

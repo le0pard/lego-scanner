@@ -47,7 +47,7 @@ export const GET = async ({ params }) => {
     });
 
     return json(processedMinifigures);
-  } catch (err) {
+  } catch {
     throw error(500, 'Error processing the JSON data.');
   }
 };

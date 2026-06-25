@@ -1,5 +1,6 @@
 <script>
   import classNames from 'classnames';
+  import { resolve } from '$app/paths';
   import { afterNavigate } from '$app/navigation';
   import pkg from '$lib/../../package.json' with { type: 'json' };
   import {
@@ -12,6 +13,16 @@
 
   let { showTabs = true } = $props();
 
+  $effect(() => {
+    if (typeof document !== 'undefined' && document.body?.style) {
+      document.body.style.overflow = isMenuOpen() ? 'hidden' : 'auto';
+
+      return () => {
+        document.body.style.overflow = 'auto';
+      };
+    }
+  });
+
   afterNavigate(() => {
     closeMenu();
   });
@@ -20,7 +31,7 @@
 <header class="py-3 flex justify-between items-center gap-2">
   <div class="flex-1 min-w-0">
     <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">
-      <a href="/">L-Scan</a>
+      <a href={resolve('/')}>L-Scan</a>
     </h1>
     <p class="text-[10px] sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
   </div>
@@ -95,13 +106,15 @@
     >
       <ul class="flex flex-col gap-4 text-lg font-bold">
         <li>
-          <a href="/" class="block py-2 text-text-main hover:text-primary transition-colors"
-            >Scanner</a
+          <a
+            href={resolve('/')}
+            class="block py-2 text-text-main hover:text-primary transition-colors">Scanner</a
           >
         </li>
         <li>
-          <a href="/howto" class="block py-2 text-text-main hover:text-primary transition-colors"
-            >How to Use</a
+          <a
+            href={resolve('/howto')}
+            class="block py-2 text-text-main hover:text-primary transition-colors">How to Use</a
           >
         </li>
         <li><hr class="border-border my-2" /></li>

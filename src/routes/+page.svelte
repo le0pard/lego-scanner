@@ -11,7 +11,6 @@
   import Upload from '$lib/components/Upload.svelte';
   import WorkerError from '$lib/components/WorkerError.svelte';
   import WorkerLoading from '$lib/components/WorkerLoading.svelte';
-  import { isMenuOpen } from '$lib/states/menu.svelte';
   import { uploadTabState } from '$lib/states/tabs.svelte';
 
   let workersLoaded = $state(false);
@@ -38,12 +37,6 @@
   onDestroy(() => {
     if (scannerWorker) {
       scannerWorker.terminate();
-    }
-  });
-
-  $effect(() => {
-    if (typeof document !== 'undefined' && document.body?.style) {
-      document.body.style.overflow = isMenuOpen() ? 'hidden' : 'auto';
     }
   });
 </script>

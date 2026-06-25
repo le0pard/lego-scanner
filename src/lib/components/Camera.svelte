@@ -318,7 +318,7 @@
         value={cameraState.selectedCameraId}
         onchange={handleCameraChange}
       >
-        {#each cameraState.cameras as camera, index}
+        {#each cameraState.cameras as camera, index (camera.deviceId)}
           <option value={camera.deviceId} class="bg-neutral-900 text-white">
             {camera.label || `Camera ${index + 1}`}
           </option>

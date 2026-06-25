@@ -214,7 +214,7 @@
           </p>
 
           <div class="grid grid-cols-2 gap-2">
-            {#each debugImageStages as stage}
+            {#each debugImageStages as stage (stage.name)}
               <div
                 class={classNames(
                   'p-2 border rounded-xl bg-app-bg/30 flex flex-col gap-1.5 relative',

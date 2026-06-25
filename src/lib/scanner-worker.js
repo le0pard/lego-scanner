@@ -1,3 +1,4 @@
+/* global FileReaderSync */
 import { expose } from 'comlink';
 import { readBarcodes, prepareZXingModule, ZXING_WASM_VERSION } from 'zxing-wasm/reader';
 import {
