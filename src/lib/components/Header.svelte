@@ -9,6 +9,8 @@
   } from '$lib/states/tabs.svelte';
   import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte';
 
+  let { showTabs = true } = $props();
+
   afterNavigate(() => {
     closeMenu();
   });
@@ -17,39 +19,41 @@
 <header class="py-3 flex justify-between items-center gap-2">
   <div class="flex-1 min-w-0">
     <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">L-Scan</h1>
-    <p class="text-[10px] sm:text-xs text-text-muted truncate">Barcode & Minifig</p>
+    <p class="text-[10px] sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
   </div>
 
-  <div class="flex shrink-0 p-1 bg-card-bg border border-border rounded-xl" role="tablist">
-    <button
-      role="tab"
-      aria-selected={cameraTabState()}
-      onclick={activateCameraTabState}
-      class={classNames(
-        'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
-        {
-          'bg-primary text-neutral-950 shadow-sm': cameraTabState(),
-          'text-text-muted hover:text-text-main': !cameraTabState()
-        }
-      )}
-    >
-      Camera
-    </button>
-    <button
-      role="tab"
-      aria-selected={uploadTabState()}
-      onclick={activateUploadTabState}
-      class={classNames(
-        'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
-        {
-          'bg-primary text-neutral-950 shadow-sm': uploadTabState(),
-          'text-text-muted hover:text-text-main': !uploadTabState()
-        }
-      )}
-    >
-      Upload
-    </button>
-  </div>
+  {#if showTabs}
+    <div class="flex shrink-0 p-1 bg-card-bg border border-border rounded-xl" role="tablist">
+      <button
+        role="tab"
+        aria-selected={cameraTabState()}
+        onclick={activateCameraTabState}
+        class={classNames(
+          'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+          {
+            'bg-primary text-neutral-950 shadow-sm': cameraTabState(),
+            'text-text-muted hover:text-text-main': !cameraTabState()
+          }
+        )}
+      >
+        Camera
+      </button>
+      <button
+        role="tab"
+        aria-selected={uploadTabState()}
+        onclick={activateUploadTabState}
+        class={classNames(
+          'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+          {
+            'bg-primary text-neutral-950 shadow-sm': uploadTabState(),
+            'text-text-muted hover:text-text-main': !uploadTabState()
+          }
+        )}
+      >
+        Upload
+      </button>
+    </div>
+  {/if}
 
   <nav aria-label="Main Navigation" class="flex-1 flex justify-end">
     <button

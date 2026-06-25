@@ -6,7 +6,7 @@
 <main
   class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt-pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
 >
-  <Header />
+  <Header showTabs={false} />
 
   <div
     class="flex-1 w-full pb-6 mt-4 flex flex-col gap-6 animate-in fade-in duration-300 text-left"
