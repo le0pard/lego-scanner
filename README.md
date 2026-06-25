@@ -35,7 +35,7 @@ To guarantee maximum responsiveness on low-end mobile devices, the app's computi
 
 ```
 
-## 🛠 Project Setup and Development Roadmap
+## Project Setup
 
 ### Prerequisites
 
