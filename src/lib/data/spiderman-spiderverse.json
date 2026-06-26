@@ -1,0 +1,187 @@
+{
+  "series": "spiderman-spiderverse",
+  "displayName": "Spider-Man: Across the Spider-Verses",
+  "releaseYear": 2025,
+  "minifigures": [
+    {
+      "slug": "smsv_miles_morales_spider_man",
+      "name": "Miles Morales / Spider-Man",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/miles-morales-spider-man.jpg",
+      "identifiers": [
+        { "code": "6615990" },
+        { "code": "6568959" },
+        { "code": "6568947" },
+        { "code": "6564838" },
+        { "code": "6615990", "factory": "R", "year": "5" },
+        { "code": "6568959", "factory": "S", "year": "5" },
+        { "code": "6568947", "factory": "S", "year": "5" },
+        { "code": "6564838", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_hobie_brown_spider_punk",
+      "name": "Hobie Brown / Spider-Punk",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/hobie-brown-spider-punk.jpg",
+      "identifiers": [
+        { "code": "6615995" },
+        { "code": "6568964" },
+        { "code": "6568952" },
+        { "code": "6564843" },
+        { "code": "6615995", "factory": "R", "year": "5" },
+        { "code": "6568964", "factory": "S", "year": "5" },
+        { "code": "6568952", "factory": "S", "year": "5" },
+        { "code": "6564843", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_miles_g_morales_prowler",
+      "name": "Miles G. Morales / Prowler",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/miles-g-morales-prowler.jpg",
+      "identifiers": [
+        { "code": "6615994" },
+        { "code": "6568963" },
+        { "code": "6568951" },
+        { "code": "6564842" },
+        { "code": "6615994", "factory": "R", "year": "5" },
+        { "code": "6568963", "factory": "S", "year": "5" },
+        { "code": "6568951", "factory": "S", "year": "5" },
+        { "code": "6564842", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_gwen_stacy_spider_gwen",
+      "name": "Gwen Stacy / Spider-Gwen",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/gwen-stacy-spider-gwen.jpg",
+      "identifiers": [
+        { "code": "6615993" },
+        { "code": "6568962" },
+        { "code": "6568950" },
+        { "code": "6564841" },
+        { "code": "6615993", "factory": "R", "year": "5" },
+        { "code": "6568962", "factory": "S", "year": "5" },
+        { "code": "6568950", "factory": "S", "year": "5" },
+        { "code": "6564841", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_miguel_ohara_spider_man_2099",
+      "name": "Miguel O'Hara / Spider-Man 2099",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/miguel-ohara-spider-man-2099.jpg",
+      "identifiers": [
+        { "code": "6615991" },
+        { "code": "6568960" },
+        { "code": "6568948" },
+        { "code": "6564839" },
+        { "code": "6615991", "factory": "R", "year": "5" },
+        { "code": "6568960", "factory": "S", "year": "5" },
+        { "code": "6568948", "factory": "S", "year": "5" },
+        { "code": "6564839", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_pavitr_prabhakar_spider_man_india",
+      "name": "Pavitr Prabhakar / Spider-Man India",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/pavitr-prabhakar-spider-man-india.jpg",
+      "identifiers": [
+        { "code": "6615996" },
+        { "code": "6568965" },
+        { "code": "6568953" },
+        { "code": "6564844" },
+        { "code": "6615996", "factory": "R", "year": "5" },
+        { "code": "6568965", "factory": "S", "year": "5" },
+        { "code": "6568953", "factory": "S", "year": "5" },
+        { "code": "6564844", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_petra_parker_cyborg_spider_woman",
+      "name": "Petra Parker / Cyborg Spider-Woman",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/petra-parker-cyborg-spider-woman.jpg",
+      "identifiers": [
+        { "code": "6615999" },
+        { "code": "6568968" },
+        { "code": "6568956" },
+        { "code": "6564847" },
+        { "code": "6615999", "factory": "R", "year": "5" },
+        { "code": "6568968", "factory": "S", "year": "5" },
+        { "code": "6568956", "factory": "S", "year": "5" },
+        { "code": "6564847", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_charlotte_webber_sun_spider",
+      "name": "Charlotte Webber / Sun-Spider",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/charlotte-webber-sun-spider.jpg",
+      "identifiers": [
+        { "code": "6615992" },
+        { "code": "6568961" },
+        { "code": "6568949" },
+        { "code": "6564840" },
+        { "code": "6615992", "factory": "R", "year": "5" },
+        { "code": "6568961", "factory": "S", "year": "5" },
+        { "code": "6568949", "factory": "S", "year": "5" },
+        { "code": "6564840", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_margo_kess_spider_byte",
+      "name": "Margo Kess / Spider-Byte",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/margo-kess-spider-byte.jpg",
+      "identifiers": [
+        { "code": "6615998" },
+        { "code": "6568967" },
+        { "code": "6568955" },
+        { "code": "6564846" },
+        { "code": "6615998", "factory": "R", "year": "5" },
+        { "code": "6568967", "factory": "S", "year": "5" },
+        { "code": "6568955", "factory": "S", "year": "5" },
+        { "code": "6564846", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_peter_b_parker_spider_man_may_mayday_parker",
+      "name": "Peter B. Parker / Spider-Man & May 'Mayday' Parker",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/peter-b-parker-spider-man-may-mayday-parkern.jpg",
+      "identifiers": [
+        { "code": "6615997" },
+        { "code": "6568966" },
+        { "code": "6568954" },
+        { "code": "6564845" },
+        { "code": "6615997", "factory": "R", "year": "5" },
+        { "code": "6568966", "factory": "S", "year": "5" },
+        { "code": "6568954", "factory": "S", "year": "5" },
+        { "code": "6564845", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_patrick_ohara_web_slinger",
+      "name": "Patrick O'Hara / Web-Slinger",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/patrick-ohara-web-slinger.jpg",
+      "identifiers": [
+        { "code": "6616000" },
+        { "code": "6568969" },
+        { "code": "6568957" },
+        { "code": "6564848" },
+        { "code": "6616000", "factory": "R", "year": "5" },
+        { "code": "6568969", "factory": "S", "year": "5" },
+        { "code": "6568957", "factory": "S", "year": "5" },
+        { "code": "6564848", "factory": "S", "year": "5" }
+      ]
+    },
+    {
+      "slug": "smsv_peter_parker_werewolf_spider_man",
+      "name": "Peter Parker / Werewolf Spider-Man",
+      "imagePath": "/assets/minifigures/spiderman-spiderverse/peter-parker-werewolf-spider-man.jpg",
+      "identifiers": [
+        { "code": "6616001" },
+        { "code": "6568970" },
+        { "code": "6568958" },
+        { "code": "6564849" },
+        { "code": "6616001", "factory": "R", "year": "5" },
+        { "code": "6568970", "factory": "S", "year": "5" },
+        { "code": "6568958", "factory": "S", "year": "5" },
+        { "code": "6564849", "factory": "S", "year": "5" }
+      ]
+    }
+  ]
+}
