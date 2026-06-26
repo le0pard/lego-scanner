@@ -1,11 +1,11 @@
-import { build, files, version } from '$service-worker';
+import { build, files, prerendered, version } from '$service-worker';
 
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
 const self = globalThis.self;
 const CACHE = `cache-${version}`;
 const API_TIMEOUT_MS = 3500;
 
-const ASSETS = [...build, ...files].filter((path) => {
+const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path);
 });
 
