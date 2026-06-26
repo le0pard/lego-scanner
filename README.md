@@ -11,6 +11,59 @@ L-Scan is a privacy-first, zero-overhead, fully client-side Progressive Web Appl
 - **Real-Time Database Sync & Pruning:** Background micro-synchronization worker downloads current series catalogs, verifies file integrity via cryptographic SHA-256 hashes, and safely prunes retired items.
 - **Responsive Visual Diagnostics Trait:** Built-in development diagnostics drawer exposes the live pipeline canvas states to speed up local testing of computer vision filters.
 
+## Catalog Data Management
+
+All inventory catalogs, batch manufacturing codes, and localized figure markers are managed statically within the repository codebase.
+
+### Where to Add or Edit Data
+
+- **Inventory Entries (JSON):** Catalog datasets are placed within the `src/lib/data/` directory.json/+server.js]. Each series has its own standalone data sheet named after its collection slug (e.g., `series-28.json`, `f1-race-cars.json`).
+- **Character Images:** Physical character illustration images are stored under `src/lib/assets/minifigures/[series-slug]/`.
+
+### JSON Schema Specifications
+
+Below is the structured property configuration model required for every catalog collection database entry:
+
+#### Top-Level Keys
+
+- `series` *(string)*: Unique URL-safe identifier handle for the inventory group (e.g., `"series-28"`).
+- `displayName` *(string)*: Human-readable formal marketing name displayed across informational panels (e.g., `"Series 28"`).
+- `releaseYear` *(integer)*: The calendar year index representing when the collection group hit retail markets (e.g., `2025`).
+- `minifigures` *(array)*: Core index list containing configuration blocks for each character figure in the set.
+
+#### Minifigure Object Profile Keys
+
+- `slug` *(string)*: System-wide unique identifier token tracking this exact figure entry (e.g., `"s28_peacock"`).
+- `name` *(string)*: The descriptive name of the character figure printed on interface cards (e.g., `"Peacock"`).
+- `imagePath` *(string)*: Root-relative pathway reference used by SvelteKit's static pre-compiler to fetch and build retina-optimized media formats (e.g., `"/assets/minifigures/series-28/peacock.jpg"`).
+- `identifiers` *(array)*: List containing the matrix stamps mapped to this character figure across different global manufacturing plants.
+
+#### Identifier Variant Keys
+
+- `code` *(string)*: The base 7-digit material packaging code sequence printed on the box bottom (e.g., `"6584394"`).
+- `factory` *(string, optional)*: Single character code representing the packaging plant location (e.g., `"S"` for Czech Republic, `"R"` for Mexico).
+- `year` *(string, optional)*: Single digit tracker marking the factory production calendar timeline year (e.g., `"5"` for 2025).
+
+```json
+{
+  "series": "series-28",
+  "displayName": "Series 28",
+  "releaseYear": 2025,
+  "minifigures": [
+    {
+      "slug": "s28_peacock",
+      "name": "Peacock",
+      "imagePath": "/assets/minifigures/series-28/peacock.jpg",
+      "identifiers": [
+        { "code": "6584394", "factory": "R", "year": "5" },
+        { "code": "6584381", "factory": "S", "year": "5" }
+      ]
+    }
+  ]
+}
+
+```
+
 ## Public API Endpoints
 
 L-Scan relies on pre-rendered, statically hosted JSON data feeds to perform background client database transformations with zero runtime backend overhead. For detailed contract object schemas, endpoint parameter details, and token flattening keys, check out the [Public API Endpoints Wiki](https://github.com/le0pard/lego-scanner/wiki/Public-API-Endpoints).
