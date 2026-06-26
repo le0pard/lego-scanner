@@ -102,6 +102,45 @@
     });
   };
 
+  const applyZoomTrackConstraint = async (targetValue) => {
+    if (!cameraState.haveZoom) return;
+
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) return;
+
+    // Defensively clamp value parameters inside hardware bounding boxes
+    const clampedValue = Math.max(
+      cameraState.zoom.min,
+      Math.min(cameraState.zoom.max, targetValue)
+    );
+
+    // Prevent floating-point accuracy decay (e.g. 1.200000000004) during addition/subtraction
+    const decimalsCount = (cameraState.zoom.step.toString().split('.')[1] || '').length || 1;
+    const preciseValue = parseFloat(clampedValue.toFixed(decimalsCount));
+
+    cameraState.zoom.value = preciseValue;
+
+    try {
+      await activeTrack.applyConstraints({
+        advanced: [{ zoom: preciseValue }]
+      });
+    } catch (err) {
+      console.warn('Could not enforce hardware zoom level constraints:', err);
+    }
+  };
+
+  const handleZoomChange = (e) => {
+    applyZoomTrackConstraint(parseFloat(e.target.value));
+  };
+
+  const handleZoomStepClick = (mode) => {
+    const currentVal = cameraState.zoom.value;
+    const stepDelta = cameraState.zoom.step || 0.1;
+
+    const calculationTarget = mode === 'in' ? currentVal + stepDelta : currentVal - stepDelta;
+    applyZoomTrackConstraint(calculationTarget);
+  };
+
   const startCamera = async (explicitDeviceId = null) => {
     isCameraRequested = true;
     streamTeardown();
@@ -251,20 +290,6 @@
     });
   };
 
-  const handleZoomChange = (e) => {
-    if (!cameraState.haveZoom) return;
-    const activeTrack = streamActiveTrack();
-    if (!activeTrack) return;
-
-    const zoomValue = parseFloat(e.target.value);
-    if (zoomValue < 0) return;
-
-    cameraState.zoom.value = zoomValue;
-    activeTrack.applyConstraints({
-      advanced: [{ zoom: zoomValue }]
-    });
-  };
-
   onMount(async () => {
     if (!browser) return;
     try {
@@ -295,7 +320,15 @@
           }
         )}
       >
-        <i class="iconify lucide--minus size-4 text-neutral-400 shrink-0"></i>
+        <button
+          type="button"
+          onclick={() => handleZoomStepClick('out')}
+          disabled={cameraState.zoom.value <= cameraState.zoom.min}
+          class="text-neutral-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed shrink-0 transition-colors cursor-pointer flex items-center justify-center p-1 active:scale-90"
+          aria-label="Zoom Out"
+        >
+          <i class="iconify lucide--minus size-4"></i>
+        </button>
         <input
           type="range"
           min={cameraState.zoom.min}
@@ -305,7 +338,15 @@
           oninput={handleZoomChange}
           class="flex-1 w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary/50 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md"
         />
-        <i class="iconify lucide--plus size-4 text-neutral-400 shrink-0"></i>
+        <button
+          type="button"
+          onclick={() => handleZoomStepClick('in')}
+          disabled={cameraState.zoom.value >= cameraState.zoom.max}
+          class="text-neutral-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed shrink-0 transition-colors cursor-pointer flex items-center justify-center p-1 active:scale-90"
+          aria-label="Zoom In"
+        >
+          <i class="iconify lucide--plus size-4"></i>
+        </button>
       </div>
 
       <button
