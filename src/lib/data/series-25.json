@@ -8,11 +8,9 @@
       "name": "Film Noir Detective",
       "imagePath": "/assets/minifigures/series-25/film-noir-detective.jpg",
       "identifiers": [
-        { "code": "6472866" },
-        { "code": "6471965" },
-        { "code": "6472899" },
-        { "code": "6471965", "factory": "R", "year": "3" },
-        { "code": "6472866", "factory": "S", "year": "3" }
+        { "code": "6472866", "factory": "S", "year": "3" },
+        { "code": "6472899", "factory": "S", "year": "3" },
+        { "code": "6471965", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -20,11 +18,9 @@
       "name": "E-Sports Gamer",
       "imagePath": "/assets/minifigures/series-25/e-sports-gamer.jpg",
       "identifiers": [
-        { "code": "6472870" },
-        { "code": "6471969" },
-        { "code": "6472903" },
-        { "code": "6471969", "factory": "R", "year": "3" },
-        { "code": "6472870", "factory": "S", "year": "3" }
+        { "code": "6472903", "factory": "S", "year": "3" },
+        { "code": "6472870", "factory": "S", "year": "3" },
+        { "code": "6471969", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -32,11 +28,9 @@
       "name": "Vampire Knight",
       "imagePath": "/assets/minifigures/series-25/vampire-knight.jpg",
       "identifiers": [
-        { "code": "6472871" },
-        { "code": "6471970" },
-        { "code": "6472904" },
-        { "code": "6471970", "factory": "R", "year": "3" },
-        { "code": "6472871", "factory": "S", "year": "3" }
+        { "code": "6472904", "factory": "S", "year": "3" },
+        { "code": "6472871", "factory": "S", "year": "3" },
+        { "code": "6471970", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -44,11 +38,9 @@
       "name": "Sprinter",
       "imagePath": "/assets/minifigures/series-25/sprinter.jpg",
       "identifiers": [
-        { "code": "6472867" },
-        { "code": "6471966" },
-        { "code": "6472900" },
-        { "code": "6471966", "factory": "R", "year": "3" },
-        { "code": "6472867", "factory": "S", "year": "3" }
+        { "code": "6472900", "factory": "S", "year": "3" },
+        { "code": "6472867", "factory": "S", "year": "3" },
+        { "code": "6471966", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -68,11 +60,9 @@
       "name": "Mushroom Sprite",
       "imagePath": "/assets/minifigures/series-25/mushroom-sprite.jpg",
       "identifiers": [
-        { "code": "6472862" },
-        { "code": "6471961" },
-        { "code": "6472895" },
-        { "code": "6471961", "factory": "R", "year": "3" },
-        { "code": "6472862", "factory": "S", "year": "3" }
+        { "code": "6472895", "factory": "S", "year": "3" },
+        { "code": "6472862", "factory": "S", "year": "3" },
+        { "code": "6471961", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -80,11 +70,9 @@
       "name": "Fitness Instructor",
       "imagePath": "/assets/minifigures/series-25/fitness-instructor.jpg",
       "identifiers": [
-        { "code": "6472861" },
-        { "code": "6471960" },
-        { "code": "6472894" },
-        { "code": "6471960", "factory": "R", "year": "3" },
-        { "code": "6472861", "factory": "S", "year": "3" }
+        { "code": "6472894", "factory": "S", "year": "3" },
+        { "code": "6472861", "factory": "S", "year": "3" },
+        { "code": "6471960", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -92,11 +80,9 @@
       "name": "Triceratops Costume Fan",
       "imagePath": "/assets/minifigures/series-25/triceratops-costume-fan.jpg",
       "identifiers": [
-        { "code": "6472869" },
-        { "code": "6471968" },
-        { "code": "6472902" },
-        { "code": "6471968", "factory": "R", "year": "3" },
-        { "code": "6472869", "factory": "S", "year": "3" }
+        { "code": "6472902", "factory": "S", "year": "3" },
+        { "code": "6472869", "factory": "S", "year": "3" },
+        { "code": "6471968", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -104,11 +90,9 @@
       "name": "Harpy",
       "imagePath": "/assets/minifigures/series-25/harpy.jpg",
       "identifiers": [
-        { "code": "6472864" },
-        { "code": "6471963" },
-        { "code": "6472897" },
-        { "code": "6471963", "factory": "R", "year": "3" },
-        { "code": "6472864", "factory": "S", "year": "3" }
+        { "code": "6472897", "factory": "S", "year": "3" },
+        { "code": "6472864", "factory": "S", "year": "3" },
+        { "code": "6471963", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -116,11 +100,9 @@
       "name": "Train Kid",
       "imagePath": "/assets/minifigures/series-25/train-kid.jpg",
       "identifiers": [
-        { "code": "6472865" },
-        { "code": "6471964" },
-        { "code": "6472898" },
-        { "code": "6471964", "factory": "R", "year": "3" },
-        { "code": "6472865", "factory": "S", "year": "3" }
+        { "code": "6472898", "factory": "S", "year": "3" },
+        { "code": "6472865", "factory": "S", "year": "3" },
+        { "code": "6471964", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -128,11 +110,9 @@
       "name": "Fierce Barbarian",
       "imagePath": "/assets/minifigures/series-25/fierce-barbarian.jpg",
       "identifiers": [
-        { "code": "6472860" },
-        { "code": "6471959" },
-        { "code": "6472893" },
-        { "code": "6471959", "factory": "R", "year": "3" },
-        { "code": "6472860", "factory": "S", "year": "3" }
+        { "code": "6472893", "factory": "S", "year": "3" },
+        { "code": "6472860", "factory": "S", "year": "3" },
+        { "code": "6471959", "factory": "R", "year": "3" }
       ]
     },
     {
@@ -140,11 +120,9 @@
       "name": "Pet Groomer",
       "imagePath": "/assets/minifigures/series-25/pet-groomer.jpg",
       "identifiers": [
-        { "code": "6472868" },
-        { "code": "6471967" },
-        { "code": "6472901" },
-        { "code": "6471967", "factory": "R", "year": "3" },
-        { "code": "6472868", "factory": "S", "year": "3" }
+        { "code": "6472901", "factory": "S", "year": "3" },
+        { "code": "6472868", "factory": "S", "year": "3" },
+        { "code": "6471967", "factory": "R", "year": "3" }
       ]
     }
   ]
