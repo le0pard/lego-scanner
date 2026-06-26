@@ -26,23 +26,23 @@ Below is the structured property configuration model required for every catalog 
 
 #### Top-Level Keys
 
-- `series` *(string)*: Unique URL-safe identifier handle for the inventory group (e.g., `"series-28"`).
-- `displayName` *(string)*: Human-readable formal marketing name displayed across informational panels (e.g., `"Series 28"`).
-- `releaseYear` *(integer)*: The calendar year index representing when the collection group hit retail markets (e.g., `2025`).
-- `minifigures` *(array)*: Core index list containing configuration blocks for each character figure in the set.
+- `series` _(string)_: Unique URL-safe identifier handle for the inventory group (e.g., `"series-28"`).
+- `displayName` _(string)_: Human-readable formal marketing name displayed across informational panels (e.g., `"Series 28"`).
+- `releaseYear` _(integer)_: The calendar year index representing when the collection group hit retail markets (e.g., `2025`).
+- `minifigures` _(array)_: Core index list containing configuration blocks for each character figure in the set.
 
 #### Minifigure Object Profile Keys
 
-- `slug` *(string)*: System-wide unique identifier token tracking this exact figure entry (e.g., `"s28_peacock"`).
-- `name` *(string)*: The descriptive name of the character figure printed on interface cards (e.g., `"Peacock"`).
-- `imagePath` *(string)*: Root-relative pathway reference used by SvelteKit's static pre-compiler to fetch and build retina-optimized media formats (e.g., `"/assets/minifigures/series-28/peacock.jpg"`).
-- `identifiers` *(array)*: List containing the matrix stamps mapped to this character figure across different global manufacturing plants.
+- `slug` _(string)_: System-wide unique identifier token tracking this exact figure entry (e.g., `"s28_peacock"`).
+- `name` _(string)_: The descriptive name of the character figure printed on interface cards (e.g., `"Peacock"`).
+- `imagePath` _(string)_: Root-relative pathway reference used by SvelteKit's static pre-compiler to fetch and build retina-optimized media formats (e.g., `"/assets/minifigures/series-28/peacock.jpg"`).
+- `identifiers` _(array)_: List containing the matrix stamps mapped to this character figure across different global manufacturing plants.
 
 #### Identifier Variant Keys
 
-- `code` *(string)*: The base 7-digit material packaging code sequence printed on the box bottom (e.g., `"6584394"`).
-- `factory` *(string, optional)*: Single character code representing the packaging plant location (e.g., `"S"` for Czech Republic, `"R"` for Mexico).
-- `year` *(string, optional)*: Single digit tracker marking the factory production calendar timeline year (e.g., `"5"` for 2025).
+- `code` _(string)_: The base 7-digit material packaging code sequence printed on the box bottom (e.g., `"6584394"`).
+- `factory` _(string, optional)_: Single character code representing the packaging plant location (e.g., `"S"` for Czech Republic, `"R"` for Mexico).
+- `year` _(string, optional)_: Single digit tracker marking the factory production calendar timeline year (e.g., `"5"` for 2025).
 
 ```json
 {
@@ -61,7 +61,6 @@ Below is the structured property configuration model required for every catalog 
     }
   ]
 }
-
 ```
 
 ## Public API Endpoints
