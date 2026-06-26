@@ -8,10 +8,9 @@
       "name": "Red Bull",
       "imagePath": "/assets/minifigures/f1-race-cars/red-bull.jpg",
       "identifiers": [
-        { "code": "6538426" },
-        { "code": "6536842" },
-        { "code": "6538306" },
-        { "code": "6538426", "factory": "R", "year": "5" }
+        { "code": "6538426", "factory": "R", "year": "5" },
+        { "code": "6536842", "factory": "S", "year": "5" },
+        { "code": "6538306", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -19,10 +18,9 @@
       "name": "Mercedes AMG",
       "imagePath": "/assets/minifigures/f1-race-cars/mercedes.jpg",
       "identifiers": [
-        { "code": "6538427" },
-        { "code": "6536843" },
-        { "code": "6538307" },
-        { "code": "6538427", "factory": "R", "year": "5" }
+        { "code": "6538427", "factory": "R", "year": "5" },
+        { "code": "6536843", "factory": "S", "year": "5" },
+        { "code": "6538307", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -30,10 +28,9 @@
       "name": "Ferrari",
       "imagePath": "/assets/minifigures/f1-race-cars/ferrari.jpg",
       "identifiers": [
-        { "code": "6538425" },
-        { "code": "6536841" },
-        { "code": "6538305" },
-        { "code": "6538425", "factory": "R", "year": "5" }
+        { "code": "6538425", "factory": "R", "year": "5" },
+        { "code": "6536841", "factory": "S", "year": "5" },
+        { "code": "6538305", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -41,10 +38,9 @@
       "name": "McLaren",
       "imagePath": "/assets/minifigures/f1-race-cars/mc-laren.jpg",
       "identifiers": [
-        { "code": "6538434" },
-        { "code": "6536850" },
-        { "code": "6538314" },
-        { "code": "6538434", "factory": "R", "year": "5" }
+        { "code": "6538434", "factory": "R", "year": "5" },
+        { "code": "6536850", "factory": "S", "year": "5" },
+        { "code": "6538314", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -52,10 +48,9 @@
       "name": "Aston Martin",
       "imagePath": "/assets/minifigures/f1-race-cars/aston-martin.jpg",
       "identifiers": [
-        { "code": "6538428" },
-        { "code": "6536844" },
-        { "code": "6538308" },
-        { "code": "6538428", "factory": "R", "year": "5" }
+        { "code": "6538428", "factory": "R", "year": "5" },
+        { "code": "6536844", "factory": "S", "year": "5" },
+        { "code": "6538308", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -63,10 +58,9 @@
       "name": "Alpine",
       "imagePath": "/assets/minifigures/f1-race-cars/alpine.jpg",
       "identifiers": [
-        { "code": "6538431" },
-        { "code": "6536847" },
-        { "code": "6538311" },
-        { "code": "6538431", "factory": "R", "year": "5" }
+        { "code": "6538431", "factory": "R", "year": "5" },
+        { "code": "6536847", "factory": "S", "year": "5" },
+        { "code": "6538311", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -74,10 +68,9 @@
       "name": "Williams",
       "imagePath": "/assets/minifigures/f1-race-cars/williams.jpg",
       "identifiers": [
-        { "code": "6538432" },
-        { "code": "6536848" },
-        { "code": "6538312" },
-        { "code": "6538432", "factory": "R", "year": "5" }
+        { "code": "6538432", "factory": "R", "year": "5" },
+        { "code": "6536848", "factory": "S", "year": "5" },
+        { "code": "6538312", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -85,10 +78,9 @@
       "name": "Visa Cash App",
       "imagePath": "/assets/minifigures/f1-race-cars/visa-cash-app.jpg",
       "identifiers": [
-        { "code": "6538429" },
-        { "code": "6536845" },
-        { "code": "6538309" },
-        { "code": "6538429", "factory": "R", "year": "5" }
+        { "code": "6538429", "factory": "R", "year": "5" },
+        { "code": "6536845", "factory": "S", "year": "5" },
+        { "code": "6538309", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -96,11 +88,9 @@
       "name": "Sauber",
       "imagePath": "/assets/minifigures/f1-race-cars/sauber.jpg",
       "identifiers": [
-        { "code": "6538430" },
-        { "code": "6536846" },
-        { "code": "6538310" },
         { "code": "6538430", "factory": "R", "year": "5" },
-        { "code": "6536846", "factory": "S", "year": "5" }
+        { "code": "6536846", "factory": "S", "year": "5" },
+        { "code": "6538310", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -108,10 +98,9 @@
       "name": "Haas",
       "imagePath": "/assets/minifigures/f1-race-cars/haas.jpg",
       "identifiers": [
-        { "code": "6538433" },
-        { "code": "6536849" },
-        { "code": "6538313" },
-        { "code": "6538433", "factory": "R", "year": "5" }
+        { "code": "6538433", "factory": "R", "year": "5" },
+        { "code": "6536849", "factory": "S", "year": "5" },
+        { "code": "6538313", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -119,10 +108,9 @@
       "name": "F1 Academy",
       "imagePath": "/assets/minifigures/f1-race-cars/f1-academy.jpg",
       "identifiers": [
-        { "code": "6538436" },
-        { "code": "6536852" },
-        { "code": "6538316" },
-        { "code": "6538436", "factory": "R", "year": "5" }
+        { "code": "6538436", "factory": "R", "year": "5" },
+        { "code": "6536852", "factory": "S", "year": "5" },
+        { "code": "6538316", "factory": "S", "year": "5" }
       ]
     },
     {
@@ -130,10 +118,9 @@
       "name": "Generic",
       "imagePath": "/assets/minifigures/f1-race-cars/generic.jpg",
       "identifiers": [
-        { "code": "6538435" },
-        { "code": "6536851" },
-        { "code": "6538315" },
-        { "code": "6538435", "factory": "R", "year": "5" }
+        { "code": "6538435", "factory": "R", "year": "5" },
+        { "code": "6536851", "factory": "S", "year": "5" },
+        { "code": "6538315", "factory": "S", "year": "5" }
       ]
     }
   ]
