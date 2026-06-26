@@ -2,7 +2,7 @@
 
 L-Scan is a privacy-first, zero-overhead, fully client-side Progressive Web Application (PWA) designed to identify blind-boxed LEGO Collectible Minifigures (Series 25 and newer) instantly by decoding the tiny Data Matrix symbols printed on box bottoms.
 
-## 🚀 Key Features
+## Key Features
 
 - **Multi-Threaded Edge Execution:** Heavy image manipulation, matrix tracking, and WebAssembly compilation occur strictly in isolated background Web Worker channels, keeping the browser UI fluid at a constant 60 FPS.
 - **Defective Print Auto-Healing:** Incorporates a custom, hardware-accelerated **Morphological Vertical Closing Filter** (composited dilation and erosion passes) designed to reconnect severed data modules caused by factory print-head line dropouts (e.g., the standard `444R5` batch errors).
