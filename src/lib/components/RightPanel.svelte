@@ -23,12 +23,11 @@
       }
 
       try {
-        const [fullSearchRes, codeSearchRes] = await Promise.all([
-          db.minifigures.where({ searchKeys: legoData.key }).first(),
-          db.minifigures.where({ searchKeys: legoData.code }).first()
-        ]);
+        const found = await db.minifigures
+          .where('searchKeys')
+          .anyOf(legoData.key, legoData.code)
+          .first();
 
-        const found = fullSearchRes || codeSearchRes;
         if (found) {
           minifig = found;
           successTick();

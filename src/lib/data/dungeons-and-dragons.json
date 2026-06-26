@@ -8,9 +8,6 @@
       "name": "Dwarf Barbarian",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/dwarf-barbarian.jpg",
       "identifiers": [
-        { "code": "6506740" },
-        { "code": "6502839" },
-        { "code": "6506754" },
         { "code": "6506754", "factory": "R", "year": "4" },
         { "code": "6502839", "factory": "S", "year": "4" },
         { "code": "6506740", "factory": "S", "year": "4" }
@@ -21,9 +18,6 @@
       "name": "Gith Warlock",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/gith-warlock.jpg",
       "identifiers": [
-        { "code": "6506743" },
-        { "code": "6502842" },
-        { "code": "6506757" },
         { "code": "6506757", "factory": "R", "year": "4" },
         { "code": "6502842", "factory": "S", "year": "4" },
         { "code": "6506743", "factory": "S", "year": "4" }
@@ -34,9 +28,6 @@
       "name": "Tiefling Sorcerer",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/tiefling-sorcerer.jpg",
       "identifiers": [
-        { "code": "6506737" },
-        { "code": "6502836" },
-        { "code": "6506751" },
         { "code": "6506751", "factory": "R", "year": "4" },
         { "code": "6502836", "factory": "S", "year": "4" },
         { "code": "6506737", "factory": "S", "year": "4" }
@@ -47,9 +38,6 @@
       "name": "Dragonborn Paladin",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/dragonborn-paladin.jpg",
       "identifiers": [
-        { "code": "6506741" },
-        { "code": "6502840" },
-        { "code": "6506755" },
         { "code": "6506755", "factory": "R", "year": "4" },
         { "code": "6502840", "factory": "S", "year": "4" },
         { "code": "6506741", "factory": "S", "year": "4" }
@@ -60,9 +48,6 @@
       "name": "Halfling Druid",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/halfling-druid.jpg",
       "identifiers": [
-        { "code": "6506739" },
-        { "code": "6502838" },
-        { "code": "6506753" },
         { "code": "6506753", "factory": "R", "year": "4" },
         { "code": "6502838", "factory": "S", "year": "4" },
         { "code": "6506739", "factory": "S", "year": "4" }
@@ -73,9 +58,6 @@
       "name": "Aarakocra Ranger",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/aarakocra-ranger.jpg",
       "identifiers": [
-        { "code": "6506742" },
-        { "code": "6502841" },
-        { "code": "6506756" },
         { "code": "6506756", "factory": "R", "year": "4" },
         { "code": "6502841", "factory": "S", "year": "4" },
         { "code": "6506742", "factory": "S", "year": "4" }
@@ -86,9 +68,6 @@
       "name": "Mind Flayer",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/mind-flayer.jpg",
       "identifiers": [
-        { "code": "6506744" },
-        { "code": "6502843" },
-        { "code": "6506758" },
         { "code": "6506758", "factory": "R", "year": "4" },
         { "code": "6502843", "factory": "S", "year": "4" },
         { "code": "6506744", "factory": "S", "year": "4" }
@@ -99,9 +78,6 @@
       "name": "Strahd von Zarovich",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/strahd-von-zarovich.jpg",
       "identifiers": [
-        { "code": "6506746" },
-        { "code": "6502845" },
-        { "code": "6506760" },
         { "code": "6506760", "factory": "R", "year": "4" },
         { "code": "6502845", "factory": "S", "year": "4" },
         { "code": "6506746", "factory": "S", "year": "4" }
@@ -112,9 +88,6 @@
       "name": "Elf Bard",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/elf-bard.jpg",
       "identifiers": [
-        { "code": "6506738" },
-        { "code": "6502837" },
-        { "code": "6506752" },
         { "code": "6506752", "factory": "R", "year": "4" },
         { "code": "6502837", "factory": "S", "year": "4" },
         { "code": "6506738", "factory": "S", "year": "4" }
@@ -125,9 +98,6 @@
       "name": "The Lady of Pain",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/the-lady-of-pain.jpg",
       "identifiers": [
-        { "code": "6506745" },
-        { "code": "6502844" },
-        { "code": "6506759" },
         { "code": "6506759", "factory": "R", "year": "4" },
         { "code": "6502844", "factory": "S", "year": "4" },
         { "code": "6506745", "factory": "S", "year": "4" }
@@ -138,9 +108,6 @@
       "name": "Szass Tam",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/szass-tam.jpg",
       "identifiers": [
-        { "code": "6506748" },
-        { "code": "6502847" },
-        { "code": "6506762" },
         { "code": "6506762", "factory": "R", "year": "4" },
         { "code": "6502847", "factory": "S", "year": "4" },
         { "code": "6506748", "factory": "S", "year": "4" }
@@ -151,9 +118,6 @@
       "name": "Tasha the Witch Queen",
       "imagePath": "/assets/minifigures/dungeons-and-dragons/tasha-the-witch-queen.jpg",
       "identifiers": [
-        { "code": "6506747" },
-        { "code": "6502846" },
-        { "code": "6506761" },
         { "code": "6506761", "factory": "R", "year": "4" },
         { "code": "6502846", "factory": "S", "year": "4" },
         { "code": "6506747", "factory": "S", "year": "4" }

@@ -35,9 +35,11 @@ export const GET = async ({ params }) => {
     const { minifigures, ...rest } = jsonData;
 
     const processedMinifigures = minifigures.map((fig) => {
-      const generatedSearchKeys = fig.identifiers.map((id) =>
-        [id.code, id.factory, id.year].filter(Boolean).join('_')
-      );
+      const generatedSearchKeys = fig.identifiers
+        .map((id) => [
+          ...new Set([[id.code, id.factory, id.year].filter(Boolean).join('_'), id.code])
+        ])
+        .flat();
 
       return {
         ...fig,
