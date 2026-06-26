@@ -11,29 +11,9 @@ L-Scan is a privacy-first, zero-overhead, fully client-side Progressive Web Appl
 - **Real-Time Database Sync & Pruning:** Background micro-synchronization worker downloads current series catalogs, verifies file integrity via cryptographic SHA-256 hashes, and safely prunes retired items.
 - **Responsive Visual Diagnostics Trait:** Built-in development diagnostics drawer exposes the live pipeline canvas states to speed up local testing of computer vision filters.
 
----
+## Public API Endpoints
 
-## 📂 Architecture and Multithreading Topography
-
-To guarantee maximum responsiveness on low-end mobile devices, the app's computing landscape is distributed across three parallel execution contexts:
-
-```
-                  ┌─────────────────────────────────────────┐
-                  │            Main UI Thread               │
-                  │   Svelte 5 Core Layout & Viewfinder     │
-                  └───────┬─────────────────────────┬───────┘
-                          │                         │
-            Comlink RPC   │                         │   Comlink RPC
-            (Structured   │                         │   (Structured
-             Cloning)     │                         │    Cloning)
-                          ▼                         ▼
-  ┌───────────────────────────────────────┐ ┌───────────────────────────────────────┐
-  │         Scanner Web Worker            │ │          Sync Web Worker              │
-  │  • OffscreenCanvas Filter Pipeline    │ │  • Fetch Manifest / Hashing Engine    │
-  │  • zxing-wasm C++ WebAssembly Engine  │ │  • dexie.js Transaction Write Pool    │
-  └───────────────────────────────────────┘ └───────────────────────────────────────┘
-
-```
+L-Scan relies on pre-rendered, statically hosted JSON data feeds to perform background client database transformations with zero runtime backend overhead. For detailed contract object schemas, endpoint parameter details, and token flattening keys, check out the [Public API Endpoints Wiki](https://github.com/le0pard/lego-scanner/wiki/Public-API-Endpoints).
 
 ## Project Setup
 
