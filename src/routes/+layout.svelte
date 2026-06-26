@@ -107,7 +107,11 @@
 
       // Fallback Reactive Message Bus: Keep the postMessage broadcast listener functional
       const handleMessage = (event) => {
-        if (event.data && event.data.type === 'UPDATE_AVAILABLE' && navigator.serviceWorker.controller) {
+        if (
+          event.data &&
+          event.data.type === 'UPDATE_AVAILABLE' &&
+          navigator.serviceWorker.controller
+        ) {
           setUpdateAvailable(true);
         }
       };
