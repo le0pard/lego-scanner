@@ -17,7 +17,7 @@ All inventory catalogs, batch manufacturing codes, and localized figure markers 
 
 ### Where to Add or Edit Data
 
-- **Inventory Entries (JSON):** Catalog datasets are placed within the `src/lib/data/` directory.json/+server.js]. Each series has its own standalone data sheet named after its collection slug (e.g., `series-28.json`, `f1-race-cars.json`).
+- **Inventory Entries (JSON):** Catalog datasets are placed within the `src/lib/data/` directory. Each series has its own standalone data sheet named after its collection slug (e.g., `series-28.json`, `f1-race-cars.json`).
 - **Character Images:** Physical character illustration images are stored under `src/lib/assets/minifigures/[series-slug]/`.
 
 ### JSON Schema Specifications
