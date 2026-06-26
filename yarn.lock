@@ -740,9 +740,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.67.0":
-  version: 2.67.0
-  resolution: "@sveltejs/kit@npm:2.67.0"
+"@sveltejs/kit@npm:^2.68.0":
+  version: 2.68.0
+  resolution: "@sveltejs/kit@npm:2.68.0"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.9"
@@ -769,7 +769,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/6e9297c97cafef89a4b8cb9b4ffa47a43b0860b341576f28fbbeb5c811b8092fac7b99f76aa13976d63d8d69c45f4089d16fd717ba54fe378cc1a3e05784edc2
+  checksum: 10c0/4fc9f4d63f3cd04ef6a8b41342bda54f047342bf8b8ddb164800f321e60e13651b09c17ea17256886b24de8d8ccb50c982368eeb6711e42e25a1270f44329dc2
   languageName: node
   linkType: hard
 
@@ -1360,9 +1360,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.19.0":
-  version: 3.19.0
-  resolution: "eslint-plugin-svelte@npm:3.19.0"
+"eslint-plugin-svelte@npm:^3.20.0":
+  version: 3.20.0
+  resolution: "eslint-plugin-svelte@npm:3.20.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -1380,7 +1380,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10c0/573723dd97ecf65435df8ee12e57db34890097e0aa0f039bf436ae1ae496daa43455af5606db080424f557cf75fd7cffabbc61ffb3d12b04b1a60d7525462e91
+  checksum: 10c0/f3eb86bbdceb4b37108b5906e4d0f2db70029022ed99ebe713c45ca987ea0986e9bbdee2da609ae6ba26f46eb86e3d866f00341c08b9ca19cb153f43b0ca6d9d
   languageName: node
   linkType: hard
 
@@ -1817,7 +1817,7 @@ __metadata:
     "@rexa-developer/tiks": "npm:^0.3.0"
     "@sveltejs/adapter-static": "npm:^3.0.10"
     "@sveltejs/enhanced-img": "npm:^0.11.0"
-    "@sveltejs/kit": "npm:^2.67.0"
+    "@sveltejs/kit": "npm:^2.68.0"
     "@sveltejs/vite-plugin-svelte": "npm:^7.1.2"
     "@tailwindcss/typography": "npm:^0.5.20"
     "@tailwindcss/vite": "npm:^4.3.1"
@@ -1827,7 +1827,7 @@ __metadata:
     dexie: "npm:^4.4.4"
     eslint: "npm:^10.5.0"
     eslint-config-prettier: "npm:^10.1.8"
-    eslint-plugin-svelte: "npm:^3.19.0"
+    eslint-plugin-svelte: "npm:^3.20.0"
     globals: "npm:^17.7.0"
     prettier: "npm:^3.8.4"
     prettier-plugin-svelte: "npm:^4.1.1"
