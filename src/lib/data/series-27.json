@@ -8,9 +8,8 @@
       "name": "Hamster Costume Fan",
       "imagePath": "/assets/minifigures/series-27/hamster-costume-fan.jpg",
       "identifiers": [
-        { "code": "6522994" },
-        { "code": "6522982" },
-        { "code": "6522667" },
+        { "code": "6522982", "factory": "S", "year": "4" },
+        { "code": "6522667", "factory": "S", "year": "4" },
         { "code": "6522994", "factory": "R", "year": "4" }
       ]
     },
@@ -19,9 +18,8 @@
       "name": "Wolfpack Beastmaster",
       "imagePath": "/assets/minifigures/series-27/wolfpack-beastmaster.jpg",
       "identifiers": [
-        { "code": "6522993" },
-        { "code": "6522981" },
-        { "code": "6522666" },
+        { "code": "6522981", "factory": "S", "year": "4" },
+        { "code": "6522666", "factory": "S", "year": "4" },
         { "code": "6522993", "factory": "R", "year": "4" }
       ]
     },
@@ -30,9 +28,8 @@
       "name": "Jetpack Racer",
       "imagePath": "/assets/minifigures/series-27/jetpack-racer.jpg",
       "identifiers": [
-        { "code": "6522998" },
-        { "code": "6522986" },
-        { "code": "6522671" },
+        { "code": "6522986", "factory": "S", "year": "4" },
+        { "code": "6522671", "factory": "S", "year": "4" },
         { "code": "6522998", "factory": "R", "year": "4" }
       ]
     },
@@ -41,9 +38,8 @@
       "name": "Astronomer Kid",
       "imagePath": "/assets/minifigures/series-27/astronomer-kid.jpg",
       "identifiers": [
-        { "code": "6523001" },
-        { "code": "6522989" },
-        { "code": "6522674" },
+        { "code": "6522989", "factory": "S", "year": "4" },
+        { "code": "6522674", "factory": "S", "year": "4" },
         { "code": "6523001", "factory": "R", "year": "4" }
       ]
     },
@@ -52,9 +48,8 @@
       "name": "Plush Toy Collector",
       "imagePath": "/assets/minifigures/series-27/plush-toy-collector.jpg",
       "identifiers": [
-        { "code": "6523003" },
-        { "code": "6522991" },
-        { "code": "6522676" },
+        { "code": "6522991", "factory": "S", "year": "4" },
+        { "code": "6522676", "factory": "S", "year": "4" },
         { "code": "6523003", "factory": "R", "year": "4" }
       ]
     },
@@ -63,9 +58,8 @@
       "name": "Pterodactyl Costume Fan",
       "imagePath": "/assets/minifigures/series-27/pterodactyl-costume-fan.jpg",
       "identifiers": [
-        { "code": "6523000" },
-        { "code": "6522988" },
-        { "code": "6522673" },
+        { "code": "6522988", "factory": "S", "year": "4" },
+        { "code": "6522673", "factory": "S", "year": "4" },
         { "code": "6523000", "factory": "R", "year": "4" }
       ]
     },
@@ -74,11 +68,9 @@
       "name": "Longboarder",
       "imagePath": "/assets/minifigures/series-27/longboarder.jpg",
       "identifiers": [
-        { "code": "6522995" },
-        { "code": "6522983" },
-        { "code": "6522668" },
-        { "code": "6522995", "factory": "R", "year": "4" },
-        { "code": "6522668", "factory": "S", "year": "4" }
+        { "code": "6522983", "factory": "S", "year": "4" },
+        { "code": "6522668", "factory": "S", "year": "4" },
+        { "code": "6522995", "factory": "R", "year": "4" }
       ]
     },
     {
@@ -86,9 +78,8 @@
       "name": "Bogeyman",
       "imagePath": "/assets/minifigures/series-27/bogeyman.jpg",
       "identifiers": [
-        { "code": "6523004" },
-        { "code": "6522992" },
-        { "code": "6522677" },
+        { "code": "6522992", "factory": "S", "year": "4" },
+        { "code": "6522677", "factory": "S", "year": "4" },
         { "code": "6523004", "factory": "R", "year": "4" }
       ]
     },
@@ -97,9 +88,8 @@
       "name": "Cupid",
       "imagePath": "/assets/minifigures/series-27/cupid.jpg",
       "identifiers": [
-        { "code": "6522997" },
-        { "code": "6522985" },
-        { "code": "6522670" },
+        { "code": "6522985", "factory": "S", "year": "4" },
+        { "code": "6522670", "factory": "S", "year": "4" },
         { "code": "6522997", "factory": "R", "year": "4" }
       ]
     },
@@ -108,9 +98,8 @@
       "name": "Pirate Quartermaster",
       "imagePath": "/assets/minifigures/series-27/pirate-quartermaster.jpg",
       "identifiers": [
-        { "code": "6522999" },
-        { "code": "6522987" },
-        { "code": "6522672" },
+        { "code": "6522987", "factory": "S", "year": "4" },
+        { "code": "6522672", "factory": "S", "year": "4" },
         { "code": "6522999", "factory": "R", "year": "4" }
       ]
     },
@@ -119,9 +108,8 @@
       "name": "Cat Lover",
       "imagePath": "/assets/minifigures/series-27/cat-lover.jpg",
       "identifiers": [
-        { "code": "6523002" },
-        { "code": "6522990" },
-        { "code": "6522675" },
+        { "code": "6522990", "factory": "S", "year": "4" },
+        { "code": "6522675", "factory": "S", "year": "4" },
         { "code": "6523002", "factory": "R", "year": "4" }
       ]
     },
@@ -130,9 +118,8 @@
       "name": "Steampunk Inventor",
       "imagePath": "/assets/minifigures/series-27/steampunk-inventor.jpg",
       "identifiers": [
-        { "code": "6522996" },
-        { "code": "6522984" },
-        { "code": "6522669" },
+        { "code": "6522984", "factory": "S", "year": "4" },
+        { "code": "6522669", "factory": "S", "year": "4" },
         { "code": "6522996", "factory": "R", "year": "4" }
       ]
     }
