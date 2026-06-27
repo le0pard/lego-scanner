@@ -13,6 +13,7 @@
             window.location.reload();
           }
         });
+
         // Tell the waiting service worker to activate immediately
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
         return; // Exit early, the controllerchange listener will handle the reload

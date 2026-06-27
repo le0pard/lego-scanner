@@ -1,23 +1,37 @@
+// src/service-worker.js
 import { build, files, prerendered, version } from '$service-worker';
 
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
 const self = globalThis.self;
-const CACHE = `cache-${version}`;
+const IMAGE_CACHE_VERSION = 'v1';
+
+// Two-Tier Cache Strategy Split
+const STATIC_CACHE = `static-${version}`; // Rotates and wipes on version updates
+const IMAGE_CACHE = `runtime-images-${IMAGE_CACHE_VERSION}`; // Persistent across updates to preserve user matching history
+
 const API_TIMEOUT_MS = 3500;
 
-/**
- * Balanced Pre-cache Matrix
- * Keeps optimized images excluded from bulk addAll() downloads to protect
- * user bandwidth limits on installation loops.
- */
 const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path);
 });
 
+/**
+ * Normalization Helper
+ * Normalizes both query parameters and trailing slashes directly
+ * within the Request instance to guarantee perfectkeyspace matching alignment.
+ */
 const normalizeRequest = (request) => {
   const url = new URL(request.url);
-  if (url.search.length > 0) {
-    return new Request(`${url.origin}${url.pathname}`, {
+  let pathname = url.pathname;
+
+  // Strip trailing slashes defensively from path checks (e.g. /howto/ -> /howto)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    pathname = pathname.slice(0, -1);
+  }
+
+  // If parameters were stripped OR the trailing slash was modified, bake a standardized Request object
+  if (url.search.length > 0 || url.pathname !== pathname) {
+    return new Request(`${url.origin}${pathname}`, {
       method: request.method,
       headers: request.headers,
       credentials: request.credentials,
@@ -38,9 +52,8 @@ const fetchWithTimeout = (request, timeoutMs) => {
 
 self.addEventListener('install', (event) => {
   const addFilesToCache = async () => {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(STATIC_CACHE);
     try {
-      // Attempt high-performance atomic bulk download pass
       await cache.addAll(ASSETS);
     } catch (bulkError) {
       console.warn(
@@ -48,7 +61,6 @@ self.addEventListener('install', (event) => {
         bulkError
       );
 
-      // Fallback path loops over files individually so 404 dropouts don't halt the PWA lifecycle
       for (const asset of ASSETS) {
         try {
           await cache.add(asset);
@@ -72,69 +84,74 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   const deleteOldCaches = async () => {
-    for (const key of await caches.keys()) {
-      if (key !== CACHE) await caches.delete(key);
+    const cacheKeys = await caches.keys();
+    for (const key of cacheKeys) {
+      // Protect IMAGE_CACHE from deletion loops when application version ticks over
+      if (key !== STATIC_CACHE && key !== IMAGE_CACHE) {
+        await caches.delete(key);
+      }
     }
   };
 
-  event.waitUntil(deleteOldCaches());
+  event.waitUntil(deleteOldCaches().then(() => self.clients.claim()));
 });
 
 self.addEventListener('fetch', (event) => {
-  // ignore POST requests etc
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
   if (!url.protocol.startsWith('http')) return;
 
   const respond = async () => {
-    const cache = await caches.open(CACHE);
+    const staticCache = await caches.open(STATIC_CACHE);
+    const imageCache = await caches.open(IMAGE_CACHE);
 
     const standardizedReq = normalizeRequest(event.request);
-    let sanitizedPath = new URL(standardizedReq.url).pathname;
+    const sanitizedPath = new URL(standardizedReq.url).pathname;
 
-    if (sanitizedPath.length > 1 && sanitizedPath.endsWith('/')) {
-      sanitizedPath = sanitizedPath.slice(0, -1);
-    }
-
-    // Serve static code files and structural elements instantly from cache
+    // Static Application Shell Cache Check
     if (ASSETS.includes(sanitizedPath)) {
-      const response = await cache.match(standardizedReq);
+      const response = await staticCache.match(standardizedReq);
       if (response) {
         return response;
       }
     }
 
-    // Network-First Data Synchronization Layer
+    // Network-First Catalog Data Sync Layer (API Routes)
     if (sanitizedPath.startsWith('/api/')) {
       try {
-        // Attempt fresh network fetch with our timeout constraint
         const response = await fetchWithTimeout(event.request, API_TIMEOUT_MS);
 
-        // If successful and valid, update the cache snapshot for offline consistency
         if (response.status === 200) {
-          cache.put(standardizedReq, response.clone());
+          staticCache.put(standardizedReq, response.clone());
         }
 
         return response;
       } catch (err) {
         console.warn(
-          `[Service Worker] API Network failed or timed out for ${url.pathname}. Using offline cache layer.`,
+          `[Service Worker] API Connection failed or timed out for ${url.pathname}. Fallback matching active.`,
           err
         );
 
-        // Fall back to the local cache if offline or timing out
-        const cachedResponse = await cache.match(standardizedReq);
+        const cachedResponse = await staticCache.match(standardizedReq);
         if (cachedResponse) {
           return cachedResponse;
         }
 
-        // Re-throw if nothing is stored locally to let application handlers gracefully intercept it
         throw err;
       }
     }
 
-    // Resource Caching Layer (Cache-First on-demand delivery fallback)
+    // Persistent Image Assets Interceptor (Cache-First)
+    const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
+    if (isOptimizedImage) {
+      const cachedImage = await imageCache.match(standardizedReq);
+      if (cachedImage) {
+        return cachedImage;
+      }
+    }
+
+    // Live Outbound Fetch Fallback Pipeline
     try {
       const response = await fetch(event.request);
       if (!(response instanceof Response)) {
@@ -144,15 +161,20 @@ self.addEventListener('fetch', (event) => {
       const isSameOrigin = url.origin === self.location.origin;
 
       if (response.status === 200 && isSameOrigin) {
-        cache.put(standardizedReq, response.clone());
+        if (isOptimizedImage) {
+          // Route high-res catalog elements to the persistent storage layer
+          imageCache.put(standardizedReq, response.clone());
+        } else {
+          staticCache.put(standardizedReq, response.clone());
+        }
       }
 
       return response;
     } catch (err) {
-      const response = await cache.match(standardizedReq);
-      if (response) {
-        return response;
-      }
+      // Cross-check all storage indices before failing completely
+      const response =
+        (await staticCache.match(standardizedReq)) || (await imageCache.match(standardizedReq));
+      if (response) return response;
 
       throw err;
     }
