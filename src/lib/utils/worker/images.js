@@ -1,8 +1,9 @@
 const DOWNSCALE_MAX_SIZE = 700;
 
 /**
- * Mathematically Symmetric Morphological Vertical Closing Filter
- * Fuses print-head dropouts while strictly preserving data module proportions.
+ * Mathematically Symmetric Morphological Vertical Closing Filter (Full Frame)
+ * Corrected to apply equal pixel expansion and contraction tiers, fusing print-head
+ * dropouts without triggering block blooming or row blending.
  */
 export const imageScratchRepairFullProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -19,20 +20,19 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
 
   const grayscaleSnapshot = await createImageBitmap(canvas);
 
-  // DILATION PASS: Shift image vertically up to 5px. Dark pixels bleed into the thick white scratch line.
+  // Balanced 2px Dilation Pass (GPU Darken Blend Mode)
   ctx.filter = 'none';
   ctx.globalCompositeOperation = 'darken';
-  const dilationOffsets = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
-  for (const offset of dilationOffsets) {
+  const closingOffsets = [-2, -1, 1, 2];
+  for (const offset of closingOffsets) {
     ctx.drawImage(grayscaleSnapshot, 0, offset);
   }
 
   const dilatedSnapshot = await createImageBitmap(canvas);
 
-  // EROSION PASS: Identical 2px offset array under 'lighten' mode to restore shapes
+  // Perfect Mirror 2px Erosion Pass (GPU Lighten Blend Mode)
   ctx.globalCompositeOperation = 'lighten';
-  const erosionOffsets = [-2, -1, 1, 2];
-  for (const offset of erosionOffsets) {
+  for (const offset of closingOffsets) {
     ctx.drawImage(dilatedSnapshot, 0, offset);
   }
 
@@ -51,7 +51,8 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
 
 /**
  * Enhanced Digital Zoom + Symmetric Morphological Healer
- * Magnifies distant data matrix grids before applying shape-safe line healing.
+ * Magnifies the center 55% of the frame and applies a symmetrical closing tier
+ * to decode small or distant barcodes without distorting element sizes.
  */
 export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -74,17 +75,19 @@ export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
 
   const grayscaleSnapshot = await createImageBitmap(canvas);
 
+  // Balanced 2px Dilation Pass
   ctx.filter = 'none';
   ctx.globalCompositeOperation = 'darken';
-  const symmetricOffsets = [-2, -1, 1, 2];
-  for (const offset of symmetricOffsets) {
+  const closingOffsets = [-2, -1, 1, 2];
+  for (const offset of closingOffsets) {
     ctx.drawImage(grayscaleSnapshot, 0, offset);
   }
 
   const dilatedSnapshot = await createImageBitmap(canvas);
 
+  // Perfect Mirror 2px Erosion Pass
   ctx.globalCompositeOperation = 'lighten';
-  for (const offset of symmetricOffsets) {
+  for (const offset of closingOffsets) {
     ctx.drawImage(dilatedSnapshot, 0, offset);
   }
 
