@@ -11,6 +11,9 @@ const BINARIZER_TIERS = ['LocalAverage', 'GlobalHistogram'];
 
 // Global stream sequence tracker for interleaving execution modes
 let liveFrameSequenceCounter = 0;
+// Reusable micro-buffers pooled at module scope to eliminate Garbage Collection churn
+let sharedCanvas = null;
+let sharedCtx = null;
 
 /**
  * Utility helper converting an active ImageBitmap into standard ImageData
@@ -19,12 +22,24 @@ let liveFrameSequenceCounter = 0;
  * @returns {ImageData}
  */
 const convertBitmapToImageData = (bitmap) => {
-  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not allocate temporary transformation context');
+  // Lazily initialize our canvas buffers on the first frame capture pass
+  if (!sharedCanvas) {
+    sharedCanvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+    sharedCtx = sharedCanvas.getContext('2d', { willReadFrequently: true });
+  }
+  // Dynamically resize buffers if device rotates or changes camera lenses
+  else if (sharedCanvas.width !== bitmap.width || sharedCanvas.height !== bitmap.height) {
+    sharedCanvas.width = bitmap.width;
+    sharedCanvas.height = bitmap.height;
+  }
 
-  ctx.drawImage(bitmap, 0, 0);
-  return ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+  if (!sharedCtx) {
+    throw new Error('Could not allocate persistent transformation context');
+  }
+
+  // Draw and copy metrics onto our unchanging context structure safely
+  sharedCtx.drawImage(bitmap, 0, 0);
+  return sharedCtx.getImageData(0, 0, bitmap.width, bitmap.height);
 };
 
 const api = {
