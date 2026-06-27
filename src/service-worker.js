@@ -111,9 +111,7 @@ self.addEventListener('fetch', (event) => {
     // Static Application Shell Cache Check
     if (ASSETS.includes(sanitizedPath)) {
       const response = await staticCache.match(standardizedReq);
-      if (response) {
-        return response;
-      }
+      if (response) return response;
     }
 
     // If an old hash file is requested, look across ALL legacy cache spaces on disk
@@ -142,9 +140,7 @@ self.addEventListener('fetch', (event) => {
         );
 
         const cachedResponse = await staticCache.match(standardizedReq);
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+        if (cachedResponse) return cachedResponse;
 
         throw err;
       }
@@ -154,9 +150,7 @@ self.addEventListener('fetch', (event) => {
     const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
     if (isOptimizedImage) {
       const cachedImage = await imageCache.match(standardizedReq);
-      if (cachedImage) {
-        return cachedImage;
-      }
+      if (cachedImage) return cachedImage;
     }
 
     // Live Outbound Fetch Fallback Pipeline

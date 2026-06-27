@@ -29,6 +29,16 @@ jobs:
       - name: Install Javascript dependencies
         run: yarn install --immutable
 
+      - name: Cache SvelteKit Build Assets
+        uses: actions/cache@v6
+        with:
+          path: |
+            .svelte-kit
+            node_modules/.vite
+          key: ${{ runner.os }}-sveltekit-${{ hashFiles('**/yarn.lock', '**/vite.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-sveltekit-
+
       - name: Lint
         run: yarn run lint
 
