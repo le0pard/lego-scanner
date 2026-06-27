@@ -1,3 +1,4 @@
+// src/service-worker.js
 import { build, files, prerendered, version } from '$service-worker';
 
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
@@ -5,6 +6,11 @@ const self = globalThis.self;
 const CACHE = `cache-${version}`;
 const API_TIMEOUT_MS = 3500;
 
+/**
+ * Balanced Pre-cache Matrix
+ * Keeps optimized images excluded from bulk addAll() downloads to protect
+ * user bandwidth limits on installation loops.
+ */
 const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path);
 });
@@ -56,7 +62,6 @@ self.addEventListener('install', (event) => {
       }
     }
 
-    // broadcast to all open tabs that a new version is downloaded and waiting
     const clientsList = await self.clients.matchAll({ includeUncontrolled: true });
     for (const client of clientsList) {
       client.postMessage({ type: 'UPDATE_AVAILABLE' });
@@ -84,22 +89,24 @@ self.addEventListener('fetch', (event) => {
   if (!url.protocol.startsWith('http')) return;
 
   const respond = async () => {
-    const url = new URL(event.request.url);
     const cache = await caches.open(CACHE);
 
     const standardizedReq = normalizeRequest(event.request);
-    const sanitizedPath = new URL(standardizedReq.url).pathname;
+    let sanitizedPath = new URL(standardizedReq.url).pathname;
 
-    // `build`/`files` can always be served from the cache
+    if (sanitizedPath.length > 1 && sanitizedPath.endsWith('/')) {
+      sanitizedPath = sanitizedPath.slice(0, -1);
+    }
+
+    // Serve static code files and structural elements instantly from cache
     if (ASSETS.includes(sanitizedPath)) {
       const response = await cache.match(standardizedReq);
-
       if (response) {
         return response;
       }
     }
 
-    // Network-First with strict Timeout Fallback
+    // Network-First Data Synchronization Layer
     if (sanitizedPath.startsWith('/api/')) {
       try {
         // Attempt fresh network fetch with our timeout constraint
@@ -128,6 +135,7 @@ self.addEventListener('fetch', (event) => {
       }
     }
 
+    // Resource Caching Layer (Cache-First on-demand delivery fallback)
     try {
       const response = await fetch(event.request);
       if (!(response instanceof Response)) {
@@ -135,16 +143,14 @@ self.addEventListener('fetch', (event) => {
       }
 
       const isSameOrigin = url.origin === self.location.origin;
-      const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(url.pathname);
 
-      if (response.status === 200 && isSameOrigin && !isOptimizedImage) {
+      if (response.status === 200 && isSameOrigin) {
         cache.put(standardizedReq, response.clone());
       }
 
       return response;
     } catch (err) {
       const response = await cache.match(standardizedReq);
-
       if (response) {
         return response;
       }
