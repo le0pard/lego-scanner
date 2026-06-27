@@ -1,4 +1,3 @@
-// src/service-worker.js
 import { build, files, prerendered, version } from '$service-worker';
 
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
