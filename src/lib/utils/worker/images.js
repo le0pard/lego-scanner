@@ -1,9 +1,42 @@
+// src/lib/utils/worker/images.js
+
 const DOWNSCALE_MAX_SIZE = 700;
+
+// Persistent execution pool mapping filter steps to recycled OffscreenCanvases
+const canvasPool = {};
+
+/**
+ * High-Performance Context Allocation Recycler
+ * Resolves context handles from a static module cache with active safe state resets.
+ * @param {string} key - Unique identifier tracking the specific pipeline texture phase
+ * @param {number} width - Targeted execution context matrix width
+ * @param {number} height - Targeted execution context matrix height
+ * @returns {{canvas: OffscreenCanvas, ctx: OffscreenCanvasRenderingContext2D}}
+ */
+const getPooledCanvas = (key, width, height) => {
+  if (!canvasPool[key]) {
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+    canvasPool[key] = { canvas, ctx };
+  } else {
+    const entry = canvasPool[key];
+
+    // Dynamic resizing natively resets canvas backings and clears pixel arrays
+    if (entry.canvas.width !== width || entry.canvas.height !== height) {
+      entry.canvas.width = width;
+      entry.canvas.height = height;
+    } else {
+      // Clears pixel data and forces context variables
+      // back to standard defaults to protect against mid-pipeline crashes.
+      entry.ctx.reset();
+    }
+  }
+  return canvasPool[key];
+};
 
 /**
  * Mathematically Symmetric Morphological Vertical Closing Filter (Full Frame)
- * Corrected to apply equal pixel expansion and contraction tiers, fusing print-head
- * dropouts without triggering block blooming or row blending.
+ * Employs a recycled canvas pool buffer to heal line dropouts with zero memory allocation overhead.
  */
 export const imageScratchRepairFullProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -11,11 +44,11 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
   const canvasWidth = Math.round(width * ratio);
   const canvasHeight = Math.round(height * ratio);
 
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not allocate execution canvas context');
+  const { canvas, ctx } = getPooledCanvas('scratch_base', canvasWidth, canvasHeight);
 
+  // Defensively reset context properties to prevent cumulative filter mutations
   ctx.filter = 'grayscale(100%) contrast(170%) brightness(95%)';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
 
   const grayscaleSnapshot = await createImageBitmap(canvas);
@@ -39,20 +72,17 @@ export const imageScratchRepairFullProcessing = async (baseBmp) => {
   grayscaleSnapshot.close();
   dilatedSnapshot.close();
 
-  const finalCanvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const finalCtx = finalCanvas.getContext('2d');
-  if (!finalCtx) throw new Error('Could not allocate final context');
+  const finalPool = getPooledCanvas('scratch_final', canvasWidth, canvasHeight);
+  finalPool.ctx.filter = 'contrast(250%)';
+  finalPool.ctx.globalCompositeOperation = 'source-over';
+  finalPool.ctx.drawImage(canvas, 0, 0);
 
-  finalCtx.filter = 'contrast(250%)';
-  finalCtx.drawImage(canvas, 0, 0);
-
-  return await createImageBitmap(finalCanvas);
+  return await createImageBitmap(finalPool.canvas);
 };
 
 /**
  * Enhanced Digital Zoom + Symmetric Morphological Healer
- * Magnifies the center 55% of the frame and applies a symmetrical closing tier
- * to decode small or distant barcodes without distorting element sizes.
+ * Magnifies the center 55% of the frame and applies a symmetrical closing tier using pooled memory space.
  */
 export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -66,16 +96,14 @@ export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
   const canvasWidth = Math.round(cropWidth * ratio);
   const canvasHeight = Math.round(cropHeight * ratio);
 
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not allocate zoom canvas context');
+  const { canvas, ctx } = getPooledCanvas('macro_base', canvasWidth, canvasHeight);
 
   ctx.filter = 'grayscale(100%) contrast(170%) brightness(95%)';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, cropX, cropY, cropWidth, cropHeight, 0, 0, canvasWidth, canvasHeight);
 
   const grayscaleSnapshot = await createImageBitmap(canvas);
 
-  // Balanced 2px Dilation Pass
   ctx.filter = 'none';
   ctx.globalCompositeOperation = 'darken';
   const closingOffsets = [-2, -1, 1, 2];
@@ -85,7 +113,6 @@ export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
 
   const dilatedSnapshot = await createImageBitmap(canvas);
 
-  // Perfect Mirror 2px Erosion Pass
   ctx.globalCompositeOperation = 'lighten';
   for (const offset of closingOffsets) {
     ctx.drawImage(dilatedSnapshot, 0, offset);
@@ -94,20 +121,17 @@ export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
   grayscaleSnapshot.close();
   dilatedSnapshot.close();
 
-  const finalCanvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const finalCtx = finalCanvas.getContext('2d');
-  if (!finalCtx) throw new Error('Could not allocate final zoom context');
+  const finalPool = getPooledCanvas('macro_final', canvasWidth, canvasHeight);
+  finalPool.ctx.filter = 'contrast(250%)';
+  finalPool.ctx.globalCompositeOperation = 'source-over';
+  finalPool.ctx.drawImage(canvas, 0, 0);
 
-  finalCtx.filter = 'contrast(250%)';
-  finalCtx.drawImage(canvas, 0, 0);
-
-  return await createImageBitmap(finalCanvas);
+  return await createImageBitmap(finalPool.canvas);
 };
 
 /**
  * Flat-Field Illumination Normalization Filter
- * Neutralizes uneven background shadows and harsh retail packaging glare
- * by executing an isolated multi-canvas low-frequency subtraction pass.
+ * Uses an completely isolated multi-canvas low-frequency subtraction pass via the cache pool.
  */
 export const imageIlluminationFlattenProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -115,36 +139,32 @@ export const imageIlluminationFlattenProcessing = async (baseBmp) => {
   const canvasWidth = Math.round(width * ratio);
   const canvasHeight = Math.round(height * ratio);
 
-  // Setup isolated canvas contexts to prevent sequential filter bleeding
-  const canvasSharp = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctxSharp = canvasSharp.getContext('2d');
-  ctxSharp.filter = 'grayscale(100%) contrast(120%)';
-  ctxSharp.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+  const sharpPool = getPooledCanvas('flatten_sharp', canvasWidth, canvasHeight);
+  sharpPool.ctx.filter = 'grayscale(100%) contrast(120%)';
+  sharpPool.ctx.globalCompositeOperation = 'source-over';
+  sharpPool.ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
 
-  const canvasBlur = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctxBlur = canvasBlur.getContext('2d');
-  ctxBlur.filter = 'grayscale(100%) blur(12px)';
-  ctxBlur.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
+  const blurPool = getPooledCanvas('flatten_blur', canvasWidth, canvasHeight);
+  blurPool.ctx.filter = 'grayscale(100%) blur(12px)';
+  blurPool.ctx.globalCompositeOperation = 'source-over';
+  blurPool.ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
 
-  // Isolate high-frequency matrix shapes via difference calculation
-  const canvasDiff = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctxDiff = canvasDiff.getContext('2d');
-  ctxDiff.drawImage(canvasSharp, 0, 0);
-  ctxDiff.globalCompositeOperation = 'difference';
-  ctxDiff.drawImage(canvasBlur, 0, 0);
+  const diffPool = getPooledCanvas('flatten_diff', canvasWidth, canvasHeight);
+  diffPool.ctx.filter = 'none';
+  diffPool.ctx.globalCompositeOperation = 'source-over';
+  diffPool.ctx.drawImage(sharpPool.canvas, 0, 0);
+  diffPool.ctx.globalCompositeOperation = 'difference';
+  diffPool.ctx.drawImage(blurPool.canvas, 0, 0);
 
-  // Invert the difference canvas against a clean solid fill to produce crisp black-on-white structures
-  const finalCanvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const finalCtx = finalCanvas.getContext('2d');
-  if (!finalCtx) throw new Error('Could not allocate flattener final context');
+  const finalPool = getPooledCanvas('flatten_final', canvasWidth, canvasHeight);
+  finalPool.ctx.globalCompositeOperation = 'source-over';
+  finalPool.ctx.fillStyle = '#ffffff';
+  finalPool.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  finalPool.ctx.globalCompositeOperation = 'difference';
+  finalPool.ctx.filter = 'contrast(250%) brightness(95%)';
+  finalPool.ctx.drawImage(diffPool.canvas, 0, 0);
 
-  finalCtx.fillStyle = '#ffffff';
-  finalCtx.fillRect(0, 0, canvasWidth, canvasHeight);
-  finalCtx.globalCompositeOperation = 'difference';
-  finalCtx.filter = 'contrast(250%) brightness(95%)';
-  finalCtx.drawImage(canvasDiff, 0, 0);
-
-  return await createImageBitmap(finalCanvas);
+  return await createImageBitmap(finalPool.canvas);
 };
 
 export const imageUnsharpMaskSharpenProcessing = async (baseBmp) => {
@@ -153,11 +173,10 @@ export const imageUnsharpMaskSharpenProcessing = async (baseBmp) => {
   const canvasWidth = Math.round(width * ratio);
   const canvasHeight = Math.round(height * ratio);
 
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not get sharpen context');
+  const { canvas, ctx } = getPooledCanvas('sharpen_base', canvasWidth, canvasHeight);
 
   ctx.filter = 'grayscale(100%) contrast(150%)';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
 
   const sharpSnapshot = await createImageBitmap(canvas);
@@ -179,11 +198,10 @@ export const imageAdaptiveThresholdProcessing = async (baseBmp) => {
   const canvasWidth = Math.round(width * ratio);
   const canvasHeight = Math.round(height * ratio);
 
-  const canvas = new OffscreenCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not allocate threshold canvas');
+  const { canvas, ctx } = getPooledCanvas('threshold_base', canvasWidth, canvasHeight);
 
   ctx.filter = 'grayscale(100%) blur(0.6px) contrast(250%) brightness(90%)';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
 
   return await createImageBitmap(canvas);
@@ -195,11 +213,12 @@ export const imageDownscaleProcessing = async (baseBmp) => {
   const targetWidth = Math.round(width * ratio);
   const targetHeight = Math.round(height * ratio);
 
-  const canvas = new OffscreenCanvas(targetWidth, targetHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not get normal canvas context');
+  const { canvas, ctx } = getPooledCanvas('downscale_base', targetWidth, targetHeight);
 
+  ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, 0, 0, targetWidth, targetHeight);
+
   return await createImageBitmap(canvas);
 };
 
@@ -209,11 +228,10 @@ export const imageHighContrastProcessing = async (baseBmp) => {
   const targetWidth = Math.round(width * ratio);
   const targetHeight = Math.round(height * ratio);
 
-  const canvas = new OffscreenCanvas(targetWidth, targetHeight);
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Could not get contrast canvas context');
+  const { canvas, ctx } = getPooledCanvas('contrast_base', targetWidth, targetHeight);
 
   ctx.filter = 'grayscale(100%) contrast(300%)';
+  ctx.globalCompositeOperation = 'source-over';
   ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, targetWidth, targetHeight);
 
   return await createImageBitmap(canvas);
