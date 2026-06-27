@@ -80,6 +80,9 @@ const api = {
       liveFrameSequenceCounter = (liveFrameSequenceCounter + 1) % 4;
       const framePhase = liveFrameSequenceCounter;
 
+      // Determine if this frame is running a high-intensity repair pass
+      const isRepairPass = framePhase === 1 || framePhase === 3;
+
       if (framePhase === 1) {
         // Run full-frame line repair on close up boxes
         try {
@@ -102,7 +105,8 @@ const api = {
 
       const results = await readBarcodes(targetImageData, {
         formats: ['DataMatrix'],
-        tryHarder: framePhase === 1 || framePhase === 3, // Enable deep engine validation only on repair passes
+        tryHarder: isRepairPass, // Enable deep engine validation only on repair passes
+        tryDenoise: isRepairPass,
         tryRotate: true,
         maxNumberOfSymbols: 1,
         binarizer: 'LocalAverage'
@@ -145,6 +149,7 @@ const api = {
             const results = await readBarcodes(imageData, {
               formats: ['DataMatrix'],
               tryHarder: true,
+              tryDenoise: true,
               tryRotate: true,
               maxNumberOfSymbols: 1,
               binarizer
@@ -198,6 +203,7 @@ const api = {
           testScan = await readBarcodes(imageData, {
             formats: ['DataMatrix'],
             tryHarder: true,
+            tryDenoise: true,
             tryRotate: true,
             maxNumberOfSymbols: 1,
             binarizer
