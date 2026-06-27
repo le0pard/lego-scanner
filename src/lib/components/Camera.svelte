@@ -22,6 +22,8 @@
     setZoomSettings
   } from '$lib/states/camera.svelte';
 
+  const PROCESSING_THROTTLE_MS = 200;
+
   const { getScanner } = $props();
 
   const CAMERA_SETTINGS = {
@@ -33,12 +35,59 @@
   let videoElement = $state(null);
   let stream = $state(null);
   let isCameraRequested = $state(false);
-  let processingFrame = false;
 
+  let processingFrame = false;
   let lastProcessedTimestamp = 0;
-  const PROCESSING_THROTTLE_MS = 200;
+  let isTrackMutating = false;
+  let pendingConstraints = null;
 
   const streamActiveTrack = () => (stream ? stream.getVideoTracks()[0] : null);
+
+  /**
+   * High-Performance Hardware Task Coordinator
+   * Serializes camera lens modifications to prevent overlapping race conditions
+   * and intercepts errors to eliminate unhandled promise rejections safely.
+   */
+  const flushTrackConstraints = async () => {
+    if (isTrackMutating) return;
+
+    const activeTrack = streamActiveTrack();
+    if (!activeTrack) {
+      pendingConstraints = null;
+      return;
+    }
+
+    if (!pendingConstraints) return;
+
+    isTrackMutating = true;
+
+    // Atomically detach the latest adjustments from the pending tracking buffer
+    const batchToExecute = pendingConstraints;
+    pendingConstraints = null;
+
+    try {
+      await activeTrack.applyConstraints({
+        advanced: [batchToExecute]
+      });
+    } catch (err) {
+      console.warn('Camera Hardware System: Constraint transaction rejected.', err);
+    } finally {
+      isTrackMutating = false;
+
+      // If the user modified values while the hardware was processing, re-flush
+      if (pendingConstraints) {
+        requestAnimationFrame(flushTrackConstraints);
+      }
+    }
+  };
+
+  /**
+   * Schedules a non-blocking hardware mutation batch payload
+   */
+  const scheduleTrackConstraint = (deltaBatch) => {
+    pendingConstraints = { ...(pendingConstraints || {}), ...deltaBatch };
+    flushTrackConstraints();
+  };
 
   const evaluateCameraPermissions = async () => {
     try {
@@ -105,9 +154,6 @@
   const applyZoomTrackConstraint = async (targetValue) => {
     if (!cameraState.haveZoom) return;
 
-    const activeTrack = streamActiveTrack();
-    if (!activeTrack) return;
-
     // Defensively clamp value parameters inside hardware bounding boxes
     const clampedValue = Math.max(
       cameraState.zoom.min,
@@ -118,15 +164,11 @@
     const decimalsCount = (cameraState.zoom.step.toString().split('.')[1] || '').length || 1;
     const preciseValue = parseFloat(clampedValue.toFixed(decimalsCount));
 
+    // Update UI tracking states immediately to keep the range element highly responsive
     cameraState.zoom.value = preciseValue;
 
-    try {
-      await activeTrack.applyConstraints({
-        advanced: [{ zoom: preciseValue }]
-      });
-    } catch (err) {
-      console.warn('Could not enforce hardware zoom level constraints:', err);
-    }
+    // Offload actual track mutation to the execution mutex channel
+    scheduleTrackConstraint({ zoom: preciseValue });
   };
 
   const handleZoomChange = (e) => {
@@ -281,13 +323,11 @@
     e.preventDefault();
     if (!cameraState.haveFlash) return;
 
-    const activeTrack = streamActiveTrack();
-    if (!activeTrack) return;
-
+    // Synchronously mutate reactive properties
     toggleFlashState();
-    activeTrack.applyConstraints({
-      advanced: [{ torch: cameraState.isFlashOn }]
-    });
+
+    // Safely route the torch assignment through the protected constraint loop
+    scheduleTrackConstraint({ torch: cameraState.isFlashOn });
   };
 
   onMount(async () => {
