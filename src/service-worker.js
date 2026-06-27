@@ -53,15 +53,17 @@ const fetchWithTimeout = (request, timeoutMs) => {
 self.addEventListener('install', (event) => {
   const addFilesToCache = async () => {
     const cache = await caches.open(STATIC_CACHE);
+    // This bypasses the local HTTP browser disk/CDN caches, forcing a fresh download of pre-rendered HTML paths
+    const freshRequestsPool = ASSETS.map(asset => new Request(asset, { cache: 'reload' }));
     try {
-      await cache.addAll(ASSETS);
+      await cache.addAll(freshRequestsPool);
     } catch (bulkError) {
       console.warn(
         '[Service Worker] Bulk asset pre-cache failed. Switching to resilient individual layout extraction...',
         bulkError
       );
 
-      for (const asset of ASSETS) {
+      for (const asset of freshRequestsPool) {
         try {
           await cache.add(asset);
         } catch (individualError) {
