@@ -12,44 +12,68 @@
   let minifig = $state(null);
   let searchCompleted = $state(false);
 
-  $effect(async () => {
-    if (scanResultState.result) {
-      const legoData = extractFieldsFromDataMatrix(scanResultState.result);
-      if (!legoData || !legoData.key) {
-        minifig = null;
-        errorTick();
-        searchCompleted = true;
-        return;
-      }
+  $effect(() => {
+    // Stale guard indicator tracks if this specific execution cycle is still valid
+    let isCurrent = true;
 
-      try {
-        const found = await db.minifigures
-          .where('searchKeys')
-          .anyOf(legoData.key, legoData.code)
-          .first();
+    const performDatabaseLookup = async () => {
+      if (scanResultState.result) {
+        const legoData = extractFieldsFromDataMatrix(scanResultState.result);
 
-        if (found) {
-          minifig = found;
-          successTick();
-        } else {
+        if (!legoData || !legoData.key) {
+          if (!isCurrent) return; // Discard state mutations if a newer scan has already started
           minifig = null;
           errorTick();
+          searchCompleted = true;
+          return;
         }
-      } catch (err) {
-        console.error('Database query failed:', err);
+
+        try {
+          const found = await db.minifigures
+            .where('searchKeys')
+            .anyOf(legoData.key, legoData.code)
+            .first();
+
+          // Verify that the parent scan context hasn't changed while we were awaiting IndexedDB
+          if (!isCurrent) return;
+
+          if (found) {
+            minifig = found;
+            successTick();
+          } else {
+            minifig = null;
+            errorTick();
+          }
+        } catch (err) {
+          console.error('Database query failed:', err);
+          if (!isCurrent) return;
+
+          minifig = null;
+          errorTick();
+        } finally {
+          if (isCurrent) {
+            searchCompleted = true;
+          }
+        }
+      } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
+        if (!isCurrent) return;
+        searchCompleted = false;
         minifig = null;
         errorTick();
-      } finally {
-        searchCompleted = true;
+      } else {
+        if (!isCurrent) return;
+        searchCompleted = false;
+        minifig = null;
       }
-    } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
-      searchCompleted = false;
-      minifig = null;
-      errorTick();
-    } else {
-      searchCompleted = false;
-      minifig = null;
-    }
+    };
+
+    // Safely fire the un-awaited microtask line
+    performDatabaseLookup();
+
+    // Instantly invalidates this lookup run when a new token arrives
+    return () => {
+      isCurrent = false;
+    };
   });
 </script>
 
