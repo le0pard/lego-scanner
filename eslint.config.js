@@ -14,7 +14,13 @@ export default defineConfig([
   prettier,
   svelte.configs.prettier,
   {
-    languageOptions: { globals: { ...globals.browser, ...globals.node } }
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        __APP_VERSION__: 'readonly'
+      }
+    }
   },
 
   {
@@ -25,8 +31,6 @@ export default defineConfig([
   {
     // Override or add rule settings here, such as:
     // 'svelte/button-has-type': 'error'
-    rules: {
-      'no-undef': 'off'
-    }
+    rules: {}
   }
 ]);
