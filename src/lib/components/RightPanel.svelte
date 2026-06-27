@@ -57,11 +57,13 @@
         }
       } else if (scanResultState.errorMessage && scanResultState.errorMessage.length > 0) {
         if (!isCurrent) return;
+
         searchCompleted = false;
         minifig = null;
         errorTick();
       } else {
         if (!isCurrent) return;
+
         searchCompleted = false;
         minifig = null;
       }
