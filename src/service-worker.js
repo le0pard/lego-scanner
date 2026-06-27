@@ -1,4 +1,3 @@
-// src/service-worker.js
 import { build, files, prerendered, version } from '$service-worker';
 
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
@@ -18,7 +17,7 @@ const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
 /**
  * Normalization Helper
  * Normalizes both query parameters and trailing slashes directly
- * within the Request instance to guarantee perfectkeyspace matching alignment.
+ * within the Request instance to guarantee perfect keyspace matching alignment.
  */
 const normalizeRequest = (request) => {
   const url = new URL(request.url);
@@ -117,6 +116,15 @@ self.addEventListener('fetch', (event) => {
       }
     }
 
+    // If an old hash file is requested, look across ALL legacy cache spaces on disk
+    const isImmutableChunk = sanitizedPath.includes('_app/immutable/');
+    if (isImmutableChunk) {
+      const globalCacheMatch = await caches.match(standardizedReq);
+      if (globalCacheMatch) {
+        return globalCacheMatch; // Found in an older cache folder
+      }
+    }
+
     // Network-First Catalog Data Sync Layer (API Routes)
     if (sanitizedPath.startsWith('/api/')) {
       try {
@@ -162,7 +170,6 @@ self.addEventListener('fetch', (event) => {
 
       if (response.status === 200 && isSameOrigin) {
         if (isOptimizedImage) {
-          // Route high-res catalog elements to the persistent storage layer
           imageCache.put(standardizedReq, response.clone());
         } else {
           staticCache.put(standardizedReq, response.clone());
