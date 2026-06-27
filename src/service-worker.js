@@ -1,5 +1,6 @@
 import { build, files, prerendered, version } from '$service-worker';
 
+const PREGENERATED_ASSETS_PREFIX = '_app/immutable/';
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
 const self = globalThis.self;
 const IMAGE_CACHE_VERSION = 'v1';
@@ -115,7 +116,7 @@ self.addEventListener('fetch', (event) => {
     }
 
     // If an old hash file is requested, look across ALL legacy cache spaces on disk
-    const isImmutableChunk = sanitizedPath.includes('_app/immutable/');
+    const isImmutableChunk = sanitizedPath.includes(PREGENERATED_ASSETS_PREFIX);
     if (isImmutableChunk) {
       const globalCacheMatch = await caches.match(standardizedReq);
       if (globalCacheMatch) {

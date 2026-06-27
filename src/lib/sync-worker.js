@@ -3,33 +3,70 @@ import { db } from '$lib/utils/db.js';
 
 const api = {
   /**
-   * Syncs the remote API manifest with local IndexedDB and prunes orphaned collections
-   * @param {string} basePath - The base URL of the app (passed from the main thread)
+   * Syncs the remote API manifest with local IndexedDB atomically using
+   * memory collection loops to keep database transactions pure and crash-proof.
+   * @param {string} basePath - The base URL of the app (passed from main thread)
    */
   async syncDatabase(basePath = '/') {
     const cleanBase = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
     try {
-      // Fetch the latest manifest to check for updates
+      // Fetch the latest manifest to check for catalog updates
       const manifestResponse = await fetch(`${cleanBase}/api/manifest.json?t=${Date.now()}`);
       if (!manifestResponse.ok) throw new Error('Could not fetch remote manifest');
       const { seriesManifest } = await manifestResponse.json();
 
-      // Get current local sync state
+      // Read current local state out of DB to isolate delta targets
       const localMetaArray = await db.syncMeta.toArray();
       const localMetaMap = Object.fromEntries(localMetaArray.map((m) => [m.series, m.hash]));
+
+      const downloadsToProcess = [];
       let didUpdate = false;
 
-      // Synchronize and prune inside active remote collections
+      // ==========================================================================
+      // NETWORK GATHERING LOOP (Must be outside the Dexie Transaction)
+      // ==========================================================================
       for (const [seriesId, remoteInfo] of Object.entries(seriesManifest)) {
         const localHash = localMetaMap[seriesId];
-        if (localHash !== remoteInfo.hash) {
-          console.log(`Sync Worker: Downloading updated data for Series ${seriesId}...`);
-          const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`);
-          if (!dataResponse.ok) continue;
-          const dbData = await dataResponse.json();
 
-          // Prune obsolete figures within this series
+        if (localHash !== remoteInfo.hash) {
+          console.log(`Sync Worker: Pulling network update parameters for Series: ${seriesId}...`);
+          const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`);
+
+          if (!dataResponse.ok) {
+            throw new Error(
+              `Network dropout encountered while fetching catalog series: ${seriesId}`
+            );
+          }
+
+          const dbData = await dataResponse.json();
+          downloadsToProcess.push({
+            seriesId,
+            remoteHash: remoteInfo.hash,
+            dbData
+          });
+        }
+      }
+
+      // If nothing has been updated on the network side, skip open hooks entirely
+      const remoteSeriesKeys = new Set(Object.keys(seriesManifest));
+      const codeHasDiscontinuedSeries = localMetaArray.some(
+        (meta) => !remoteSeriesKeys.has(meta.series)
+      );
+
+      if (downloadsToProcess.length === 0 && !codeHasDiscontinuedSeries) {
+        return false;
+      }
+
+      // ==========================================================================
+      // ATOMIC DATABASE FLUSH (100% Acid Compliant, Zero Network Activity)
+      // ==========================================================================
+      await db.transaction('rw', [db.minifigures, db.syncMeta], async () => {
+        // Flush and modify updated download modules sequentially inside the transaction
+        for (const update of downloadsToProcess) {
+          const { seriesId, remoteHash, dbData } = update;
+
+          // Isolate and prune obsolete figure entries no longer present in the updated file
           const remoteSlugs = new Set(dbData.map((fig) => fig.slug));
           const localOldFigures = await db.minifigures.where({ series: seriesId }).toArray();
           const slugsToDelete = localOldFigures
@@ -38,42 +75,46 @@ const api = {
 
           if (slugsToDelete.length > 0) {
             console.log(
-              `Sync Worker: Pruning ${slugsToDelete.length} stale figures from ${seriesId}`
+              `Sync Worker [Tx]: Pruning ${slugsToDelete.length} obsolete targets from ${seriesId}`
             );
             await db.minifigures.bulkDelete(slugsToDelete);
           }
 
-          // Save fresh JSON data snapshot directly to IndexedDB
+          // Force-insert the fresh collection array block into IndexedDB
           await db.minifigures.bulkPut(dbData);
 
-          // Update hash tracking in DB so we don't download it again next time
+          // Update sync history hash blocks safely inside the atomic loop
           await db.syncMeta.put({
             series: seriesId,
-            hash: remoteInfo.hash,
+            hash: remoteHash,
             lastSynced: new Date().toISOString()
           });
-          didUpdate = true;
-        }
-      }
 
-      // Full Series Purge: Remove entire series missing from remote manifest
-      const remoteSeriesKeys = new Set(Object.keys(seriesManifest));
-      for (const localMeta of localMetaArray) {
-        if (!remoteSeriesKeys.has(localMeta.series)) {
-          console.log(
-            `Sync Worker: Purging discontinued collection "${localMeta.series}" from local storage.`
-          );
-          // Delete all figures matched to this discontinued series index
-          await db.minifigures.where({ series: localMeta.series }).delete();
-          // Drop the tracking signature block
-          await db.syncMeta.delete(localMeta.series);
           didUpdate = true;
         }
-      }
+
+        // Complete Catalog Purge: Remove legacy retired series missed by the manifest
+        for (const localMeta of localMetaArray) {
+          if (!remoteSeriesKeys.has(localMeta.series)) {
+            console.log(
+              `Sync Worker [Tx]: Purging discontinued catalog namespace: "${localMeta.series}"`
+            );
+
+            // Delete all mapped character items matching this series identifier handle
+            await db.minifigures.where({ series: localMeta.series }).delete();
+            // Evict tracking identity key
+            await db.syncMeta.delete(localMeta.series);
+
+            didUpdate = true;
+          }
+        }
+      });
+
       return didUpdate;
     } catch (error) {
-      console.warn('Sync Worker: Sync deferred. Running fully local offline mode.', error);
-      return false;
+      console.warn('Sync Worker: Atomic operation failed. Rollback successfully triggered.', error);
+      // Pass the error back up to SvelteKit layout handlers to set correct UI indicator banners
+      throw error;
     }
   }
 };
