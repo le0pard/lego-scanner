@@ -2,7 +2,6 @@
   import classNames from 'classnames';
   import { resolve } from '$app/paths';
   import { afterNavigate } from '$app/navigation';
-  import pkg from '$lib/../../package.json' with { type: 'json' };
   import {
     cameraTabState,
     uploadTabState,
@@ -148,7 +147,7 @@
         </li>
       </ul>
       <div class="mt-auto text-xs text-text-muted border-t border-border pt-4">
-        v{pkg.version}
+        v{__APP_VERSION__}
       </div>
     </div>
   </nav>

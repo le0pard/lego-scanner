@@ -3,6 +3,9 @@ import adapter from '@sveltejs/adapter-static';
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import readPackageProperty from 'node:fs';
+
+const pkg = JSON.parse(readPackageProperty.readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   plugins: [
@@ -23,5 +26,8 @@ export default defineConfig({
         precompress: false
       })
     })
-  ]
+  ],
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version)
+  }
 });
