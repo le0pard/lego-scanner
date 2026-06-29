@@ -1,9 +1,9 @@
 {
-  "short_name": "LegoScanner",
-  "name": "LegoScanner",
-  "description": "LegoScanner - Lego Minifigures Scanner",
+  "short_name": "L-Scan",
+  "name": "Lego Scanner",
+  "description": "Lego Scanner - Lego Minifigures Scanner",
   "start_url": "/",
-  "display": "fullscreen",
+  "display": "minimal-ui",
   "theme_color": "#f4c946",
   "background_color": "#f4c946",
   "icons": [
