@@ -1,127 +1,81 @@
-const METADATA_DB_NAME = 'image-cache-ledger';
-const METADATA_STORE_NAME = 'usage-metrics';
-const DB_VERSION = 2;
-const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Quota
+// src/lib/utils/worker/images_metadata_db.js
+import Dexie from 'dexie';
 
-// Atomic concurrency token preventing overlapping eviction cycles
+const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Limit
+
+// Isolated database dedicated exclusively to tracking service worker cache health
+export const cacheDb = new Dexie('RuntimeImagesCacheDB');
+cacheDb.version(1).stores({
+  usageMetrics: 'url, lastAccessed' // 'url' is the primary key; index created on 'lastAccessed'
+});
+
+// Atomic concurrency token preventing overlapping eviction loops
 let isEvictionRunning = false;
 
 /**
- * High-Performance Database Initialization
- */
-const openLedgerDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(METADATA_DB_NAME, DB_VERSION);
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      let store;
-
-      if (!db.objectStoreNames.contains(METADATA_STORE_NAME)) {
-        store = db.createObjectStore(METADATA_STORE_NAME, { keyPath: 'url' });
-      } else {
-        store = request.transaction.objectStore(METADATA_STORE_NAME);
-      }
-
-      if (!store.indexNames.contains('lastAccessed')) {
-        store.createIndex('lastAccessed', 'lastAccessed', { unique: false });
-      }
-    };
-
-    request.onsuccess = (event) => resolve(event.target.result);
-    request.onerror = (event) => reject(event.target.error);
-  });
-};
-
-/**
  * Stream-Based Size Eviction Coordinator
- * Natively scans pre-sorted index tracks to evict elements dynamically.
+ * Leverages native pre-sorted indices to evaluate boundaries and evict items
+ * in lightweight chunks without causing worker memory spikes.
+ * @param {string} cacheName - Target string token identifying the cache chamber
  */
 const enforceLedgerLimits = async (cacheName) => {
   if (isEvictionRunning) return;
-  isEvictionRunning = true; // Protect workspace from simultaneous fetch spikes
+  isEvictionRunning = true; // Secure the execution track against concurrent fetch spikes
 
   try {
-    const db = await openLedgerDB();
-
-    // Stream cursor just to calculate combined weight without table allocation bloom
-    const calcTx = db.transaction(METADATA_STORE_NAME, 'readonly');
-    const calcStore = calcTx.objectStore(METADATA_STORE_NAME);
-
     let totalCacheMass = 0;
-    await new Promise((resolve, reject) => {
-      const cursorReq = calcStore.openCursor();
-      cursorReq.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (cursor) {
-          totalCacheMass += cursor.value.size || 0;
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-      cursorReq.onerror = () => reject(calcTx.error);
+
+    // Memory-safe streaming calculation using Dexie's each wrapper
+    await cacheDb.usageMetrics.each((record) => {
+      totalCacheMass += record.size || 0;
     });
 
     if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) return;
 
-    // Open readwrite context only if limits are broken
-    const writeTx = db.transaction(METADATA_STORE_NAME, 'readwrite');
-    const writeStore = writeTx.objectStore(METADATA_STORE_NAME);
-    const ageIndex = writeStore.index('lastAccessed');
-
     const imageCacheBucket = await caches.open(cacheName);
 
-    // Stream pre-sorted indices natively from oldest to newest ↩️ Brought back!
-    await new Promise((resolve, reject) => {
-      const cursorRequest = ageIndex.openCursor();
+    // Batch processing loop: Fetch old items in small chunks to prevent RAM bloat
+    // while avoiding standard cursor lock deadlocks during deletions
+    while (totalCacheMass > MAX_IMAGE_CACHE_BYTES) {
+      const oldestRecords = await cacheDb.usageMetrics.orderBy('lastAccessed').limit(10).toArray();
 
-      cursorRequest.onsuccess = async (event) => {
-        const cursor = event.target.result;
-        if (!cursor) {
-          resolve();
-          return;
-        }
+      if (oldestRecords.length === 0) break;
 
-        if (totalCacheMass > MAX_IMAGE_CACHE_BYTES) {
-          const record = cursor.value;
+      for (const record of oldestRecords) {
+        if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) break;
 
-          // Prune across both chambers concurrently
-          await imageCacheBucket.delete(record.url);
-          cursor.delete();
+        // Evict concurrently across both local storage mechanisms
+        await imageCacheBucket.delete(record.url);
+        await cacheDb.usageMetrics.delete(record.url);
 
-          totalCacheMass -= record.size;
-          console.log(
-            `[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`
-          );
-
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-
-      cursorRequest.onerror = (event) => reject(event.target.error);
-    });
+        totalCacheMass -= record.size;
+        console.log(
+          `[LRU Eviction] Evicted asset via Dexie: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`
+        );
+      }
+    }
   } catch (err) {
-    // Single valid catch clause block matching JS specifications cleanly
-    console.error('[LRU Manager] Eviction execution error or background rejection caught:', err);
+    console.error('[LRU Manager] Dexie eviction process encountered an error:', err);
   } finally {
-    isEvictionRunning = false; // Guarantees lock release on all exits
+    isEvictionRunning = false; // Always clear the concurrency lock safely on termination
   }
 };
 
 /**
  * Pure Metadata Metrics Logging Entrypoint
+ * @param {string} cacheName - Target string token identifying the cache chamber
+ * @param {string} url - Target resource web URL string location
+ * @param {Response|null} responseClone - Cloned HTTP token payload (passed on fresh downloads)
  */
 export const updateImageMetadata = async (cacheName, url, responseClone = null) => {
   try {
     let size = 0;
     const isIncomingWrite = !!responseClone;
 
+    // Extract sizes over the wire before touching database contexts
     if (isIncomingWrite) {
       if (responseClone.type === 'opaque') {
-        size = 0;
+        size = 0; // Opaque cross-origin structures hide body sizes from javascript access
       } else {
         try {
           const headerLength = responseClone.headers.get('content-length');
@@ -137,33 +91,24 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
       }
     }
 
-    const db = await openLedgerDB();
-    const tx = db.transaction(METADATA_STORE_NAME, 'readwrite');
-    const store = tx.objectStore(METADATA_STORE_NAME);
-
+    // If it's a simple cache read hit touch pass, look up and preserve the historical mass
     if (!isIncomingWrite) {
-      const existing = await new Promise((resolve) => {
-        const req = store.get(url);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => resolve(null);
-      });
+      const existing = await cacheDb.usageMetrics.get(url);
       if (existing) size = existing.size;
     }
 
-    store.put({
+    // Atomic update/insert using Dexie's clean put API
+    await cacheDb.usageMetrics.put({
       url,
       size,
       lastAccessed: Date.now()
     });
 
-    await new Promise((resolve) => {
-      tx.oncomplete = resolve;
-    });
-
+    // Trigger limits safely after the metric row has committed completely
     if (isIncomingWrite && size > 0) {
       await enforceLedgerLimits(cacheName);
     }
   } catch (err) {
-    console.warn('[LRU Manager] Logging sequence deferred safely:', err);
+    console.warn('[LRU Manager] Dexie tracking logging deferred safely:', err);
   }
 };
