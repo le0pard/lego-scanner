@@ -39,7 +39,7 @@ const openLedgerDB = () => {
  */
 const enforceLedgerLimits = async (cacheName) => {
   if (isEvictionRunning) return;
-  isEvictionRunning = true; // ✅ FIXED: Atomic lock established immediately at the gate
+  isEvictionRunning = true; // Atomic lock established immediately at the gate
 
   try {
     const db = await openLedgerDB();
