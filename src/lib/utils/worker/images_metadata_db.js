@@ -1,5 +1,6 @@
 const METADATA_DB_NAME = 'image-cache-ledger';
 const METADATA_STORE_NAME = 'usage-metrics';
+const DB_VERSION = 2;
 const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Quota
 
 // Atomic concurrency token preventing overlapping eviction cycles
@@ -10,7 +11,7 @@ let isEvictionRunning = false;
  */
 const openLedgerDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(METADATA_DB_NAME, 2);
+    const request = indexedDB.open(METADATA_DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
@@ -34,47 +35,77 @@ const openLedgerDB = () => {
 
 /**
  * Stream-Based Size Eviction Coordinator
- * Leverages native pre-sorted indices to evaluate boundaries and evict items
- * without loading complete database entries into system RAM.
+ * Natively scans pre-sorted index tracks to evict elements dynamically.
  */
 const enforceLedgerLimits = async (cacheName) => {
+  if (isEvictionRunning) return;
+  isEvictionRunning = true; // Protect workspace from simultaneous fetch spikes
+
   try {
     const db = await openLedgerDB();
-    const tx = db.transaction(METADATA_STORE_NAME, 'readwrite');
-    const store = tx.objectStore(METADATA_STORE_NAME);
 
-    const records = await new Promise((resolve) => {
-      const req = store.getAll();
-      req.onsuccess = () => resolve(req.result || []);
+    // Stream cursor just to calculate combined weight without table allocation bloom
+    const calcTx = db.transaction(METADATA_STORE_NAME, 'readonly');
+    const calcStore = calcTx.objectStore(METADATA_STORE_NAME);
+
+    let totalCacheMass = 0;
+    await new Promise((resolve, reject) => {
+      const cursorReq = calcStore.openCursor();
+      cursorReq.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          totalCacheMass += (cursor.value.size || 0);
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+      cursorReq.onerror = () => reject(calcTx.error);
     });
 
-    let totalCacheMass = records.reduce((sum, item) => sum + item.size, 0);
     if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) return;
 
-    // Sort ascending by last access time (Oldest items first)
-    records.sort((a, b) => a.lastAccessed - b.lastAccessed);
+    // Open readwrite context only if limits are broken
+    const writeTx = db.transaction(METADATA_STORE_NAME, 'readwrite');
+    const writeStore = writeTx.objectStore(METADATA_STORE_NAME);
+    const ageIndex = writeStore.index('lastAccessed');
 
-    const imageCache = await caches.open(cacheName);
+    const imageCacheBucket = await caches.open(cacheName);
 
-    for (const record of records) {
-      if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) break;
+    // Stream pre-sorted indices natively from oldest to newest ↩️ Brought back!
+    await new Promise((resolve, reject) => {
+      const cursorRequest = ageIndex.openCursor();
 
-      // Remove raw asset from the browser's hardware cache pool
-      await imageCache.delete(record.url);
+      cursorRequest.onsuccess = async (event) => {
+        const cursor = event.target.result;
+        if (!cursor) {
+          resolve();
+          return;
+        }
 
-      // Clear out identity tracking rows inside IndexedDB
-      await store.delete(record.url);
+        if (totalCacheMass > MAX_IMAGE_CACHE_BYTES) {
+          const record = cursor.value;
 
-      // Re-calculate active weights
-      totalCacheMass -= record.size;
-      console.log(`[LRU Eviction] Cleaned stale image: ${record.url} (${(record.size / 1024).toFixed(1)} KB purged)`);
-    }
+          // Prune across both chambers concurrently
+          await imageCacheBucket.delete(record.url);
+          cursor.delete();
+
+          totalCacheMass -= record.size;
+          console.log(`[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`);
+
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+
+      cursorRequest.onerror = (event) => reject(event.target.error);
+    });
   } catch (err) {
-    // ✅ Consolidated into a single valid JavaScript catch wrapper
+    // Single valid catch clause block matching JS specifications cleanly
     console.error('[LRU Manager] Eviction execution error or background rejection caught:', err);
   } finally {
-    // Restores mutex lock state safely on all termination code paths
-    isEvictionRunning = false;
+    isEvictionRunning = false; // Guarantees lock release on all exits
   }
 };
 
@@ -86,10 +117,9 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
     let size = 0;
     const isIncomingWrite = !!responseClone;
 
-    // Compute file sizes completely outside and before opening transactions
     if (isIncomingWrite) {
       if (responseClone.type === 'opaque') {
-        size = 0; // Opaque cross-origin structures hide body sizes from javascript access
+        size = 0;
       } else {
         try {
           const headerLength = responseClone.headers.get('content-length');
@@ -109,7 +139,6 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
     const tx = db.transaction(METADATA_STORE_NAME, 'readwrite');
     const store = tx.objectStore(METADATA_STORE_NAME);
 
-    // If it's a simple cache hit touch pass, look up and preserve the historical size mass
     if (!isIncomingWrite) {
       const existing = await new Promise((resolve) => {
         const req = store.get(url);
@@ -119,18 +148,14 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
       if (existing) size = existing.size;
     }
 
-    // This store call now fires immediately in a clean, non-yielding sequence
     store.put({
       url,
       size,
       lastAccessed: Date.now()
     });
 
-    await new Promise((resolve) => {
-      tx.oncomplete = resolve;
-    });
+    await new Promise((resolve) => { tx.oncomplete = resolve; });
 
-    // Trigger limits safely after the write pipeline transaction has committed completely
     if (isIncomingWrite && size > 0) {
       await enforceLedgerLimits(cacheName);
     }
