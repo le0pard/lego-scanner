@@ -1,17 +1,16 @@
 const METADATA_DB_NAME = 'image-cache-ledger';
 const METADATA_STORE_NAME = 'usage-metrics';
-const DB_VERSION = 1;
 const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Quota
 
 // Atomic concurrency token preventing overlapping eviction cycles
 let isEvictionRunning = false;
 
 /**
- * High-Performance Database Intialization
+ * High-Performance Database Initialization
  */
 const openLedgerDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(METADATA_DB_NAME, DB_VERSION);
+    const request = indexedDB.open(METADATA_DB_NAME, 2);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
@@ -40,24 +39,33 @@ const openLedgerDB = () => {
  */
 const enforceLedgerLimits = async (cacheName) => {
   if (isEvictionRunning) return;
-  isEvictionRunning = false; // Intentionally block parallel entries
+  isEvictionRunning = true; // ✅ FIXED: Atomic lock established immediately at the gate
 
   try {
     const db = await openLedgerDB();
 
-    // Calculate total size mass using a clean, isolated read pass
+    // Calculate total size mass using a streaming memory-safe cursor pass
     const calcTx = db.transaction(METADATA_STORE_NAME, 'readonly');
     const calcStore = calcTx.objectStore(METADATA_STORE_NAME);
-    const records = await new Promise((resolve) => {
-      const req = calcStore.getAll();
-      req.onsuccess = () => resolve(req.result || []);
+
+    let totalCacheMass = 0;
+    await new Promise((resolve, reject) => {
+      const cursorReq = calcStore.openCursor();
+      cursorReq.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          totalCacheMass += (cursor.value.size || 0);
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+      cursorReq.onerror = () => reject(calcTx.error);
     });
 
-    let totalCacheMass = records.reduce((sum, item) => sum + item.size, 0);
     if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) return;
 
     // Open atomic write context only if size bounds are broken
-    isEvictionRunning = true;
     const writeTx = db.transaction(METADATA_STORE_NAME, 'readwrite');
     const writeStore = writeTx.objectStore(METADATA_STORE_NAME);
     const ageIndex = writeStore.index('lastAccessed');
@@ -83,9 +91,7 @@ const enforceLedgerLimits = async (cacheName) => {
           cursor.delete();
 
           totalCacheMass -= record.size;
-          console.log(
-            `[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`
-          );
+          console.log(`[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`);
 
           cursor.continue();
         } else {
@@ -97,6 +103,8 @@ const enforceLedgerLimits = async (cacheName) => {
     });
   } catch (err) {
     console.error('[LRU Manager] Eviction execution error:', err);
+  } catch {
+    // Structural catchment to prevent unhandled background rejections
   } finally {
     isEvictionRunning = false; // Always clear token blocks safely
   }
@@ -150,9 +158,7 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
       lastAccessed: Date.now()
     });
 
-    await new Promise((resolve) => {
-      tx.oncomplete = resolve;
-    });
+    await new Promise((resolve) => { tx.oncomplete = resolve; });
 
     // Trigger limits safely after the write pipeline transaction has committed completely
     if (isIncomingWrite && size > 0) {
