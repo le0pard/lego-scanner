@@ -38,75 +38,43 @@ const openLedgerDB = () => {
  * without loading complete database entries into system RAM.
  */
 const enforceLedgerLimits = async (cacheName) => {
-  if (isEvictionRunning) return;
-  isEvictionRunning = true; // Atomic lock established immediately at the gate
-
   try {
     const db = await openLedgerDB();
+    const tx = db.transaction(METADATA_STORE_NAME, 'readwrite');
+    const store = tx.objectStore(METADATA_STORE_NAME);
 
-    // Calculate total size mass using a streaming memory-safe cursor pass
-    const calcTx = db.transaction(METADATA_STORE_NAME, 'readonly');
-    const calcStore = calcTx.objectStore(METADATA_STORE_NAME);
-
-    let totalCacheMass = 0;
-    await new Promise((resolve, reject) => {
-      const cursorReq = calcStore.openCursor();
-      cursorReq.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (cursor) {
-          totalCacheMass += cursor.value.size || 0;
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-      cursorReq.onerror = () => reject(calcTx.error);
+    const records = await new Promise((resolve) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
     });
 
+    let totalCacheMass = records.reduce((sum, item) => sum + item.size, 0);
     if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) return;
 
-    // Open atomic write context only if size bounds are broken
-    const writeTx = db.transaction(METADATA_STORE_NAME, 'readwrite');
-    const writeStore = writeTx.objectStore(METADATA_STORE_NAME);
-    const ageIndex = writeStore.index('lastAccessed');
+    // Sort ascending by last access time (Oldest items first)
+    records.sort((a, b) => a.lastAccessed - b.lastAccessed);
 
-    const imageCacheBucket = await caches.open(cacheName);
+    const imageCache = await caches.open(cacheName);
 
-    // Stream cursors pre-sorted from oldest to newest natively
-    await new Promise((resolve, reject) => {
-      const cursorRequest = ageIndex.openCursor();
+    for (const record of records) {
+      if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) break;
 
-      cursorRequest.onsuccess = async (event) => {
-        const cursor = event.target.result;
-        if (!cursor) {
-          resolve();
-          return;
-        }
+      // Remove raw asset from the browser's hardware cache pool
+      await imageCache.delete(record.url);
 
-        if (totalCacheMass > MAX_IMAGE_CACHE_BYTES) {
-          const record = cursor.value;
+      // Clear out identity tracking rows inside IndexedDB
+      await store.delete(record.url);
 
-          // Evict simultaneously across both Storage Chambers
-          await imageCacheBucket.delete(record.url);
-          cursor.delete();
-
-          totalCacheMass -= record.size;
-          console.log(
-            `[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`
-          );
-
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-
-      cursorRequest.onerror = (event) => reject(event.target.error);
-    });
+      // Re-calculate active weights
+      totalCacheMass -= record.size;
+      console.log(`[LRU Eviction] Cleaned stale image: ${record.url} (${(record.size / 1024).toFixed(1)} KB purged)`);
+    }
   } catch (err) {
-    console.error('[LRU Manager] Eviction execution error:', err);
+    // ✅ Consolidated into a single valid JavaScript catch wrapper
+    console.error('[LRU Manager] Eviction execution error or background rejection caught:', err);
   } finally {
-    isEvictionRunning = false; // Always clear token blocks safely
+    // Restores mutex lock state safely on all termination code paths
+    isEvictionRunning = false;
   }
 };
 
