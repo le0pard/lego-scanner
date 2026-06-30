@@ -54,7 +54,7 @@ const enforceLedgerLimits = async (cacheName) => {
       cursorReq.onsuccess = (e) => {
         const cursor = e.target.result;
         if (cursor) {
-          totalCacheMass += (cursor.value.size || 0);
+          totalCacheMass += cursor.value.size || 0;
           cursor.continue();
         } else {
           resolve();
@@ -91,7 +91,9 @@ const enforceLedgerLimits = async (cacheName) => {
           cursor.delete();
 
           totalCacheMass -= record.size;
-          console.log(`[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`);
+          console.log(
+            `[LRU Eviction] Evicted asset: ${record.url} (${(record.size / 1024).toFixed(1)} KB freed)`
+          );
 
           cursor.continue();
         } else {
@@ -103,8 +105,6 @@ const enforceLedgerLimits = async (cacheName) => {
     });
   } catch (err) {
     console.error('[LRU Manager] Eviction execution error:', err);
-  } catch {
-    // Structural catchment to prevent unhandled background rejections
   } finally {
     isEvictionRunning = false; // Always clear token blocks safely
   }
@@ -158,7 +158,9 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
       lastAccessed: Date.now()
     });
 
-    await new Promise((resolve) => { tx.oncomplete = resolve; });
+    await new Promise((resolve) => {
+      tx.oncomplete = resolve;
+    });
 
     // Trigger limits safely after the write pipeline transaction has committed completely
     if (isIncomingWrite && size > 0) {
