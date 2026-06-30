@@ -69,7 +69,7 @@ self.addEventListener('install', (event) => {
           await cache.add(asset);
         } catch (individualError) {
           console.error(
-            `[Service Worker] Critical 404 Dropout: Target missing -> ${asset}`,
+            `[Service Worker] Critical 404 Dropout: Target missing -> ${asset.url}`,
             individualError
           );
         }
@@ -118,6 +118,16 @@ self.addEventListener('fetch', (event) => {
       if (response) return response;
     }
 
+    // Persistent Image Assets Interceptor (Cache-First)
+    const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
+    if (isOptimizedImage) {
+      const cachedImage = await imageCache.match(standardizedReq);
+      if (cachedImage) {
+        event.waitUntil(updateImageMetadata(IMAGE_CACHE, standardizedReq.url));
+        return cachedImage;
+      }
+    }
+
     // If an old hash file is requested, look across ALL legacy cache spaces on disk
     const isImmutableChunk = sanitizedPath.includes(PREGENERATED_ASSETS_PREFIX);
     if (isImmutableChunk) {
@@ -147,16 +157,6 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) return cachedResponse;
 
         throw err;
-      }
-    }
-
-    // Persistent Image Assets Interceptor (Cache-First)
-    const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
-    if (isOptimizedImage) {
-      const cachedImage = await imageCache.match(standardizedReq);
-      if (cachedImage) {
-        event.waitUntil(updateImageMetadata(IMAGE_CACHE, standardizedReq.url));
-        return cachedImage;
       }
     }
 

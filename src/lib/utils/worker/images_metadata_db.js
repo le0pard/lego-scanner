@@ -89,10 +89,8 @@ export const updateImageMetadata = async (cacheName, url, responseClone = null) 
           size = 0;
         }
       }
-    }
-
-    // If it's a simple cache read hit touch pass, look up and preserve the historical mass
-    if (!isIncomingWrite) {
+    } else {
+      // If it's a simple cache read hit touch pass, look up and preserve the historical mass
       const existing = await cacheDb.usageMetrics.get(url);
       if (existing) size = existing.size;
     }
