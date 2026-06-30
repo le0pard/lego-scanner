@@ -1,4 +1,5 @@
 import { build, files, prerendered, version } from '$service-worker';
+import { updateImageMetadata } from '$lib/utils/worker/images_metadata_db.js';
 
 const PREGENERATED_ASSETS_PREFIX = '_app/immutable/';
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
@@ -153,7 +154,10 @@ self.addEventListener('fetch', (event) => {
     const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
     if (isOptimizedImage) {
       const cachedImage = await imageCache.match(standardizedReq);
-      if (cachedImage) return cachedImage;
+      if (cachedImage) {
+        event.waitUntil(updateImageMetadata(IMAGE_CACHE, standardizedReq.url));
+        return cachedImage;
+      }
     }
 
     // Live Outbound Fetch Fallback Pipeline
@@ -168,6 +172,7 @@ self.addEventListener('fetch', (event) => {
       if (response.status === 200 && isSameOrigin) {
         if (isOptimizedImage) {
           imageCache.put(standardizedReq, response.clone());
+          event.waitUntil(updateImageMetadata(IMAGE_CACHE, standardizedReq.url, response.clone()));
         } else {
           staticCache.put(standardizedReq, response.clone());
         }
