@@ -1,4 +1,3 @@
-// src/lib/utils/worker/images_metadata_db.js
 import Dexie from 'dexie';
 
 const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Limit
