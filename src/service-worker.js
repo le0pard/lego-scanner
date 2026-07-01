@@ -42,7 +42,8 @@ const normalizeRequest = (request) => {
   return request;
 };
 
-const fetchWithTimeout = (request, timeoutMs) => {
+// fetch or timeout helper
+const fetchWithTimeout = (request, timeoutMs = API_TIMEOUT_MS) => {
   return Promise.race([
     fetch(request),
     new Promise((_, reject) =>
@@ -56,6 +57,7 @@ self.addEventListener('install', (event) => {
     const cache = await caches.open(STATIC_CACHE);
     // This bypasses the local HTTP browser disk/CDN caches, forcing a fresh download of pre-rendered HTML paths
     const freshRequestsPool = ASSETS.map((asset) => new Request(asset, { cache: 'reload' }));
+
     try {
       await cache.addAll(freshRequestsPool);
     } catch (bulkError) {
