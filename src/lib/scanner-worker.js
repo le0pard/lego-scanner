@@ -5,48 +5,39 @@ import {
   imageProcessingPipeline,
   imageScratchRepairFullProcessing,
   imageMacroCropScratchRepairProcessing
-} from '$lib/utils/worker/images';
+} from '$lib/utils/worker/data_matrix_processing';
 
 const BINARIZER_TIERS = ['LocalAverage', 'GlobalHistogram'];
 
-// Global stream sequence tracker for interleaving execution modes
 let liveFrameSequenceCounter = 0;
-// Reusable micro-buffers pooled at module scope to eliminate Garbage Collection churn
 let sharedCanvas = null;
 let sharedCtx = null;
 
 /**
  * Utility helper converting an active ImageBitmap into standard ImageData
- * to conform perfectly with zxing-wasm's required memory allocation types.
- * @param {ImageBitmap} bitmap
- * @returns {ImageData}
+ * with active context re-binding safeguards.
  */
 const convertBitmapToImageData = (bitmap) => {
-  // Lazily initialize our canvas buffers on the first frame capture pass
   if (!sharedCanvas) {
     sharedCanvas = new OffscreenCanvas(bitmap.width, bitmap.height);
     sharedCtx = sharedCanvas.getContext('2d', { willReadFrequently: true });
   }
-  // Dynamically resize buffers if device rotates or changes camera lenses
+  // If dimensions change, resize AND re-acquire the context handle
   else if (sharedCanvas.width !== bitmap.width || sharedCanvas.height !== bitmap.height) {
     sharedCanvas.width = bitmap.width;
     sharedCanvas.height = bitmap.height;
+    sharedCtx = sharedCanvas.getContext('2d', { willReadFrequently: true });
   }
 
   if (!sharedCtx) {
     throw new Error('Could not allocate persistent transformation context');
   }
 
-  // Draw and copy metrics onto our unchanging context structure safely
   sharedCtx.drawImage(bitmap, 0, 0);
   return sharedCtx.getImageData(0, 0, bitmap.width, bitmap.height);
 };
 
 const api = {
-  /**
-   * Initialize the WASM module and detector instance inside the worker
-   * @param {string} basePath - Passed dynamically from SvelteKit's main thread
-   */
   async init(basePath = '/') {
     const cleanBase = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
@@ -54,7 +45,6 @@ const api = {
       overrides: {
         locateFile: (path, prefix) => {
           if (path.endsWith('.wasm')) {
-            // Dynamically prepend the deployment base path
             return `${cleanBase}/wasm/zxing/${ZXING_WASM_VERSION}/${path}`;
           }
           return `${prefix}${path}`;
@@ -65,26 +55,18 @@ const api = {
   },
 
   /**
-   * Balanced real-time video stream processor with a 4-phase frame cycle.
-   * Phase 0 & 2: Lightning fast raw frame paths.
-   * Phase 1: Full-frame morphological closing pass.
-   * Phase 3: Zoomed macro-crop morphological closing pass.
-   * @param {ImageBitmap} imageBitmap
+   * Balanced real-time video stream processor
    */
   async detect(imageBitmap) {
     let processedFrameBitmap = imageBitmap;
     let separateTextureGenerated = false;
 
     try {
-      // Bounds the value between 0 and 3 immediately so it never grows infinitely
       liveFrameSequenceCounter = (liveFrameSequenceCounter + 1) % 4;
       const framePhase = liveFrameSequenceCounter;
-
-      // Determine if this frame is running a high-intensity repair pass
       const isRepairPass = framePhase === 1 || framePhase === 3;
 
       if (framePhase === 1) {
-        // Run full-frame line repair on close up boxes
         try {
           processedFrameBitmap = await imageScratchRepairFullProcessing(imageBitmap);
           separateTextureGenerated = true;
@@ -92,7 +74,6 @@ const api = {
           processedFrameBitmap = imageBitmap;
         }
       } else if (framePhase === 3) {
-        // Run zoomed macro center repair on distant boxes
         try {
           processedFrameBitmap = await imageMacroCropScratchRepairProcessing(imageBitmap);
           separateTextureGenerated = true;
@@ -105,7 +86,7 @@ const api = {
 
       const results = await readBarcodes(targetImageData, {
         formats: ['DataMatrix'],
-        tryHarder: isRepairPass, // Enable deep engine validation only on repair passes
+        tryHarder: isRepairPass,
         tryDenoise: isRepairPass,
         tryRotate: true,
         maxNumberOfSymbols: 1,
@@ -120,7 +101,6 @@ const api = {
       console.error('Live camera scan error:', err);
       return null;
     } finally {
-      // Prevent web worker memory leaks by clearing generated resources
       if (separateTextureGenerated && processedFrameBitmap) {
         processedFrameBitmap.close();
       }
@@ -129,9 +109,8 @@ const api = {
   },
 
   /**
-   * Deep file analysis combining your custom canvas morphological pipeline
-   * with variable engine binarization profiles for extreme resilience.
-   * @param {File} file
+   * Deep file analysis featuring safe conditional loop breaks
+   * and clean multi-stage memory deallocation cascades.
    */
   async detectFromFile(file) {
     const baseBmp = await createImageBitmap(file);
@@ -143,8 +122,8 @@ const api = {
 
         try {
           currentBmp = await processingMethod(baseBmp);
-
           const imageData = convertBitmapToImageData(currentBmp);
+
           for (const binarizer of BINARIZER_TIERS) {
             const results = await readBarcodes(imageData, {
               formats: ['DataMatrix'],
@@ -157,11 +136,73 @@ const api = {
 
             if (results && results.length > 0) {
               result = results[0].text;
-              return result;
+              break; // Break binarizer loop safely
             }
           }
-        } catch {
-          // Fall back gracefully to the next filter pipeline stage
+        } catch (err) {
+          console.warn(`Pipeline stage failed: ${processingMethod.name}`, err);
+        } finally {
+          // Explicitly release resources at the conclusion of every step loop
+          if (currentBmp && currentBmp !== baseBmp) {
+            currentBmp.close();
+          }
+        }
+
+        // If a result was found, exit the pipeline sequence early without leaking
+        if (result !== null) {
+          return result;
+        }
+      }
+    } finally {
+      baseBmp.close(); // Clean up core image handle
+    }
+
+    return result;
+  },
+
+  /**
+   * Interactive Vision Diagnostics Engine
+   */
+  async runDiagnosticSuite(file) {
+    const baseBmp = await createImageBitmap(file);
+    const diagnosticReport = [];
+
+    try {
+      for (const processingMethod of imageProcessingPipeline) {
+        let currentBmp = null;
+        try {
+          currentBmp = await processingMethod(baseBmp);
+
+          const debugCanvas = new OffscreenCanvas(currentBmp.width, currentBmp.height);
+          const debugCtx = debugCanvas.getContext('2d');
+          debugCtx.drawImage(currentBmp, 0, 0);
+
+          const blob = await debugCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
+          const reader = new FileReaderSync();
+          const dataUrl = reader.readAsDataURL(blob);
+          const imageData = debugCtx.getImageData(0, 0, currentBmp.width, currentBmp.height);
+
+          let testScan = [];
+          for (const binarizer of BINARIZER_TIERS) {
+            testScan = await readBarcodes(imageData, {
+              formats: ['DataMatrix'],
+              tryHarder: true,
+              tryDenoise: true,
+              tryRotate: true,
+              maxNumberOfSymbols: 1,
+              binarizer
+            });
+            if (testScan.length > 0) break;
+          }
+
+          diagnosticReport.push({
+            name: processingMethod.name.replace('image', '').replace('Processing', ''),
+            preview: dataUrl,
+            success: testScan.length > 0,
+            decodedValue: testScan.length > 0 ? testScan[0].text : null
+          });
+        } catch (err) {
+          console.warn(`Diagnostic pass error under ${processingMethod.name}:`, err);
         } finally {
           if (currentBmp && currentBmp !== baseBmp) {
             currentBmp.close();
@@ -172,59 +213,6 @@ const api = {
       baseBmp.close();
     }
 
-    return result;
-  },
-
-  /**
-   * Interactive Vision Diagnostics Engine
-   * Keeps your layout debugging tray operational with advanced settings active.
-   */
-  async runDiagnosticSuite(file) {
-    const baseBmp = await createImageBitmap(file);
-    const diagnosticReport = [];
-
-    for (const processingMethod of imageProcessingPipeline) {
-      let currentBmp = null;
-      try {
-        currentBmp = await processingMethod(baseBmp);
-
-        // Snapshot texture context into visual data URLs
-        const debugCanvas = new OffscreenCanvas(currentBmp.width, currentBmp.height);
-        const debugCtx = debugCanvas.getContext('2d');
-        debugCtx.drawImage(currentBmp, 0, 0);
-
-        const blob = await debugCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-        const reader = new FileReaderSync();
-        const dataUrl = reader.readAsDataURL(blob);
-        const imageData = debugCtx.getImageData(0, 0, currentBmp.width, currentBmp.height);
-
-        let testScan = [];
-        for (const binarizer of BINARIZER_TIERS) {
-          testScan = await readBarcodes(imageData, {
-            formats: ['DataMatrix'],
-            tryHarder: true,
-            tryDenoise: true,
-            tryRotate: true,
-            maxNumberOfSymbols: 1,
-            binarizer
-          });
-          if (testScan.length > 0) break;
-        }
-
-        diagnosticReport.push({
-          name: processingMethod.name.replace('image', '').replace('Processing', ''),
-          preview: dataUrl,
-          success: testScan.length > 0,
-          decodedValue: testScan.length > 0 ? testScan[0].text : null
-        });
-      } catch (err) {
-        console.warn(`Diagnostic pass error under ${processingMethod.name}:`, err);
-      } finally {
-        if (currentBmp && currentBmp !== baseBmp) currentBmp.close();
-      }
-    }
-
-    baseBmp.close();
     return diagnosticReport;
   }
 };
