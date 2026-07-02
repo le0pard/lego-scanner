@@ -5,7 +5,7 @@ import {
   imageProcessingPipeline,
   imageScratchRepairFullProcessing,
   imageMacroCropScratchRepairProcessing
-} from '$lib/utils/worker/data_matrix_processing';
+} from '$lib/utils/worker/images_processing';
 
 const BINARIZER_TIERS = ['LocalAverage', 'GlobalHistogram'];
 

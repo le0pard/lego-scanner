@@ -740,9 +740,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.68.0":
-  version: 2.68.0
-  resolution: "@sveltejs/kit@npm:2.68.0"
+"@sveltejs/kit@npm:^2.69.0":
+  version: 2.69.0
+  resolution: "@sveltejs/kit@npm:2.69.0"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.9"
@@ -769,7 +769,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/4fc9f4d63f3cd04ef6a8b41342bda54f047342bf8b8ddb164800f321e60e13651b09c17ea17256886b24de8d8ccb50c982368eeb6711e42e25a1270f44329dc2
+  checksum: 10c0/0afbb07e99c75051d84f3b7fed9da56459a3d4d3c0f80ccff7f2a1d512e9f3558e21ebcf4c951d82235603863a057a5dce944f38f4f1ae1db64f70ba02c5204c
   languageName: node
   linkType: hard
 
@@ -1817,7 +1817,7 @@ __metadata:
     "@rexa-developer/tiks": "npm:^0.3.0"
     "@sveltejs/adapter-static": "npm:^3.0.10"
     "@sveltejs/enhanced-img": "npm:^0.11.0"
-    "@sveltejs/kit": "npm:^2.68.0"
+    "@sveltejs/kit": "npm:^2.69.0"
     "@sveltejs/vite-plugin-svelte": "npm:^7.1.2"
     "@tailwindcss/typography": "npm:^0.5.20"
     "@tailwindcss/vite": "npm:^4.3.2"
@@ -1836,7 +1836,7 @@ __metadata:
     svelte-check: "npm:^4.7.1"
     tailwindcss: "npm:^4.3.2"
     typescript: "npm:^6.0.3"
-    vite: "npm:^8.1.2"
+    vite: "npm:^8.1.3"
     zxing-wasm: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
@@ -2840,9 +2840,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^8.1.2":
-  version: 8.1.2
-  resolution: "vite@npm:8.1.2"
+"vite@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "vite@npm:8.1.3"
   dependencies:
     fsevents: "npm:~2.3.3"
     lightningcss: "npm:^1.32.0"
@@ -2893,7 +2893,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/b39731dc31250b267ae5ddae81d737deafe2163bd0e1aa04849fb5f7c66b7ff7bcffa50883480b5f9fb47b1596b772021a8f9f671986e57b88d98300710ded77
+  checksum: 10c0/e3c95e95f9c19b36be3c9d1c4de7f57d24d5af71613a221cfa22f1fd1568adebdb640e30ef9a7f2361fbb15478883955c9d8932e4fa5566280dd7a16bffa64f9
   languageName: node
   linkType: hard
 
