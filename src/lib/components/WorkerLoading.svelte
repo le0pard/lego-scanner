@@ -8,5 +8,5 @@
     <i class="iconify lucide--cpu size-6 text-text-muted animate-pulse"></i>
   </div>
   <h2 class="text-lg font-bold text-text-main mb-1">Booting Engine</h2>
-  <p class="text-sm text-text-muted">Loading WASM...</p>
+  <p class="text-sm text-text-muted">Loading WASM detector...</p>
 </div>
