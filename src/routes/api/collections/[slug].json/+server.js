@@ -1,22 +1,8 @@
 import { json, error } from '@sveltejs/kit';
+import { seriesEntries, seriesJsonFiles, extractSeriesJsonFromPath } from '$lib/utils/lego_data.js';
 
 export const prerender = true;
-
-const jsonFiles = import.meta.glob('/src/lib/data/*.json');
-
-const extractJsonFromPath = async (filePath) => {
-  const module = await jsonFiles[filePath]();
-  return module.default;
-};
-
-export const entries = async () => {
-  const promises = Object.keys(jsonFiles).map(async (filePath) => {
-    const jsonData = await extractJsonFromPath(filePath);
-    return { slug: jsonData.series };
-  });
-
-  return await Promise.all(promises);
-};
+export const entries = seriesEntries;
 
 export const GET = async ({ params }) => {
   const { slug } = params;
@@ -25,13 +11,13 @@ export const GET = async ({ params }) => {
   const targetPath = `/src/lib/data/${slug}.json`;
 
   // Check if the file exists in our mapped object
-  if (!jsonFiles[targetPath]) {
+  if (!seriesJsonFiles[targetPath]) {
     // If someone requests /api/collections/fake-series, return a 404
     throw error(404, `Collection '${slug}' not found.`);
   }
 
   try {
-    const jsonData = await extractJsonFromPath(targetPath);
+    const jsonData = await extractSeriesJsonFromPath(targetPath);
     const { minifigures, ...rest } = jsonData;
 
     const processedMinifigures = minifigures.map((fig) => {

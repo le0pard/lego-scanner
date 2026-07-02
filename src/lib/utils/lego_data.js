@@ -1,3 +1,19 @@
+export const seriesJsonFiles = import.meta.glob('/src/lib/data/*.json');
+
+export const extractSeriesJsonFromPath = async (filePath) => {
+  const module = await seriesJsonFiles[filePath]();
+  return module.default;
+};
+
+export const seriesEntries = async () => {
+  const promises = Object.keys(seriesJsonFiles).map(async (filePath) => {
+    const jsonData = await extractSeriesJsonFromPath(filePath);
+    return { slug: jsonData.series };
+  });
+
+  return await Promise.all(promises);
+};
+
 export const optimizedImageModules = import.meta.glob(
   '/src/lib/assets/minifigures/**/*.{avif,AVIF,gif,GIF,heif,HEIF,jpeg,JPEG,jpg,JPG,png,PNG,tiff,TIFF,webp,WEBP}',
   {

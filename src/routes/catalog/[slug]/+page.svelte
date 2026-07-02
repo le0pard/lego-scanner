@@ -1,35 +1,12 @@
 <script>
-  import { page } from '$app/state';
   import { resolve } from '$app/paths';
-  import { db } from '$lib/utils/db.js';
   import { getOptimizedImage } from '$lib/utils/lego_data.js';
 
-  let seriesSlug = $derived(page.params.slug);
-  let figures = $state([]);
-  let seriesName = $state('');
-  let seriesYear = $state('');
-  let isLoading = $state(true);
+  let { data } = $props();
 
-  $effect(() => {
-    if (!seriesSlug) return;
-    isLoading = true;
-
-    db.minifigures
-      .where('series')
-      .equals(seriesSlug)
-      .sortBy('slug')
-      .then((results) => {
-        figures = results;
-        if (results.length > 0) {
-          seriesName = results[0].displayName || results[0].series;
-          seriesYear = results[0].releaseYear;
-        }
-      })
-      .catch((err) => console.error('Failed to load specific series:', err))
-      .finally(() => {
-        isLoading = false;
-      });
-  });
+  let figures = $derived(data.figures);
+  let seriesName = $derived(data.metadata?.displayName || data.metadata?.series || 'Collection');
+  let seriesYear = $derived(data.metadata?.releaseYear || '');
 </script>
 
 <div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
@@ -58,40 +35,34 @@
     </div>
   </div>
 
-  {#if isLoading}
-    <div class="flex justify-center py-12">
-      <i class="iconify lucide--loader-2 size-8 animate-spin text-primary"></i>
-    </div>
-  {:else}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {#each figures as fig, index (index)}
-        {@const optImg = getOptimizedImage(fig.imagePath)}
-        <div class="bg-card-bg border border-border rounded-2xl p-4 flex flex-col shadow-sm">
-          <div
-            class="relative w-full aspect-4/5 mb-4 bg-app-bg rounded-xl border border-border/50 image-box"
-          >
-            {#if optImg}
-              <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 160px, 144px" />
-            {:else}
-              <img src={fig.imagePath} alt={fig.name} loading="lazy" />
-            {/if}
-          </div>
-
-          <div class="flex flex-col mt-auto border-t border-border/40 pt-3">
-            <h4 class="text-base font-black text-text-main leading-tight mb-1">
-              {fig.name}
-            </h4>
-            <p
-              class="text-xs text-text-muted leading-tight line-clamp-2"
-              title={fig.identifiers?.map((i) => i.code).join(', ')}
-            >
-              Data Matrix codes: {fig.identifiers?.map((i) => i.code).join(', ')}
-            </p>
-          </div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    {#each figures as fig, index (index)}
+      {@const optImg = getOptimizedImage(fig.imagePath)}
+      <div class="bg-card-bg border border-border rounded-2xl p-4 flex flex-col shadow-sm">
+        <div
+          class="relative w-full aspect-4/5 mb-4 bg-app-bg rounded-xl border border-border/50 image-box"
+        >
+          {#if optImg}
+            <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 160px, 144px" />
+          {:else}
+            <img src={fig.imagePath} alt={fig.name} loading="lazy" />
+          {/if}
         </div>
-      {/each}
-    </div>
-  {/if}
+
+        <div class="flex flex-col mt-auto border-t border-border/40 pt-3">
+          <h4 class="text-base font-black text-text-main leading-tight mb-1">
+            {fig.name}
+          </h4>
+          <p
+            class="text-xs text-text-muted leading-tight line-clamp-2"
+            title={fig.identifiers?.map((i) => i.code).join(', ')}
+          >
+            Data Matrix codes: {fig.identifiers?.map((i) => i.code).join(', ')}
+          </p>
+        </div>
+      </div>
+    {/each}
+  </div>
 
   <a
     href={resolve('/')}
