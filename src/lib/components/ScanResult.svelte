@@ -1,33 +1,15 @@
 <script>
+  import { resolve } from '$app/paths';
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte.js';
-  import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
+  import { extractFieldsFromDataMatrix, getOptimizedImage } from '$lib/utils/lego_data.js';
 
   const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
 
   // Receive the processed data from RightPanel
   let { minifig, searchCompleted } = $props();
 
-  const optimizedImageModules = import.meta.glob(
-    '/src/lib/assets/minifigures/**/*.{avif,AVIF,gif,GIF,heif,HEIF,jpeg,JPEG,jpg,JPG,png,PNG,tiff,TIFF,webp,WEBP}',
-    {
-      query: {
-        enhanced: true,
-        // Generates 1x (160px), 2x (320px), and 3x (480px) asset variations
-        w: '160;320;480'
-      },
-      import: 'default',
-      eager: true
-    }
-  );
-
-  let optimizedImage = $derived.by(() => {
-    if (!minifig?.imagePath) return null;
-
-    const resolvedSourceKey = minifig.imagePath.replace('/assets/', '/src/lib/assets/');
-    return optimizedImageModules[resolvedSourceKey] || null;
-  });
-
   let legoData = $derived(extractFieldsFromDataMatrix(scanResultState.result));
+  let optimizedImage = $derived(getOptimizedImage(minifig?.imagePath));
 
   // Local interactive clipboard copy feedback states
   let copyStatus = $state('idle'); // 'idle' | 'success'
@@ -149,9 +131,23 @@
           {/if}
         </div>
         <div class="flex flex-col items-start justify-center">
-          <span class="bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2">
-            {minifig.displayName || 'Unknown'}
-          </span>
+          {#if minifig.series}
+            <a
+              href={resolve(`/catalog/${minifig.series}`)}
+              class="flex justify-center gap-1 items-center bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2 border border-transparent hover:border-primary transition-colors active:scale-95"
+            >
+              <i
+                class="iconify lucide--link-2 size-4 opacity-60 group-hover:opacity-100 transition-opacity"
+              ></i>
+              {minifig.displayName || 'Unknown'}
+            </a>
+          {:else}
+            <span
+              class="bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2 border border-transparent"
+            >
+              {minifig.displayName || 'Unknown'}
+            </span>
+          {/if}
           <h2 class="text-xl sm:text-2xl font-black text-text-main leading-tight mb-1">
             {minifig.name || 'Unknown Figure'}
           </h2>

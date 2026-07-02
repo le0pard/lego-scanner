@@ -18,7 +18,7 @@
 
     const performDatabaseLookup = async () => {
       if (scanResultState.result) {
-        let legoData = $derived(extractFieldsFromDataMatrix(scanResultState.result));
+        let legoData = extractFieldsFromDataMatrix(scanResultState.result);
 
         if (!legoData || !legoData.key) {
           if (!isCurrent) return; // Discard state mutations if a newer scan has already started

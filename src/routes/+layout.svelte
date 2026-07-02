@@ -1,15 +1,19 @@
 <script>
   import './css/app.css';
+  import { page } from '$app/state';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { resolve } from '$app/paths';
   import { wrap } from 'comlink';
+  import Header from '$lib/components/Header.svelte';
 
   import { db } from '$lib/utils/db.js';
   import { setSyncStatus } from '$lib/states/sync.svelte.js';
   import { setUpdateAvailable } from '$lib/states/update.svelte.js';
 
   let { children } = $props();
+
+  let showTabs = $derived(page.url.pathname === '/');
 
   const firstSortedMetaRecord = async () => {
     return (await db.syncMeta.orderBy('lastSynced').reverse().first()) || null;
@@ -118,4 +122,10 @@
   });
 </script>
 
-{@render children()}
+<main
+  class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt-pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
+>
+  <Header {showTabs} />
+
+  {@render children()}
+</main>

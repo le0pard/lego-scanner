@@ -115,6 +115,15 @@
         </li>
         <li>
           <a
+            href={resolve('/catalog')}
+            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+          >
+            <i class="iconify mdi--view-grid size-8"></i>
+            Catalog
+          </a>
+        </li>
+        <li>
+          <a
             href={resolve('/howto')}
             class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
           >
