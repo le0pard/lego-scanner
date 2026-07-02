@@ -40,6 +40,10 @@
   });
 </script>
 
+<svelte:head>
+  <meta name="description" content="L-Scan: LEGO Collectible Minifigure Online Scanner" />
+</svelte:head>
+
 <UpdateBanner />
 
 <div

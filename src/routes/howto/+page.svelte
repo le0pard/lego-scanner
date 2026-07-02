@@ -3,6 +3,10 @@
   import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced';
 </script>
 
+<svelte:head>
+  <meta name="description" content="How to use L-Scan LEGO Collectible Minifigure Online Scanner" />
+</svelte:head>
+
 <div class="flex-1 w-full pb-6 mt-4 flex flex-col gap-5 animate-in fade-in duration-300 text-left">
   <div>
     <h2 class="text-2xl font-black tracking-tight text-text-main">How to Scan Minifigures</h2>

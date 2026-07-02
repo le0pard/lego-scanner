@@ -123,10 +123,14 @@
 </script>
 
 <svelte:head>
-  <title>
-    {page.data.title ? `${page.data.title} | ` : ''}
-    L-Scan: LEGO Collectible Minifigure Online Scanner
-  </title>
+  <title
+    >{[
+      page.data.title ? `${page.data.title} |` : null,
+      'L-Scan: LEGO Collectible Minifigure Online Scanner'
+    ]
+      .filter(Boolean)
+      .join(' ')}</title
+  >
 </svelte:head>
 
 <main

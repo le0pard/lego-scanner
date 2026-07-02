@@ -10,6 +10,10 @@
   let seriesYear = $derived(data.metadata?.releaseYear || '');
 </script>
 
+<svelte:head>
+  <meta name="description" content={`${seriesName} Minifigures and Codes`} />
+</svelte:head>
+
 <div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
   <div class="flex justify-between gap-2">
     <div class="flex items-center gap-3">
