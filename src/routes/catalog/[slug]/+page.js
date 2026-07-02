@@ -1,7 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { seriesEntries, seriesJsonFiles } from '$lib/utils/lego_data.js';
 
-export const prerender = true;
 export const entries = seriesEntries;
 
 export const load = async ({ params }) => {

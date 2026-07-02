@@ -1,7 +1,5 @@
 import { seriesJsonFiles, extractSeriesJsonFromPath } from '$lib/utils/lego_data.js';
 
-export const prerender = true;
-
 export const load = async () => {
   const promises = Object.keys(seriesJsonFiles).map(async (filePath) => {
     const data = await extractSeriesJsonFromPath(filePath);
