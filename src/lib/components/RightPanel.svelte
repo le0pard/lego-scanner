@@ -1,5 +1,5 @@
 <script>
-  import { scanResultState } from '$lib/states/scanResult.svelte';
+  import { scanResultState } from '$lib/states/scanResult.svelte.js';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
   import { db } from '$lib/utils/db';
@@ -18,7 +18,7 @@
 
     const performDatabaseLookup = async () => {
       if (scanResultState.result) {
-        const legoData = extractFieldsFromDataMatrix(scanResultState.result);
+        let legoData = $derived(extractFieldsFromDataMatrix(scanResultState.result));
 
         if (!legoData || !legoData.key) {
           if (!isCurrent) return; // Discard state mutations if a newer scan has already started

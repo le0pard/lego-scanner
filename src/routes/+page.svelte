@@ -6,12 +6,12 @@
 
   import Camera from '$lib/components/Camera.svelte';
   import Header from '$lib/components/Header.svelte';
-  import UpdateBanner from '$lib/components/UpdateBanner.svelte'; // <-- NEW IMPORT
+  import UpdateBanner from '$lib/components/UpdateBanner.svelte';
   import RightPanel from '$lib/components/RightPanel.svelte';
   import Upload from '$lib/components/Upload.svelte';
   import WorkerError from '$lib/components/WorkerError.svelte';
   import WorkerLoading from '$lib/components/WorkerLoading.svelte';
-  import { uploadTabState } from '$lib/states/tabs.svelte';
+  import { uploadTabState } from '$lib/states/tabs.svelte.js';
 
   let workersLoaded = $state(false);
   let errorMessage = $state('');

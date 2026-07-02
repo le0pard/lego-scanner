@@ -3,7 +3,7 @@
   import classNames from 'classnames';
   import { browser } from '$app/environment';
   import { transfer } from 'comlink';
-  import { setScanResult, resetScanState } from '$lib/states/scanResult.svelte';
+  import { setScanResult, resetScanState } from '$lib/states/scanResult.svelte.js';
   import {
     cameraState,
     noCameraPermission,
@@ -20,7 +20,7 @@
     supportFlashState,
     toggleFlashState,
     setZoomSettings
-  } from '$lib/states/camera.svelte';
+  } from '$lib/states/camera.svelte.js';
 
   const PROCESSING_THROTTLE_MS = 200;
 

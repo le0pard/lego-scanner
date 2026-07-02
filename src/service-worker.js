@@ -114,6 +114,29 @@ self.addEventListener('fetch', (event) => {
     const standardizedReq = normalizeRequest(event.request);
     const sanitizedPath = new URL(standardizedReq.url).pathname;
 
+    // Network-First Catalog Data Sync Layer (API Routes)
+    if (sanitizedPath.startsWith('/api/')) {
+      try {
+        const response = await fetchWithTimeout(event.request, API_TIMEOUT_MS);
+
+        if (response.status === 200) {
+          staticCache.put(standardizedReq, response.clone());
+        }
+
+        return response;
+      } catch (err) {
+        console.warn(
+          `[Service Worker] API Connection failed or timed out for ${url.pathname}. Fallback matching active.`,
+          err
+        );
+
+        const cachedResponse = await staticCache.match(standardizedReq);
+        if (cachedResponse) return cachedResponse;
+
+        throw err;
+      }
+    }
+
     // Static Application Shell Cache Check
     if (ASSETS.includes(sanitizedPath)) {
       const response = await staticCache.match(standardizedReq);
@@ -136,29 +159,6 @@ self.addEventListener('fetch', (event) => {
       const globalCacheMatch = await caches.match(standardizedReq);
       if (globalCacheMatch) {
         return globalCacheMatch; // Found in an older cache folder
-      }
-    }
-
-    // Network-First Catalog Data Sync Layer (API Routes)
-    if (sanitizedPath.startsWith('/api/')) {
-      try {
-        const response = await fetchWithTimeout(event.request, API_TIMEOUT_MS);
-
-        if (response.status === 200) {
-          staticCache.put(standardizedReq, response.clone());
-        }
-
-        return response;
-      } catch (err) {
-        console.warn(
-          `[Service Worker] API Connection failed or timed out for ${url.pathname}. Fallback matching active.`,
-          err
-        );
-
-        const cachedResponse = await staticCache.match(standardizedReq);
-        if (cachedResponse) return cachedResponse;
-
-        throw err;
       }
     }
 

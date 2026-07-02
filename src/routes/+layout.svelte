@@ -12,15 +12,7 @@
   let { children } = $props();
 
   const firstSortedMetaRecord = async () => {
-    const list = await db.syncMeta.toArray();
-
-    const sorted = list.sort((a, b) => new Date(b.lastSynced) - new Date(a.lastSynced));
-
-    if (sorted.length > 0) {
-      return sorted[0];
-    }
-
-    return null;
+    return (await db.syncMeta.orderBy('lastSynced').reverse().first()) || null;
   };
 
   // Auto-detect and set theme based on system preference

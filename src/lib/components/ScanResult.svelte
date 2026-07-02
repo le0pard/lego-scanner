@@ -1,5 +1,5 @@
 <script>
-  import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte';
+  import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte.js';
   import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
 
   const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
@@ -27,7 +27,7 @@
     return optimizedImageModules[resolvedSourceKey] || null;
   });
 
-  const legoData = extractFieldsFromDataMatrix(scanResultState.result);
+  let legoData = $derived(extractFieldsFromDataMatrix(scanResultState.result));
 
   // Local interactive clipboard copy feedback states
   let copyStatus = $state('idle'); // 'idle' | 'success'

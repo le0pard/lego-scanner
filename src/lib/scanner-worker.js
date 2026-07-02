@@ -1,4 +1,3 @@
-/* global FileReaderSync */
 import { expose } from 'comlink';
 import { readBarcodes, prepareZXingModule, ZXING_WASM_VERSION } from 'zxing-wasm/reader';
 import {
@@ -178,8 +177,6 @@ const api = {
           debugCtx.drawImage(currentBmp, 0, 0);
 
           const blob = await debugCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-          const reader = new FileReaderSync();
-          const dataUrl = reader.readAsDataURL(blob);
           const imageData = debugCtx.getImageData(0, 0, currentBmp.width, currentBmp.height);
 
           let testScan = [];
@@ -197,7 +194,7 @@ const api = {
 
           diagnosticReport.push({
             name: processingMethod.name.replace('image', '').replace('Processing', ''),
-            preview: dataUrl,
+            preview: blob,
             success: testScan.length > 0,
             decodedValue: testScan.length > 0 ? testScan[0].text : null
           });

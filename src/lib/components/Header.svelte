@@ -7,8 +7,8 @@
     uploadTabState,
     activateCameraTabState,
     activateUploadTabState
-  } from '$lib/states/tabs.svelte';
-  import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte';
+  } from '$lib/states/tabs.svelte.js';
+  import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte.js';
 
   let { showTabs = true } = $props();
 

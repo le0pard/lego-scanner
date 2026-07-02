@@ -3,7 +3,7 @@
   import classNames from 'classnames';
   import { dev, browser } from '$app/environment';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte';
+  import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte.js';
 
   const { getScanner } = $props();
   const { warning: warningTick } = useTiks({ theme: 'crisp', volume: 1.0 });
@@ -13,10 +13,18 @@
   let isDiagnosticsExpanded = $state(false);
   let debugImageStages = $state([]);
 
+  const clearDebugUrls = () => {
+    debugImageStages.forEach((stage) => {
+      if (stage.preview) {
+        URL.revokeObjectURL(stage.preview);
+      }
+    });
+    debugImageStages = [];
+  };
+
   const processFile = async (file) => {
     isProcessing = true;
-    debugImageStages = [];
-
+    clearDebugUrls();
     resetScanState();
 
     try {
@@ -24,7 +32,11 @@
 
       // usage for debug
       if (dev) {
-        debugImageStages = await getScanner().runDiagnosticSuite(file);
+        const rawStages = await getScanner().runDiagnosticSuite(file);
+        debugImageStages = rawStages.map((stage) => ({
+          ...stage,
+          preview: URL.createObjectURL(stage.preview)
+        }));
       }
 
       if (result) {
@@ -113,6 +125,7 @@
   });
 
   onDestroy(() => {
+    clearDebugUrls();
     resetScanState();
   });
 </script>

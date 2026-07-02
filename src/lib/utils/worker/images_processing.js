@@ -9,8 +9,8 @@ const clearCanvas = (poolEntry) => {
   if (poolEntry.ctx.reset) {
     poolEntry.ctx.reset();
   } else {
-    const { width } = poolEntry.canvas;
-    poolEntry.canvas.width = width; // Legacy fallback
+    const { width, height } = poolEntry.canvas;
+    poolEntry.ctx.clearRect(0, 0, width, height); // Legacy fallback
   }
 };
 
