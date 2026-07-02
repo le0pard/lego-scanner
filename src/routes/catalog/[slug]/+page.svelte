@@ -11,7 +11,7 @@
 </script>
 
 <div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
-  <div class="flex justify-between">
+  <div class="flex justify-between gap-2">
     <div class="flex items-center gap-3">
       <a
         title="Catalog"
@@ -20,9 +20,19 @@
       >
         <i class="iconify lucide--arrow-left size-5"></i>
       </a>
-      <div>
+      <div class="flex gap-3">
         <h2 class="text-2xl font-black tracking-tight text-text-main">{seriesName}</h2>
-        <p class="text-xs text-text-muted mt-0.5">All Minifigures</p>
+        {#if data.metadata?.series}
+          <a
+            href={resolve(`/api/collections/${data.metadata?.series}.json`)}
+            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="API link"
+          >
+            <i class="iconify lucide--database size-5"></i>
+          </a>
+        {/if}
       </div>
     </div>
     <div class="flex items-center gap-3">
