@@ -32,13 +32,14 @@
     class="p-4 bg-card-bg border border-border rounded-2xl overflow-hidden flex flex-col gap-3"
   >
     <div
-      class="w-full rounded-xl overflow-hidden border border-border bg-black aspect-video flex items-center justify-center"
+      class="w-full rounded-xl overflow-hidden border border-border bg-black aspect-video landscape:aspect-auto landscape:flex-1 flex items-center justify-center min-h-55"
     >
       <enhanced:img
         src={scannerCodeImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        class="w-full h-full object-cover"
+        sizes="(orientation: landscape) 50vw, (min-width: 480px) 480px, 100vw"
+        class="w-full h-full object-cover landscape:object-contain"
       />
     </div>
     <p class="text-xs text-text-muted text-center italic mt-0.5">
