@@ -1,5 +1,5 @@
 <script>
-  import { resolve } from '$app/paths';
+  import ReturnButton from '$lib/components/ReturnButton.svelte';
   import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced';
 </script>
 
@@ -95,10 +95,5 @@
     </section>
   </div>
 
-  <a
-    href={resolve('/')}
-    class="mt-4 w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-md active:scale-95 cursor-pointer"
-  >
-    Return to Scanner
-  </a>
+  <ReturnButton />
 </div>

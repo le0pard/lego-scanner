@@ -1,6 +1,7 @@
 <script>
   import { resolve } from '$app/paths';
   import { getOptimizedImage } from '$lib/utils/lego_data.js';
+  import ReturnButton from '$lib/components/ReturnButton.svelte';
 
   let { data } = $props();
   let seriesList = $derived(data.seriesList || []);
@@ -37,12 +38,7 @@
     {/each}
   </div>
 
-  <a
-    href={resolve('/')}
-    class="mt-4 w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-md active:scale-95 cursor-pointer"
-  >
-    Return to Scanner
-  </a>
+  <ReturnButton />
 </div>
 
 <style>
