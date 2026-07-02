@@ -21,7 +21,9 @@
         <i class="iconify lucide--arrow-left size-5"></i>
       </a>
       <div class="flex gap-3">
-        <h2 class="text-2xl font-black tracking-tight text-text-main">{seriesName}</h2>
+        <h2 class="flex justify-center text-2xl font-black tracking-tight text-text-main">
+          {seriesName}
+        </h2>
         {#if data.metadata?.series}
           <a
             href={resolve(`/api/collections/${data.metadata?.series}.json`)}

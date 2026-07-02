@@ -122,6 +122,13 @@
   });
 </script>
 
+<svelte:head>
+  <title>
+    {page.data.title ? `${page.data.title} | ` : ''}
+    L-Scan: LEGO Collectible Minifigure Online Scanner
+  </title>
+</svelte:head>
+
 <main
   class="max-w-md landscape:max-w-4xl mx-auto min-h-dvh px-4 pt-pwa-top pb-pwa-bottom flex flex-col sm:border-x sm:border-border sm:shadow-2xl sm:bg-app-bg relative overflow-x-hidden"
 >

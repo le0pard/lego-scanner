@@ -9,8 +9,10 @@
 
 <div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
   <div>
-    <h2 class="text-2xl font-black tracking-tight text-text-main">Lego Catalog</h2>
-    <p class="text-xs text-text-muted mt-0.5">Browse your locally synchronized collections.</p>
+    <h2 class="text-2xl font-black tracking-tight text-text-main">Lego Minifigures Catalog</h2>
+    <p class="text-xs text-text-muted mt-0.5">
+      Browse your locally synchronized collections and codes.
+    </p>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
