@@ -58,7 +58,7 @@
             class="text-xs text-text-muted leading-tight line-clamp-2"
             title={fig.identifiers?.map((i) => i.code).join(', ')}
           >
-            Data Matrix codes: {fig.identifiers?.map((i) => i.code).join(', ')}
+            Codes: {fig.identifiers?.map((i) => i.code).join(', ')}
           </p>
         </div>
       </div>
