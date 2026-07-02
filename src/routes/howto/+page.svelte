@@ -6,7 +6,7 @@
 <div class="flex-1 w-full pb-6 mt-4 flex flex-col gap-5 animate-in fade-in duration-300 text-left">
   <div>
     <h2 class="text-2xl font-black tracking-tight text-text-main">How to Scan Minifigures</h2>
-    <p class="text-xs text-text-muted mt-0.5">
+    <p class="text-sm text-text-muted mt-0.5">
       Quick setup guide and peripheral hardware requirements
     </p>
   </div>
@@ -18,8 +18,8 @@
       <i class="iconify lucide--layers-3 size-5"></i>
     </div>
     <div class="flex flex-col gap-0.5">
-      <h3 class="font-bold text-text-main text-sm">Series Compatibility Notice</h3>
-      <p class="text-text-muted text-xs sm:text-sm leading-relaxed">
+      <h3 class="font-bold text-text-main text-base">Series Compatibility Notice</h3>
+      <p class="text-text-muted text-sm sm:text-sm leading-relaxed">
         Data Matrix internal tracking codes are exclusively available on <strong
           >LEGO Collectible Minifigures Series 25 and newer</strong
         >. Earlier retail package configurations (Series 1 through 24) utilize historical box prints

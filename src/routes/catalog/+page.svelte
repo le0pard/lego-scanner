@@ -10,12 +10,12 @@
 <div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
   <div>
     <h2 class="text-2xl font-black tracking-tight text-text-main">Lego Minifigures Catalog</h2>
-    <p class="text-xs text-text-muted mt-0.5">
+    <p class="text-sm text-text-muted mt-0.5">
       Browse your locally synchronized collections and codes.
     </p>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 landscape:grid-cols-2 gap-4">
     {#each seriesList as series (series.slug)}
       {@const optImg = getOptimizedImage(series.coverImage)}
       <a
@@ -32,8 +32,8 @@
           {/if}
         </div>
         <div class="flex flex-col">
-          <h3 class="font-bold text-text-main leading-tight">{series.displayName}</h3>
-          <span class="text-xs text-text-muted mt-1">{series.releaseYear}</span>
+          <h3 class="text-lg font-bold text-text-main leading-tight">{series.displayName}</h3>
+          <span class="text-sm text-text-muted mt-1">{series.releaseYear}</span>
         </div>
         <i class="iconify lucide--chevron-right size-5 text-text-muted ml-auto"></i>
       </a>

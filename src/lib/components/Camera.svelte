@@ -444,8 +444,8 @@
     >
       <i class="iconify lucide--camera size-8 text-text-muted"></i>
     </div>
-    <p class="text-sm font-bold text-text-main">Camera Access Required</p>
-    <p class="text-xs text-text-muted mb-5 max-w-60">
+    <p class="text-base font-bold text-text-main">Camera Access Required</p>
+    <p class="text-sm text-text-muted mb-5 max-w-60">
       Tap below to allow device camera access for scanning.
     </p>
 

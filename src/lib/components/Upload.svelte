@@ -164,8 +164,8 @@
         ></div>
         <i class="iconify lucide--image size-6 text-text-muted animate-pulse"></i>
       </div>
-      <p class="text-sm font-bold text-text-main">Analyzing Image...</p>
-      <p class="text-xs text-text-muted mt-1">Scanning for Data Matrix codes</p>
+      <p class="text-base font-bold text-text-main">Analyzing Image...</p>
+      <p class="text-sm text-text-muted mt-1">Scanning for Data Matrix codes</p>
     {:else}
       <div
         class={classNames(
@@ -184,14 +184,14 @@
         ></i>
       </div>
       <p
-        class={classNames('text-sm font-bold', {
+        class={classNames('text-base font-bold', {
           'text-primary': isDragging,
           'text-text-main': !isDragging
         })}
       >
         {isDragging ? 'Release to Scan' : 'Drop, Paste, or Click to Upload'}
       </p>
-      <p class="text-xs text-text-muted mt-1">Supports PNG, JPG, or Cmd+V clipboard buffers</p>
+      <p class="text-sm text-text-muted mt-1">Supports PNG, JPG, or Cmd+V clipboard buffers</p>
     {/if}
   </label>
 
@@ -223,7 +223,7 @@
         <div
           class="p-3 flex flex-col gap-3 max-h-85 overflow-y-auto bg-card-bg animate-in fade-in duration-200"
         >
-          <p class="text-[11px] text-text-muted leading-relaxed">
+          <p class="text-xs text-text-muted leading-relaxed">
             Reviewing step-by-step filter modifications. The Morphological Close stage bridges line
             gaps on code models like batch series <span class="font-mono text-text-main font-bold"
               >444R5</span
@@ -242,11 +242,11 @@
                 )}
               >
                 <div class="flex items-center justify-between gap-1">
-                  <span class="font-mono text-[10px] font-black truncate text-text-main uppercase"
+                  <span class="font-mono text-xs font-black truncate text-text-main uppercase"
                     >{stage.name}</span
                   >
                   <span
-                    class={classNames('text-[9px] font-mono font-bold px-1.5 py-0.5 rounded', {
+                    class={classNames('text-xs font-mono font-bold px-1.5 py-0.5 rounded', {
                       'bg-success-bg text-success-text': stage.success,
                       'bg-neutral-200 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400':
                         !stage.success
@@ -264,7 +264,7 @@
 
                 {#if stage.success}
                   <p
-                    class="text-[9px] font-mono bg-success-bg text-success-text px-1 py-0.5 rounded break-all truncate font-bold text-center"
+                    class="text-xs font-mono bg-success-bg text-success-text px-1 py-0.5 rounded break-all truncate font-bold text-center"
                   >
                     Value: {stage.decodedValue}
                   </p>

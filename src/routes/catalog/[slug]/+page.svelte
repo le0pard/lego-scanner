@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-2 landscape:grid-cols-4 gap-4">
     {#each figures as fig, index (index)}
       {@const optImg = getOptimizedImage(fig.imagePath)}
       <div class="bg-card-bg border border-border rounded-2xl p-4 flex flex-col shadow-sm">
@@ -63,11 +63,11 @@
         </div>
 
         <div class="flex flex-col mt-auto border-t border-border/40 pt-3">
-          <h4 class="text-base font-black text-text-main leading-tight mb-1">
+          <h4 class="text-lg font-black text-text-main leading-tight mb-1">
             {fig.name}
           </h4>
           <p
-            class="text-xs text-text-muted leading-tight line-clamp-2"
+            class="text-sm text-text-muted leading-tight line-clamp-3"
             title={fig.identifiers?.map((i) => i.code).join(', ')}
           >
             Codes: {fig.identifiers?.map((i) => i.code).join(', ')}

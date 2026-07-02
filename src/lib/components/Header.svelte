@@ -32,7 +32,7 @@
     <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">
       <a href={resolve('/')}>L-Scan</a>
     </h1>
-    <p class="text-[10px] sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
+    <p class="text-xs sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
   </div>
 
   {#if showTabs}

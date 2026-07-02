@@ -42,32 +42,27 @@
   </div>
 
   <div class="border-t border-border pt-4 flex flex-col gap-3">
-    <div class="flex items-center gap-2 text-sm font-bold text-text-main">
-      <i class="iconify lucide--database size-4 text-text-muted"></i>
-      <h3>Lego Catalog Database</h3>
-    </div>
-
     <div
       class="p-3 bg-app-bg border border-border rounded-xl flex items-center justify-between text-xs"
     >
       <div class="flex items-center gap-2.5 text-left">
         {#if syncState.status === 'syncing'}
-          <i class="iconify lucide--refresh-cw size-4 text-primary animate-spin"></i>
+          <i class="iconify lucide--refresh-cw size-6 text-primary animate-spin"></i>
           <div>
-            <p class="font-bold text-text-main">Syncing Collection...</p>
-            <p class="text-[10px] text-text-muted">Fetching latest JSON signatures</p>
+            <p class="text-base font-bold text-text-main">Syncing Collection...</p>
+            <p class="text-xs text-text-muted">Fetching latest JSON signatures</p>
           </div>
         {:else if syncState.status === 'error'}
-          <i class="iconify lucide--alert-triangle size-4 text-error-text"></i>
+          <i class="iconify lucide--alert-triangle size-6 text-error-text"></i>
           <div>
-            <p class="font-bold text-error-text">Sync Deferred</p>
-            <p class="text-[10px] text-text-muted">Running in local offline query mode</p>
+            <p class="text-base font-bold text-error-text">Sync Deferred</p>
+            <p class="text-xs text-text-muted">Running in local offline query mode</p>
           </div>
         {:else}
-          <i class="iconify lucide--check-circle size-4 text-success-text"></i>
+          <i class="iconify lucide--check-circle size-6 text-success-text"></i>
           <div>
-            <p class="font-bold text-text-main">Database Sync Active</p>
-            <p class="text-[10px] text-text-muted">
+            <p class="text-base font-bold text-text-main">Database Sync Active</p>
+            <p class="text-xs text-text-muted">
               Last verified: {formatTime(syncState.lastSynced)}
             </p>
           </div>
@@ -76,7 +71,7 @@
 
       <span
         class={classNames(
-          'font-mono text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border',
+          'font-mono text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border',
           {
             'bg-primary/10 text-primary border-primary/20': syncState.status === 'syncing',
             'bg-success-bg text-success-text border-success-border':
