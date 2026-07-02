@@ -12,7 +12,7 @@ export const load = async () => {
     if (firstFig) {
       return {
         slug: rest.series,
-        displayName: firstFig.displayName || rest.series,
+        displayName: rest.displayName || rest.series,
         releaseYear: rest.releaseYear,
         coverImage: firstFig.imagePath
       };
