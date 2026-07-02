@@ -4,6 +4,15 @@ const DOWNSCALE_PROCESSING_SIZE = 600;
 
 const canvasPool = {};
 
+const clearCanvas = (poolEntry) => {
+  if (poolEntry.ctx.reset) {
+    poolEntry.ctx.reset();
+  } else {
+    const width = poolEntry.canvas.width;
+    poolEntry.canvas.width = width; // Legacy fallback
+  }
+};
+
 const getPooledCanvas = (key, width, height) => {
   if (!canvasPool[key]) {
     const canvas = new OffscreenCanvas(width, height);
@@ -15,11 +24,7 @@ const getPooledCanvas = (key, width, height) => {
       entry.canvas.width = width;
       entry.canvas.height = height;
     } else {
-      if (entry.ctx.reset) {
-        entry.ctx.reset();
-      } else {
-        entry.canvas.width = width; // Legacy reliable way to clear canvas and reset state
-      }
+      clearCanvas(entry); // Use the safe helper here
     }
   }
   return canvasPool[key];
@@ -39,104 +44,65 @@ const applyMorphology = ({ ctx, snapshot, mode, type = 'vertical', w, h } = {}) 
   for (const offset of STRIDES) {
     ctx.drawImage(snapshot, 0, 0, w, h, isVertical ? 0 : offset, isVertical ? offset : 0, w, h);
   }
-  // Safeguard: Always revert composite mode back to default baseline
-  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalCompositeOperation = 'source-over'; // Revert to baseline
 };
 
-export const applyVerticalMorphology = ({ ctx, snapshot, mode, w, h } = {}) => {
-  applyMorphology({ type: 'vertical', ctx, snapshot, mode, w, h });
-};
-
-export const applyHorizontalMorphology = ({ ctx, snapshot, mode, w, h } = {}) => {
-  applyMorphology({ type: 'horizontal', ctx, snapshot, mode, w, h });
-};
-
-export const repairHorizontalScratches = async (baseBmp) => {
+/**
+ * Merges Horizontal & Vertical repair logic into one DRY function
+ */
+const repairScratches = async (baseBmp, targetScratchType = 'horizontal') => {
   const { width, height } = baseBmp;
   const ratio = Math.min(RESIZE_MATRIX_SIZE / width, RESIZE_MATRIX_SIZE / height);
   const canvasWidth = Math.round(width * ratio);
   const canvasHeight = Math.round(height * ratio);
 
-  const basePool = getPooledCanvas('scratch_h_base', canvasWidth, canvasHeight);
-  const tempPool = getPooledCanvas('scratch_h_temp', canvasWidth, canvasHeight);
+  // Determine smear direction: To fix a horizontal scratch, we must smear pixels vertically (and vice versa)
+  const morphologyType = targetScratchType === 'horizontal' ? 'vertical' : 'horizontal';
+  const prefix = targetScratchType === 'horizontal' ? 'h' : 'v';
 
-  // Binarize the image FIRST so the scratch is absolute white and modules are absolute black
-  basePool.ctx.filter = 'grayscale(100%) contrast(300%) brightness(90%)';
-  basePool.ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
-  const grayscaleSnapshot = await createImageBitmap(basePool.canvas);
-
-  // Dilate pass: move vertically to seal horizontal cut lines
-  tempPool.ctx.filter = 'none';
-  applyVerticalMorphology({
-    ctx: tempPool.ctx,
-    snapshot: grayscaleSnapshot,
-    mode: 'darken',
-    w: canvasWidth,
-    h: canvasHeight
-  });
-  const dilatedSnapshot = await createImageBitmap(tempPool.canvas);
-
-  // Erode pass: restore geometric sizes
-  basePool.ctx.reset();
-  basePool.ctx.filter = 'none';
-  applyVerticalMorphology({
-    ctx: basePool.ctx,
-    snapshot: dilatedSnapshot,
-    mode: 'lighten',
-    w: canvasWidth,
-    h: canvasHeight
-  });
-
-  grayscaleSnapshot.close();
-  dilatedSnapshot.close();
-
-  return await createImageBitmap(basePool.canvas);
-};
-
-export const repairVerticalScratches = async (baseBmp) => {
-  const { width, height } = baseBmp;
-  const ratio = Math.min(RESIZE_MATRIX_SIZE / width, RESIZE_MATRIX_SIZE / height);
-  const canvasWidth = Math.round(width * ratio);
-  const canvasHeight = Math.round(height * ratio);
-
-  const basePool = getPooledCanvas('scratch_v_base', canvasWidth, canvasHeight);
-  const tempPool = getPooledCanvas('scratch_v_temp', canvasWidth, canvasHeight);
+  const basePool = getPooledCanvas(`scratch_${prefix}_base`, canvasWidth, canvasHeight);
+  const tempPool = getPooledCanvas(`scratch_${prefix}_temp`, canvasWidth, canvasHeight);
 
   // Binarize the image FIRST
   basePool.ctx.filter = 'grayscale(100%) contrast(300%) brightness(90%)';
   basePool.ctx.drawImage(baseBmp, 0, 0, width, height, 0, 0, canvasWidth, canvasHeight);
   const grayscaleSnapshot = await createImageBitmap(basePool.canvas);
 
-  // Dilate pass: move horizontally to seal vertical cut lines
+  // Dilate pass: Move along the designated axis to seal cut lines
   tempPool.ctx.filter = 'none';
-  applyHorizontalMorphology({
+  applyMorphology({
     ctx: tempPool.ctx,
     snapshot: grayscaleSnapshot,
     mode: 'darken',
+    type: morphologyType,
     w: canvasWidth,
     h: canvasHeight
   });
   const dilatedSnapshot = await createImageBitmap(tempPool.canvas);
 
-  basePool.ctx.reset();
+  // Erode pass: Restore geometric sizes
+  clearCanvas(basePool); // Use safe helper
   basePool.ctx.filter = 'none';
-  applyHorizontalMorphology({
+  applyMorphology({
     ctx: basePool.ctx,
     snapshot: dilatedSnapshot,
     mode: 'lighten',
+    type: morphologyType,
     w: canvasWidth,
     h: canvasHeight
   });
 
+  // Release memory
   grayscaleSnapshot.close();
   dilatedSnapshot.close();
 
   return await createImageBitmap(basePool.canvas);
 };
 
-export const imageScratchRepairFullProcessing = async (baseBmp) => {
-  return await repairHorizontalScratches(baseBmp);
-};
+export const repairHorizontalScratches = (baseBmp) => repairScratches(baseBmp, 'horizontal');
+export const repairVerticalScratches = (baseBmp) => repairScratches(baseBmp, 'vertical');
+export const imageScratchRepairFullProcessing = async (baseBmp) =>
+  repairHorizontalScratches(baseBmp);
 
 export const imageMacroCropScratchRepairProcessing = async (baseBmp) => {
   const { width, height } = baseBmp;
@@ -307,7 +273,6 @@ export const imageHighContrastProcessing = async (baseBmp) => {
   return await createImageBitmap(canvas);
 };
 
-// Reordered: Run morphology with robust threshold states directly inside its logic loops
 export const imageProcessingPipeline = [
   imageDownscaleProcessing,
   imageUnsharpMaskSharpenProcessing,
