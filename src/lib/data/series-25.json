@@ -48,11 +48,9 @@
       "name": "Goatherd",
       "imagePath": "/assets/minifigures/series-25/goatherd.jpg",
       "identifiers": [
-        { "code": "6472863" },
-        { "code": "6471962" },
-        { "code": "6472896" },
-        { "code": "6471962", "factory": "R", "year": "3" },
-        { "code": "6472863", "factory": "S", "year": "3" }
+        { "code": "6472863", "factory": "S", "year": "3" },
+        { "code": "6472896", "factory": "S", "year": "3" },
+        { "code": "6471962", "factory": "R", "year": "3" }
       ]
     },
     {
