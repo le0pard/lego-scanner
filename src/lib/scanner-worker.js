@@ -40,7 +40,7 @@ const api = {
   async init(basePath = '/') {
     const cleanBase = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
-    prepareZXingModule({
+    await prepareZXingModule({
       overrides: {
         locateFile: (path, prefix) => {
           if (path.endsWith('.wasm')) {
