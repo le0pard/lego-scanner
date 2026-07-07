@@ -1,6 +1,8 @@
 import Dexie from 'dexie';
 
 const MAX_IMAGE_CACHE_BYTES = 15 * 1024 * 1024; // Strict 15 Megabyte Limit
+const CRITICAL_FREE_SPACE_BYTES = 40 * 1024 * 1024; // Threshold panic flag: 40 MB of free storage space remaining
+const DB_QUOTE_PERCENTAGE = 0.85;
 
 // Isolated database dedicated exclusively to tracking service worker cache health
 export const cacheDb = new Dexie('RuntimeImagesCacheDB');
@@ -22,6 +24,22 @@ const enforceLedgerLimits = async (cacheName) => {
   isEvictionRunning = true; // Secure the execution track against concurrent fetch spikes
 
   try {
+    let dynamicLimit = MAX_IMAGE_CACHE_BYTES;
+
+    if (globalThis.navigator?.storage?.estimate) {
+      const { quota, usage } = await globalThis.navigator.storage.estimate();
+      const freeSpace = quota - usage;
+
+      if (freeSpace < CRITICAL_FREE_SPACE_BYTES || usage / quota > DB_QUOTE_PERCENTAGE) {
+        console.warn(
+          `[LRU Manager] Storage Pressure Detected! Free space: ${(freeSpace / 1024 / 1024).toFixed(1)} MB. ` +
+            `Quota usage: ${((usage / quota) * 100).toFixed(1)}%. Tightening cache limit threefold.`
+        );
+        // Drastically reduce decorative image allocations to 5 MB to keep the engine operational
+        dynamicLimit = Math.floor(MAX_IMAGE_CACHE_BYTES / 3);
+      }
+    }
+
     let totalCacheMass = 0;
 
     // Memory-safe streaming calculation using Dexie's each wrapper
@@ -29,19 +47,20 @@ const enforceLedgerLimits = async (cacheName) => {
       totalCacheMass += record.size || 0;
     });
 
-    if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) return;
+    // Compare total image byte usage against our dynamic (adaptive) limit
+    if (totalCacheMass <= dynamicLimit) return;
 
     const imageCacheBucket = await caches.open(cacheName);
 
     // Batch processing loop: Fetch old items in small chunks to prevent RAM bloat
     // while avoiding standard cursor lock deadlocks during deletions
-    while (totalCacheMass > MAX_IMAGE_CACHE_BYTES) {
+    while (totalCacheMass > dynamicLimit) {
       const oldestRecords = await cacheDb.usageMetrics.orderBy('lastAccessed').limit(10).toArray();
 
       if (oldestRecords.length === 0) break;
 
       for (const record of oldestRecords) {
-        if (totalCacheMass <= MAX_IMAGE_CACHE_BYTES) break;
+        if (totalCacheMass <= dynamicLimit) break;
 
         // Evict concurrently across both local storage mechanisms
         await imageCacheBucket.delete(record.url);
