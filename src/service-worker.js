@@ -1,5 +1,7 @@
 import { build, files, prerendered, version } from '$service-worker';
+import { SYNC_LEGO_CATALOG_EVENT } from '$lib/utils/constants.js';
 import { updateImageMetadata } from '$lib/utils/worker/images_metadata_db.js';
+import { performDatabaseSync } from '$lib/utils/worker/sync_engine.js';
 
 const PREGENERATED_ASSETS_PREFIX = '_app/immutable/';
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
@@ -197,5 +199,27 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+});
+
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === SYNC_LEGO_CATALOG_EVENT) {
+    event.waitUntil(
+      (async () => {
+        console.log('[Periodic Sync SW] Background OS event interceptor running...');
+        try {
+          // Fire the exact same asset compilation pipeline completely serverless
+          const didUpdate = await performDatabaseSync('/');
+          console.log(
+            `[Periodic Sync SW] Automation loop complete. Target database changes written: ${didUpdate}`
+          );
+        } catch (err) {
+          console.error(
+            '[Periodic Sync SW] Background catalog compilation cycle encountered a failure:',
+            err
+          );
+        }
+      })()
+    );
   }
 });

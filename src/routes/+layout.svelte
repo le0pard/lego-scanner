@@ -7,6 +7,7 @@
   import { wrap } from 'comlink';
   import Header from '$lib/components/Header.svelte';
 
+  import { SYNC_LEGO_CATALOG_EVENT } from '$lib/utils/constants.js';
   import { db } from '$lib/utils/db.js';
   import { setSyncStatus } from '$lib/states/sync.svelte.js';
   import { setUpdateAvailable } from '$lib/states/update.svelte.js';
@@ -98,6 +99,39 @@
               });
             }
           });
+
+          // Checks if Periodic Sync interface is supported by the client browser instance
+          if ('periodicSync' in registration) {
+            navigator.permissions
+              .query({
+                name: 'periodic-background-sync'
+              })
+              .then((status) => {
+                if (status.state !== 'granted') {
+                  return;
+                }
+
+                // Register sync schedule. Interval set to 24 hours (86,400,000 milliseconds)
+                registration.periodicSync
+                  .register(SYNC_LEGO_CATALOG_EVENT, {
+                    minInterval: 24 * 60 * 60 * 1000
+                  })
+                  .then(() => {
+                    console.log(
+                      '[Periodic Sync] Hardware background routine registered successfully.'
+                    );
+                  })
+                  .catch((err) => {
+                    console.warn('[Periodic Sync] Register sync have errors:', err);
+                  });
+              })
+              .catch((permError) => {
+                console.warn(
+                  '[Periodic Sync] Permission evaluation skipped or restricted by client device:',
+                  permError
+                );
+              });
+          }
         }
       });
 
