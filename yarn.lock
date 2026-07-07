@@ -787,9 +787,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "@sveltejs/vite-plugin-svelte@npm:7.1.2"
+"@sveltejs/vite-plugin-svelte@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@sveltejs/vite-plugin-svelte@npm:7.2.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     magic-string: "npm:^0.30.21"
@@ -798,7 +798,7 @@ __metadata:
   peerDependencies:
     svelte: ^5.46.4
     vite: ^8.0.0-beta.7 || ^8.0.0
-  checksum: 10c0/d177e090ae310e1f9fc4e906de6034274f318e7ea831bf099b9624b469715408fa6ce1e4fe08a8272f8805fe32f882a2a97e6319e36995c86365fd6b407c9001
+  checksum: 10c0/f256762aae5c6f6338e7cccf1e229da3c092d836779e2e6c557d17494341ffe352ef53f5218fd24a8a9de780734932ea08f894e093d5a708d5b1596295a5e591
   languageName: node
   linkType: hard
 
@@ -1816,7 +1816,7 @@ __metadata:
     "@sveltejs/adapter-static": "npm:^3.0.10"
     "@sveltejs/enhanced-img": "npm:^0.11.0"
     "@sveltejs/kit": "npm:^2.69.1"
-    "@sveltejs/vite-plugin-svelte": "npm:^7.1.2"
+    "@sveltejs/vite-plugin-svelte": "npm:^7.2.0"
     "@tailwindcss/typography": "npm:^0.5.20"
     "@tailwindcss/vite": "npm:^4.3.2"
     "@types/node": "npm:^24.13.2"
@@ -1831,7 +1831,7 @@ __metadata:
     prettier-plugin-svelte: "npm:^4.1.1"
     prettier-plugin-tailwindcss: "npm:^0.8.0"
     svelte: "npm:^5.56.4"
-    svelte-check: "npm:^4.7.1"
+    svelte-check: "npm:^4.7.2"
     tailwindcss: "npm:^4.3.2"
     typescript: "npm:^6.0.3"
     vite: "npm:^8.1.3"
@@ -2585,9 +2585,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.7.1":
-  version: 4.7.1
-  resolution: "svelte-check@npm:4.7.1"
+"svelte-check@npm:^4.7.2":
+  version: 4.7.2
+  resolution: "svelte-check@npm:4.7.2"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@sveltejs/load-config": "npm:^0.2.0"
@@ -2600,7 +2600,7 @@ __metadata:
     typescript: ">=5.0.0"
   bin:
     svelte-check: bin/svelte-check
-  checksum: 10c0/2c836957acf2571c730d0fe484713905db63c3b0c6d8c9c8fb2a4d58dd1b0dee40b4078f2f0ef290a84efcce0cfc03128ba9275c37d6c577b0b630bf8f59361f
+  checksum: 10c0/7a48c8fdb02b72c067e4690371f6bf41bc001e18a2455019176c3be3dfa2d3b2147622a8956991d5576ae628154fe918e82e03c476c9afe4967bbc90a84b38ef
   languageName: node
   linkType: hard
 
