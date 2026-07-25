@@ -4,7 +4,7 @@
 
 <a
   href={resolve('/')}
-  class="mt-4 w-full bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-md active:scale-95 cursor-pointer"
+  class="mt-4 w-full cursor-pointer rounded-xl bg-primary px-4 py-3.5 text-center font-black text-neutral-950 shadow-md transition-all hover:bg-primary-hover active:scale-95"
 >
   Return to Scanner
 </a>

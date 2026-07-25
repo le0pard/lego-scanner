@@ -130,7 +130,7 @@
   });
 </script>
 
-<div class="w-full flex flex-col gap-4">
+<div class="flex w-full flex-col gap-4">
   <label
     id="workspace-upload"
     for="file-picker"
@@ -139,11 +139,11 @@
     ondragover={handleDragOver}
     ondrop={handleDrop}
     class={classNames(
-      'w-full aspect-square flex flex-col items-center justify-center border-2 border-dashed shadow-lg rounded-2xl p-6 text-center transition-all duration-200 group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent outline-none',
+      'group flex aspect-square w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center shadow-lg transition-all duration-200 outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-primary',
       {
         'cursor-wait opacity-70': isProcessing,
         'cursor-pointer': !isProcessing,
-        'border-primary bg-primary/5 scale-[0.98]': isDragging,
+        'scale-[0.98] border-primary bg-primary/5': isDragging,
         'border-border bg-card-bg hover:border-primary': !isDragging
       }
     )}
@@ -158,28 +158,28 @@
     />
 
     {#if isProcessing}
-      <div class="relative flex items-center justify-center w-16 h-16 mb-4">
+      <div class="relative mb-4 flex h-16 w-16 items-center justify-center">
         <div
-          class="absolute inset-0 rounded-full border-4 border-app-bg border-t-primary animate-spin"
+          class="absolute inset-0 animate-spin rounded-full border-4 border-app-bg border-t-primary"
         ></div>
-        <i class="iconify lucide--image size-6 text-text-muted animate-pulse"></i>
+        <i class="iconify size-6 animate-pulse text-text-muted lucide--image"></i>
       </div>
       <p class="text-base font-bold text-text-main">Analyzing Image...</p>
-      <p class="text-sm text-text-muted mt-1">Scanning for Data Matrix codes</p>
+      <p class="mt-1 text-sm text-text-muted">Scanning for Data Matrix codes</p>
     {:else}
       <div
         class={classNames(
-          'flex justify-center p-4 rounded-full border mb-4 transition-transform duration-200',
+          'mb-4 flex justify-center rounded-full border p-4 transition-transform duration-200',
           {
-            'bg-primary/20 border-primary/50 scale-110': isDragging,
-            'bg-app-bg border-border group-hover:scale-105': !isDragging
+            'scale-110 border-primary/50 bg-primary/20': isDragging,
+            'border-border bg-app-bg group-hover:scale-105': !isDragging
           }
         )}
       >
         <i
           class={classNames('iconify size-8 transition-colors', {
-            'lucide--clipboard-paste text-primary animate-bounce': isDragging,
-            'lucide--image text-text-muted group-hover:text-primary': !isDragging
+            'animate-bounce text-primary lucide--clipboard-paste': isDragging,
+            'text-text-muted lucide--image group-hover:text-primary': !isDragging
           })}
         ></i>
       </div>
@@ -191,27 +191,27 @@
       >
         {isDragging ? 'Release to Scan' : 'Drop, Paste, or Click to Upload'}
       </p>
-      <p class="text-sm text-text-muted mt-1">Supports PNG, JPG, or Cmd+V clipboard buffers</p>
+      <p class="mt-1 text-sm text-text-muted">Supports PNG, JPG, or Cmd+V clipboard buffers</p>
     {/if}
   </label>
 
   {#if dev && debugImageStages.length > 0}
     <div
-      class="bg-card-bg border border-border rounded-2xl overflow-hidden shadow-md transition-all"
+      class="overflow-hidden rounded-2xl border border-border bg-card-bg shadow-md transition-all"
     >
       <button
         type="button"
         onclick={() => (isDiagnosticsExpanded = !isDiagnosticsExpanded)}
         aria-expanded={isDiagnosticsExpanded}
-        class="w-full px-4 py-3 bg-app-bg/50 flex items-center justify-between border-b border-border text-xs font-black text-text-main cursor-pointer outline-none select-none hover:bg-app-bg transition-colors"
+        class="flex w-full cursor-pointer items-center justify-between border-b border-border bg-app-bg/50 px-4 py-3 text-xs font-black text-text-main transition-colors outline-none select-none hover:bg-app-bg"
       >
         <div class="flex items-center gap-2">
-          <i class="iconify lucide--sliders size-4 text-primary"></i>
+          <i class="iconify size-4 text-primary lucide--sliders"></i>
           <span>PIPELINE DIAGNOSTICS VIEW</span>
         </div>
         <i
           class={classNames(
-            'iconify lucide--chevron-down size-4 transition-transform duration-200',
+            'iconify size-4 transition-transform duration-200 lucide--chevron-down',
             {
               'rotate-180': isDiagnosticsExpanded
             }
@@ -221,11 +221,11 @@
 
       {#if isDiagnosticsExpanded}
         <div
-          class="p-3 flex flex-col gap-3 max-h-85 overflow-y-auto bg-card-bg animate-in fade-in duration-200"
+          class="animate-in fade-in flex max-h-85 flex-col gap-3 overflow-y-auto bg-card-bg p-3 duration-200"
         >
-          <p class="text-xs text-text-muted leading-relaxed">
+          <p class="text-xs leading-relaxed text-text-muted">
             Reviewing step-by-step filter modifications. The Morphological Close stage bridges line
-            gaps on code models like batch series <span class="font-mono text-text-main font-bold"
+            gaps on code models like batch series <span class="font-mono font-bold text-text-main"
               >444R5</span
             >.
           </p>
@@ -234,7 +234,7 @@
             {#each debugImageStages as stage (stage.name)}
               <div
                 class={classNames(
-                  'p-2 border rounded-xl bg-app-bg/30 flex flex-col gap-1.5 relative',
+                  'relative flex flex-col gap-1.5 rounded-xl border bg-app-bg/30 p-2',
                   {
                     'border-success-border/60': stage.success,
                     'border-border': !stage.success
@@ -242,11 +242,11 @@
                 )}
               >
                 <div class="flex items-center justify-between gap-1">
-                  <span class="font-mono text-xs font-black truncate text-text-main uppercase"
+                  <span class="truncate font-mono text-xs font-black text-text-main uppercase"
                     >{stage.name}</span
                   >
                   <span
-                    class={classNames('text-xs font-mono font-bold px-1.5 py-0.5 rounded', {
+                    class={classNames('rounded px-1.5 py-0.5 font-mono text-xs font-bold', {
                       'bg-success-bg text-success-text': stage.success,
                       'bg-neutral-200 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400':
                         !stage.success
@@ -257,14 +257,14 @@
                 </div>
 
                 <div
-                  class="w-full aspect-square bg-black rounded-lg overflow-hidden border border-border relative flex items-center justify-center"
+                  class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-black"
                 >
-                  <img src={stage.preview} alt={stage.name} class="w-full h-full object-contain" />
+                  <img src={stage.preview} alt={stage.name} class="h-full w-full object-contain" />
                 </div>
 
                 {#if stage.success}
                   <p
-                    class="text-xs font-mono bg-success-bg text-success-text px-1 py-0.5 rounded break-all truncate font-bold text-center"
+                    class="truncate rounded bg-success-bg px-1 py-0.5 text-center font-mono text-xs font-bold break-all text-success-text"
                   >
                     Value: {stage.decodedValue}
                   </p>

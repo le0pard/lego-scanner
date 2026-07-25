@@ -14,15 +14,15 @@
   <meta name="description" content={`${seriesName} Minifigures and Codes`} />
 </svelte:head>
 
-<div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
+<div class="animate-in fade-in mt-4 flex w-full flex-1 flex-col gap-6 pb-8 duration-300">
   <div class="flex justify-between gap-2">
     <div class="flex items-center gap-3">
       <a
         title="Catalog"
         href={resolve('/catalog')}
-        class="flex justify-center bg-card-bg border border-border p-2 rounded-xl text-text-main hover:border-primary transition-colors active:scale-95"
+        class="flex justify-center rounded-xl border border-border bg-card-bg p-2 text-text-main transition-colors hover:border-primary active:scale-95"
       >
-        <i class="iconify lucide--arrow-left size-5"></i>
+        <i class="iconify size-5 lucide--arrow-left"></i>
       </a>
       <div class="flex gap-3">
         <h2 class="flex justify-center text-2xl font-black tracking-tight text-text-main">
@@ -31,12 +31,12 @@
         {#if data.metadata?.series}
           <a
             href={resolve(`/api/collections/${data.metadata?.series}.json`)}
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
             target="_blank"
             rel="noopener noreferrer"
             title="API link"
           >
-            <i class="iconify lucide--database size-5"></i>
+            <i class="iconify size-5 lucide--database"></i>
           </a>
         {/if}
       </div>
@@ -44,7 +44,7 @@
     <div class="flex items-center gap-3">
       {#if seriesYear}
         <div
-          class="text-sm font-bold text-text-muted bg-badge-bg border border-border px-2 py-0.5 rounded-md"
+          class="rounded-md border border-border bg-badge-bg px-2 py-0.5 text-sm font-bold text-text-muted"
         >
           {seriesYear}
         </div>
@@ -52,12 +52,12 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-2 landscape:grid-cols-4 gap-4">
+  <div class="grid grid-cols-2 gap-4 landscape:grid-cols-4">
     {#each figures as fig, index (index)}
       {@const optImg = getOptimizedImage(fig.imagePath)}
-      <div class="bg-card-bg border border-border rounded-2xl p-4 flex flex-col shadow-sm">
+      <div class="flex flex-col rounded-2xl border border-border bg-card-bg p-4 shadow-sm">
         <div
-          class="relative w-full aspect-4/5 mb-4 bg-app-bg rounded-xl border border-border/50 image-box"
+          class="image-box relative mb-4 aspect-4/5 w-full rounded-xl border border-border/50 bg-app-bg"
         >
           {#if optImg}
             <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 160px, 144px" />
@@ -66,12 +66,12 @@
           {/if}
         </div>
 
-        <div class="flex flex-col mt-auto border-t border-border/40 pt-3">
-          <h4 class="text-lg font-black text-text-main leading-tight mb-1">
+        <div class="mt-auto flex flex-col border-t border-border/40 pt-3">
+          <h4 class="mb-1 text-lg leading-tight font-black text-text-main">
             {fig.name}
           </h4>
           <p
-            class="text-sm text-text-muted leading-tight line-clamp-3"
+            class="line-clamp-3 text-sm leading-tight text-text-muted"
             title={fig.identifiers?.map((i) => i.code).join(', ')}
           >
             Codes: {fig.identifiers?.map((i) => i.code).join(', ')}

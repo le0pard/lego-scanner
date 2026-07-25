@@ -47,10 +47,10 @@
 <UpdateBanner />
 
 <div
-  class="flex flex-col landscape:flex-row landscape:items-start landscape:gap-6 flex-1 w-full pb-2 mt-2"
+  class="mt-2 flex w-full flex-1 flex-col pb-2 landscape:flex-row landscape:items-start landscape:gap-6"
 >
   <div
-    class="w-full landscape:w-1/2 landscape:max-w-[75svh] shrink-0 flex flex-col relative z-10 mx-auto"
+    class="relative z-10 mx-auto flex w-full shrink-0 flex-col landscape:w-1/2 landscape:max-w-[75svh]"
   >
     {#if errorMessage && errorMessage.length > 0}
       <WorkerError {errorMessage} />

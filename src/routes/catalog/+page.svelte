@@ -11,23 +11,23 @@
   <meta name="description" content="Lego Catalog with Minifigures and Codes" />
 </svelte:head>
 
-<div class="flex-1 w-full pb-8 mt-4 flex flex-col gap-6 animate-in fade-in duration-300">
+<div class="animate-in fade-in mt-4 flex w-full flex-1 flex-col gap-6 pb-8 duration-300">
   <div>
     <h2 class="text-2xl font-black tracking-tight text-text-main">Lego Minifigures Catalog</h2>
-    <p class="text-sm text-text-muted mt-0.5">
+    <p class="mt-0.5 text-sm text-text-muted">
       Browse your locally synchronized collections and codes.
     </p>
   </div>
 
-  <div class="grid grid-cols-1 landscape:grid-cols-2 gap-4">
+  <div class="grid grid-cols-1 gap-4 landscape:grid-cols-2">
     {#each seriesList as series (series.slug)}
       {@const optImg = getOptimizedImage(series.coverImage)}
       <a
         href={resolve(`/catalog/${series.slug}`)}
-        class="bg-card-bg border border-border rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:border-primary transition-colors active:scale-[0.98]"
+        class="flex items-center gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-sm transition-colors hover:border-primary active:scale-[0.98]"
       >
         <div
-          class="size-16 bg-app-bg rounded-xl flex items-center justify-center p-1.5 shrink-0 image-wrapper"
+          class="image-wrapper flex size-16 shrink-0 items-center justify-center rounded-xl bg-app-bg p-1.5"
         >
           {#if optImg}
             <enhanced:img src={optImg} alt={series.displayName} />
@@ -36,10 +36,10 @@
           {/if}
         </div>
         <div class="flex flex-col">
-          <h3 class="text-lg font-bold text-text-main leading-tight">{series.displayName}</h3>
-          <span class="text-sm text-text-muted mt-1">{series.releaseYear}</span>
+          <h3 class="text-lg leading-tight font-bold text-text-main">{series.displayName}</h3>
+          <span class="mt-1 text-sm text-text-muted">{series.releaseYear}</span>
         </div>
-        <i class="iconify lucide--chevron-right size-5 text-text-muted ml-auto"></i>
+        <i class="ml-auto iconify size-5 text-text-muted lucide--chevron-right"></i>
       </a>
     {/each}
   </div>

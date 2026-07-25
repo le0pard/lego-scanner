@@ -349,12 +349,12 @@
 {#if isCameraRequested}
   <div
     id="workspace-camera"
-    class="flex flex-col w-full aspect-square relative overflow-hidden rounded-2xl bg-black border border-border shadow-lg"
+    class="relative flex aspect-square w-full flex-col overflow-hidden rounded-2xl border border-border bg-black shadow-lg"
   >
-    <div class="flex justify-between gap-2 m-1 min-h-10 z-20">
+    <div class="z-20 m-1 flex min-h-10 justify-between gap-2">
       <div
         class={classNames(
-          'flex-1 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-lg transition-opacity',
+          'flex flex-1 items-center gap-3 rounded-xl border border-white/10 bg-black/60 px-4 py-2 shadow-lg backdrop-blur-md transition-opacity',
           {
             hidden: !cameraState.haveZoom
           }
@@ -364,10 +364,10 @@
           type="button"
           onclick={() => handleZoomStepClick('out')}
           disabled={cameraState.zoom.value <= cameraState.zoom.min}
-          class="text-neutral-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed shrink-0 transition-colors cursor-pointer flex items-center justify-center p-1 active:scale-90"
+          class="flex shrink-0 cursor-pointer items-center justify-center p-1 text-neutral-400 transition-colors hover:text-white active:scale-90 disabled:cursor-not-allowed disabled:opacity-25"
           aria-label="Zoom Out"
         >
-          <i class="iconify lucide--minus size-4"></i>
+          <i class="iconify size-4 lucide--minus"></i>
         </button>
         <input
           type="range"
@@ -376,23 +376,23 @@
           step={cameraState.zoom.step}
           value={cameraState.zoom.value}
           oninput={handleZoomChange}
-          class="flex-1 w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary/50 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md"
+          class="h-1.5 w-full flex-1 cursor-pointer appearance-none rounded-lg bg-white/20 outline-none focus:ring-2 focus:ring-primary/50 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
         />
         <button
           type="button"
           onclick={() => handleZoomStepClick('in')}
           disabled={cameraState.zoom.value >= cameraState.zoom.max}
-          class="text-neutral-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed shrink-0 transition-colors cursor-pointer flex items-center justify-center p-1 active:scale-90"
+          class="flex shrink-0 cursor-pointer items-center justify-center p-1 text-neutral-400 transition-colors hover:text-white active:scale-90 disabled:cursor-not-allowed disabled:opacity-25"
           aria-label="Zoom In"
         >
-          <i class="iconify lucide--plus size-4"></i>
+          <i class="iconify size-4 lucide--plus"></i>
         </button>
       </div>
 
       <button
         onclick={handleTorchBtn}
         class={classNames(
-          'flex items-center justify-center bg-black/60 hover:bg-black/80 backdrop-blur-md p-2.5 rounded-xl transition-colors shadow-lg border border-white/10 shrink-0',
+          'flex shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/60 p-2.5 shadow-lg backdrop-blur-md transition-colors hover:bg-black/80',
           {
             hidden: !cameraState.haveFlash
           }
@@ -401,7 +401,7 @@
         aria-pressed={cameraState.isFlashOn}
       >
         <i
-          class={classNames('iconify lucide--zap w-5 h-5 transition-all', {
+          class={classNames('iconify h-5 w-5 transition-all lucide--zap', {
             'text-primary drop-shadow-[0_0_8px_var(--color-primary)]': cameraState.isFlashOn,
             'text-neutral-400': !cameraState.isFlashOn
           })}
@@ -410,20 +410,20 @@
     </div>
 
     <div
-      class="absolute inset-0 w-full h-full bg-neutral-900 flex items-center justify-center overflow-hidden"
+      class="absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden bg-neutral-900"
     >
-      <video bind:this={videoElement} autoplay playsinline muted class="w-full h-full object-cover"
+      <video bind:this={videoElement} autoplay playsinline muted class="h-full w-full object-cover"
       ></video>
       <div
-        class="absolute size-40 border-3 border-dashed border-primary rounded-xl pointer-events-none z-10 shadow-[0_0_0_100vmax_rgba(0,0,0,0.5)]"
+        class="pointer-events-none absolute z-10 size-40 rounded-xl border-3 border-dashed border-primary shadow-[0_0_0_100vmax_rgba(0,0,0,0.5)]"
       ></div>
     </div>
 
     <div
-      class="w-[calc(100%-8px)] absolute bottom-1 left-1 bg-black/60 backdrop-blur-md rounded-xl border border-white/10 p-1 flex items-center gap-2 z-20"
+      class="absolute bottom-1 left-1 z-20 flex w-[calc(100%-8px)] items-center gap-2 rounded-xl border border-white/10 bg-black/60 p-1 backdrop-blur-md"
     >
       <select
-        class="flex-1 bg-transparent text-xs text-neutral-200 font-semibold py-2 pl-1 pr-8 rounded-lg outline-none cursor-pointer border-0 focus:ring-0"
+        class="flex-1 cursor-pointer rounded-lg border-0 bg-transparent py-2 pr-8 pl-1 text-xs font-semibold text-neutral-200 outline-none focus:ring-0"
         value={cameraState.selectedCameraId}
         onchange={handleCameraChange}
       >
@@ -437,21 +437,21 @@
   </div>
 {:else}
   <div
-    class="w-full aspect-square flex flex-col items-center justify-center border border-border bg-card-bg shadow-lg rounded-2xl p-6 text-center gap-1"
+    class="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-2xl border border-border bg-card-bg p-6 text-center shadow-lg"
   >
     <div
-      class="flex items-center justify-center p-4 bg-app-bg rounded-full border border-border mb-3"
+      class="mb-3 flex items-center justify-center rounded-full border border-border bg-app-bg p-4"
     >
-      <i class="iconify lucide--camera size-8 text-text-muted"></i>
+      <i class="iconify size-8 text-text-muted lucide--camera"></i>
     </div>
     <p class="text-base font-bold text-text-main">Camera Access Required</p>
-    <p class="text-sm text-text-muted mb-5 max-w-60">
+    <p class="mb-5 max-w-60 text-sm text-text-muted">
       Tap below to allow device camera access for scanning.
     </p>
 
     <button
       onclick={handleCameraRequestBtn}
-      class="bg-primary hover:bg-primary-hover text-black font-bold py-2.5 px-6 rounded-xl shadow-sm transition-colors cursor-pointer active:scale-[0.99]"
+      class="cursor-pointer rounded-xl bg-primary px-6 py-2.5 font-bold text-black shadow-sm transition-colors hover:bg-primary-hover active:scale-[0.99]"
     >
       Start Camera
     </button>

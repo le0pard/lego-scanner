@@ -27,22 +27,22 @@
   });
 </script>
 
-<header class="py-3 flex justify-between items-center gap-2">
-  <div class="flex-1 min-w-0">
-    <h1 class="text-xl sm:text-2xl font-black tracking-tight truncate">
+<header class="flex items-center justify-between gap-2 py-3">
+  <div class="min-w-0 flex-1">
+    <h1 class="truncate text-xl font-black tracking-tight sm:text-2xl">
       <a href={resolve('/')}>L-Scan</a>
     </h1>
-    <p class="text-xs sm:text-xs text-text-muted truncate">Minifigures Scanner</p>
+    <p class="truncate text-xs text-text-muted sm:text-xs">Minifigures Scanner</p>
   </div>
 
   {#if showTabs}
-    <div class="flex shrink-0 p-1 bg-card-bg border border-border rounded-xl" role="tablist">
+    <div class="flex shrink-0 rounded-xl border border-border bg-card-bg p-1" role="tablist">
       <button
         role="tab"
         aria-selected={cameraTabState()}
         onclick={activateCameraTabState}
         class={classNames(
-          'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+          'cursor-pointer rounded-lg px-4 py-1.5 text-xs font-black transition-all duration-150 active:scale-95 sm:text-sm',
           {
             'bg-primary text-neutral-950 shadow-sm': cameraTabState(),
             'text-text-muted hover:text-text-main': !cameraTabState()
@@ -56,7 +56,7 @@
         aria-selected={uploadTabState()}
         onclick={activateUploadTabState}
         class={classNames(
-          'px-4 py-1.5 text-xs sm:text-sm font-black rounded-lg transition-all duration-150 active:scale-95 cursor-pointer',
+          'cursor-pointer rounded-lg px-4 py-1.5 text-xs font-black transition-all duration-150 active:scale-95 sm:text-sm',
           {
             'bg-primary text-neutral-950 shadow-sm': uploadTabState(),
             'text-text-muted hover:text-text-main': !uploadTabState()
@@ -68,27 +68,27 @@
     </div>
   {/if}
 
-  <nav aria-label="Main Navigation" class="flex-1 flex justify-end">
+  <nav aria-label="Main Navigation" class="flex flex-1 justify-end">
     <button
       aria-expanded={isMenuOpen()}
       aria-controls="mobile-menu"
       aria-label="Toggle navigation menu"
       onclick={toggleMenu}
-      class="relative z-50 w-8 h-8 cursor-pointer flex flex-col justify-center items-end gap-1.5 p-1"
+      class="relative z-50 flex h-8 w-8 cursor-pointer flex-col items-end justify-center gap-1.5 p-1"
     >
       <span
-        class={classNames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
-          'rotate-45 translate-y-2': isMenuOpen()
+        class={classNames('block h-0.5 w-6 bg-text-main transition-transform duration-300', {
+          'translate-y-2 rotate-45': isMenuOpen()
         })}
       ></span>
       <span
-        class={classNames('block w-6 h-0.5 bg-text-main transition-opacity duration-300', {
+        class={classNames('block h-0.5 w-6 bg-text-main transition-opacity duration-300', {
           'opacity-0': isMenuOpen()
         })}
       ></span>
       <span
-        class={classNames('block w-6 h-0.5 bg-text-main transition-transform duration-300', {
-          '-rotate-45 -translate-y-2': isMenuOpen()
+        class={classNames('block h-0.5 w-6 bg-text-main transition-transform duration-300', {
+          '-translate-y-2 -rotate-45': isMenuOpen()
         })}
       ></span>
     </button>
@@ -96,7 +96,7 @@
     <div
       id="mobile-menu"
       class={classNames(
-        'absolute top-0 left-0 w-full h-dvh z-40 bg-app-bg transition-transform duration-300 ease-out p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] flex flex-col text-left overflow-y-auto overscroll-contain',
+        'absolute top-0 left-0 z-40 flex h-dvh w-full flex-col overflow-y-auto overscroll-contain bg-app-bg p-6 pt-[calc(var(--spacing-pwa-top)+4rem)] text-left transition-transform duration-300 ease-out',
         {
           'translate-x-0': isMenuOpen(),
           'translate-x-full': !isMenuOpen()
@@ -107,55 +107,55 @@
         <li>
           <a
             href={resolve('/')}
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
-            <i class="iconify mdi--data-matrix-scan size-8"></i>
+            <i class="iconify size-8 mdi--data-matrix-scan"></i>
             Scanner
           </a>
         </li>
         <li>
           <a
             href={resolve('/catalog')}
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
-            <i class="iconify mdi--view-grid size-8"></i>
+            <i class="iconify size-8 mdi--view-grid"></i>
             Catalog
           </a>
         </li>
         <li>
           <a
             href={resolve('/howto')}
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
-            <i class="iconify mdi--about-circle-outline size-8"></i>
+            <i class="iconify size-8 mdi--about-circle-outline"></i>
             How to Use
           </a>
         </li>
-        <li><hr class="border-border my-2" /></li>
+        <li><hr class="my-2 border-border" /></li>
         <li>
           <a
             href="https://github.com/le0pard/lego-scanner"
             target="_blank"
             rel="external noopener noreferrer"
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
-            <i class="iconify mdi--github size-8"></i>
+            <i class="iconify size-8 mdi--github"></i>
             Source Code
           </a>
         </li>
         <li>
           <a
             href="https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set"
-            class="flex items-center gap-2 py-2 text-text-muted hover:text-text-main transition-colors"
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
             target="_blank"
             rel="external noopener noreferrer"
           >
-            <i class="iconify mdi--lego size-8"></i>
+            <i class="iconify size-8 mdi--lego"></i>
             Report Missing Brick Set
           </a>
         </li>
       </ul>
-      <div class="mt-auto text-xs text-text-muted border-t border-border pt-4">
+      <div class="mt-auto border-t border-border pt-4 text-xs text-text-muted">
         v{__APP_VERSION__}
       </div>
     </div>

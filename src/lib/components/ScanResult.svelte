@@ -72,20 +72,20 @@
 
 {#if searchCompleted}
   <div
-    class="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-2 duration-300 p-2 md:p-4"
+    class="animate-in fade-in slide-in-from-bottom-2 flex w-full flex-col gap-4 p-2 duration-300 md:p-4"
   >
     {#if minifig}
       <div
-        class="bg-success-bg border border-success-border rounded-xl py-4 px-2 flex items-center gap-2 shadow-sm relative overflow-hidden"
+        class="relative flex items-center gap-2 overflow-hidden rounded-xl border border-success-border bg-success-bg px-2 py-4 shadow-sm"
       >
-        <div class="bg-success-icon-bg text-success-text flex p-2 rounded-xl shrink-0 z-10">
-          <i class="iconify lucide--circle-check size-6"></i>
+        <div class="z-10 flex shrink-0 rounded-xl bg-success-icon-bg p-2 text-success-text">
+          <i class="iconify size-6 lucide--circle-check"></i>
         </div>
-        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-2">
+        <div class="z-10 flex min-w-0 flex-1 items-center justify-between gap-2">
           <div class="min-w-0 flex-1">
-            <h3 class="text-success-text font-bold text-lg leading-tight">Match Found!</h3>
+            <h3 class="text-lg leading-tight font-bold text-success-text">Match Found!</h3>
             <p
-              class="text-success-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all select-all"
+              class="mt-0.5 font-mono text-xs break-all text-success-text-muted select-all sm:text-sm"
             >
               {scanResultState.result}
             </p>
@@ -94,15 +94,15 @@
             type="button"
             aria-label="Copy scanned string data to clipboard"
             onclick={() => copyToClipboard(scanResultState.result)}
-            class="bg-success-icon-bg/40 hover:bg-success-icon-bg text-success-text p-2 rounded-xl transition-all cursor-pointer shrink-0 active:scale-95 border border-success-border/30 flex items-center justify-center min-w-9 min-h-9"
+            class="flex min-h-9 min-w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-success-border/30 bg-success-icon-bg/40 p-2 text-success-text transition-all hover:bg-success-icon-bg active:scale-95"
           >
             {#if copyStatus === 'success'}
               <i
-                class="iconify lucide--check size-5 text-success-text animate-in scale-in duration-200"
+                class="animate-in scale-in iconify size-5 text-success-text duration-200 lucide--check"
               ></i>
             {:else}
               <i
-                class="iconify lucide--copy size-5 opacity-80 hover:opacity-100 animate-in scale-in duration-200"
+                class="animate-in scale-in iconify size-5 opacity-80 duration-200 lucide--copy hover:opacity-100"
               ></i>
             {/if}
           </button>
@@ -110,23 +110,23 @@
       </div>
 
       <div
-        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex flex-col gap-5 items-center relative"
+        class="relative flex flex-col items-center gap-5 rounded-xl border border-border bg-card-bg p-4 shadow-md"
       >
         <div
-          class="image-box size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
+          class="image-box relative flex size-36 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-40"
         >
           {#if optimizedImage}
             <enhanced:img
               src={optimizedImage}
               alt={minifig.name}
               sizes="(min-width: 640px) 160px, 144px"
-              class="max-w-full max-h-full object-contain drop-shadow-lg"
+              class="max-h-full max-w-full object-contain drop-shadow-lg"
             />
           {:else}
             <img
               src={minifig.imagePath}
               alt={minifig.name}
-              class="max-w-full max-h-full object-contain drop-shadow-lg"
+              class="max-h-full max-w-full object-contain drop-shadow-lg"
             />
           {/if}
         </div>
@@ -134,21 +134,21 @@
           {#if minifig.series}
             <a
               href={resolve(`/catalog/${minifig.series}`)}
-              class="flex justify-center gap-1 items-center bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2 border border-transparent hover:border-primary transition-colors active:scale-95"
+              class="mb-2 flex items-center justify-center gap-1 rounded-full border border-transparent bg-badge-bg px-3 py-1 text-xs font-bold text-badge-text transition-colors hover:border-primary active:scale-95"
             >
               <i
-                class="iconify lucide--link-2 size-4 opacity-60 group-hover:opacity-100 transition-opacity"
+                class="iconify size-4 opacity-60 transition-opacity lucide--link-2 group-hover:opacity-100"
               ></i>
               {minifig.displayName || 'Unknown'}
             </a>
           {:else}
             <span
-              class="bg-badge-bg text-badge-text text-xs font-bold px-3 py-1 rounded-full mb-2 border border-transparent"
+              class="mb-2 rounded-full border border-transparent bg-badge-bg px-3 py-1 text-xs font-bold text-badge-text"
             >
               {minifig.displayName || 'Unknown'}
             </span>
           {/if}
-          <h2 class="text-xl sm:text-2xl font-black text-text-main leading-tight mb-1">
+          <h2 class="mb-1 text-xl leading-tight font-black text-text-main sm:text-2xl">
             {minifig.name || 'Unknown Figure'}
           </h2>
           {#if legoData?.code}
@@ -161,22 +161,22 @@
 
       <button
         onclick={resetScanState}
-        class="mt-4 w-full bg-app-bg border-2 border-border hover:border-primary text-text-main font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-[0.99]"
+        class="mt-4 w-full cursor-pointer rounded-xl border-2 border-border bg-app-bg px-4 py-3.5 font-bold text-text-main transition-colors hover:border-primary active:scale-[0.99]"
       >
         Scan Another Box
       </button>
     {:else}
       <div
-        class="bg-error-bg border border-error-border rounded-xl py-4 px-2 flex items-center gap-2 shadow-sm relative overflow-hidden"
+        class="relative flex items-center gap-2 overflow-hidden rounded-xl border border-error-border bg-error-bg px-2 py-4 shadow-sm"
       >
-        <div class="bg-error-icon-bg text-error-text flex p-2 rounded-xl shrink-0 z-10">
-          <i class="iconify lucide--x size-6"></i>
+        <div class="z-10 flex shrink-0 rounded-xl bg-error-icon-bg p-2 text-error-text">
+          <i class="iconify size-6 lucide--x"></i>
         </div>
-        <div class="z-10 flex-1 min-w-0 flex items-center justify-between gap-2">
-          <div class="min-w-0 flex-1 flex flex-col gap-1">
-            <h3 class="text-error-text font-bold text-lg leading-tight">Code Not in Database</h3>
+        <div class="z-10 flex min-w-0 flex-1 items-center justify-between gap-2">
+          <div class="flex min-w-0 flex-1 flex-col gap-1">
+            <h3 class="text-lg leading-tight font-bold text-error-text">Code Not in Database</h3>
             <p
-              class="text-error-text-muted font-mono text-xs sm:text-sm mt-0.5 break-all select-all"
+              class="mt-0.5 font-mono text-xs break-all text-error-text-muted select-all sm:text-sm"
             >
               {scanResultState.result}
             </p>
@@ -185,15 +185,15 @@
             type="button"
             aria-label="Copy scanned string data to clipboard"
             onclick={() => copyToClipboard(scanResultState.result)}
-            class="bg-error-icon-bg/40 hover:bg-error-icon-bg text-error-text p-2 rounded-xl transition-all cursor-pointer shrink-0 active:scale-95 border border-error-border/30 flex items-center justify-center min-w-9 min-h-9"
+            class="flex min-h-9 min-w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-error-border/30 bg-error-icon-bg/40 p-2 text-error-text transition-all hover:bg-error-icon-bg active:scale-95"
           >
             {#if copyStatus === 'success'}
               <i
-                class="iconify lucide--check size-5 text-error-text animate-in scale-in duration-200"
+                class="animate-in scale-in iconify size-5 text-error-text duration-200 lucide--check"
               ></i>
             {:else}
               <i
-                class="iconify lucide--copy size-5 opacity-80 hover:opacity-100 animate-in scale-in duration-200"
+                class="animate-in scale-in iconify size-5 opacity-80 duration-200 lucide--copy hover:opacity-100"
               ></i>
             {/if}
           </button>
@@ -201,18 +201,18 @@
       </div>
 
       <div
-        class="bg-card-bg border border-border shadow-md rounded-xl p-4 flex flex-col gap-5 items-center relative"
+        class="relative flex flex-col items-center gap-5 rounded-xl border border-border bg-card-bg p-4 shadow-md"
       >
         <div
-          class="size-36 sm:size-40 bg-app-bg border border-border rounded-xl shrink-0 flex justify-center items-center p-2 relative"
+          class="relative flex size-36 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-40"
         >
-          <i class="iconify lucide--package-search size-12 text-text-muted opacity-50"></i>
+          <i class="iconify size-12 text-text-muted opacity-50 lucide--package-search"></i>
         </div>
         <div class="flex flex-col items-start justify-center">
-          <span class="bg-error-bg text-error-text text-xs font-bold px-3 py-1 rounded-full mb-2">
+          <span class="mb-2 rounded-full bg-error-bg px-3 py-1 text-xs font-bold text-error-text">
             Unknown Box
           </span>
-          <h2 class="text-xl sm:text-2xl font-black text-text-main leading-tight mb-1">
+          <h2 class="mb-1 text-xl leading-tight font-black text-text-main sm:text-2xl">
             Figure Not Found
           </h2>
           <p class="text-sm font-medium text-text-muted">
@@ -225,9 +225,9 @@
         href={generateReportUrl(scanResultState.result)}
         target="_blank"
         rel="external noopener noreferrer"
-        class="bg-primary hover:bg-primary-hover text-neutral-950 font-black py-3.5 px-4 rounded-xl text-center transition-all shadow-sm active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 text-sm select-none"
+        class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3.5 text-center text-sm font-black text-neutral-950 shadow-sm transition-all select-none hover:bg-primary-hover active:scale-[0.98]"
       >
-        <i class="iconify mdi--github size-8"></i>
+        <i class="iconify size-8 mdi--github"></i>
         Help with missing figure
       </a>
     {/if}

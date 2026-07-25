@@ -80,7 +80,7 @@
 </script>
 
 <article
-  class="mt-4 mb-0 landscape:mt-0 landscape:w-1/2 flex-1 min-h-70 landscape:min-h-0 landscape:h-fit flex flex-col justify-start"
+  class="mt-4 mb-0 flex min-h-70 flex-1 flex-col justify-start landscape:mt-0 landscape:h-fit landscape:min-h-0 landscape:w-1/2"
 >
   {#if scanResultState.errorMessage && scanResultState.errorMessage.length > 0}
     <ScanError errorMessage={scanResultState.errorMessage} />

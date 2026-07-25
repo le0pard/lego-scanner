@@ -6,34 +6,34 @@
   import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced';
 </script>
 
-<div class="h-full flex flex-col justify-between gap-6 p-2 md:p-4">
+<div class="flex h-full flex-col justify-between gap-6 p-2 md:p-4">
   <div class="flex flex-col gap-3">
     <div
-      class="w-full overflow-hidden border border-border bg-black aspect-video flex items-center justify-center"
+      class="flex aspect-video w-full items-center justify-center overflow-hidden border border-border bg-black"
     >
       <enhanced:img
         src={dataMatrixCodeExampleImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        class="w-full h-full object-cover"
+        class="h-full w-full object-cover"
       />
     </div>
 
-    <p class="text-sm text-text-muted leading-relaxed">
+    <p class="text-sm leading-relaxed text-text-muted">
       Locate the bottom flap of any blind LEGO Minifigure mystery box. Next to the standard linear
       barcode, you will see a tiny square <strong>Data Matrix</strong> code. Align this square code within
       the camera frame or upload a snapshot to decode its signatures instantly.
     </p>
 
     <div
-      class="text-xs flex items-start gap-2 bg-badge-bg text-badge-text px-3 py-2.5 rounded-xl border border-border"
+      class="flex items-start gap-2 rounded-xl border border-border bg-badge-bg px-3 py-2.5 text-xs text-badge-text"
     >
-      <i class="iconify lucide--info size-4 shrink-0 mt-0.5 opacity-80"></i>
+      <i class="mt-0.5 iconify size-4 shrink-0 opacity-80 lucide--info"></i>
       <span class="leading-normal">
         Works with <strong>Series 25 & newer</strong> boxes.
         <a
           href={resolve('/howto')}
-          class="underline font-bold text-text-main hover:text-primary transition-colors ml-0.5"
+          class="ml-0.5 font-bold text-text-main underline transition-colors hover:text-primary"
         >
           View compatibility guide
         </a>
@@ -41,25 +41,25 @@
     </div>
   </div>
 
-  <div class="border-t border-border pt-4 flex flex-col gap-3">
+  <div class="flex flex-col gap-3 border-t border-border pt-4">
     <div
-      class="p-3 bg-app-bg border border-border rounded-xl flex items-center justify-between text-xs"
+      class="flex items-center justify-between rounded-xl border border-border bg-app-bg p-3 text-xs"
     >
       <div class="flex items-center gap-2.5 text-left">
         {#if syncState.status === 'syncing'}
-          <i class="iconify lucide--refresh-cw size-6 text-primary animate-spin"></i>
+          <i class="iconify size-6 animate-spin text-primary lucide--refresh-cw"></i>
           <div>
             <p class="text-base font-bold text-text-main">Syncing Collection...</p>
             <p class="text-xs text-text-muted">Fetching latest JSON signatures</p>
           </div>
         {:else if syncState.status === 'error'}
-          <i class="iconify lucide--alert-triangle size-6 text-error-text"></i>
+          <i class="iconify size-6 text-error-text lucide--alert-triangle"></i>
           <div>
             <p class="text-base font-bold text-error-text">Sync Deferred</p>
             <p class="text-xs text-text-muted">Running in local offline query mode</p>
           </div>
         {:else}
-          <i class="iconify lucide--check-circle size-6 text-success-text"></i>
+          <i class="iconify size-6 text-success-text lucide--check-circle"></i>
           <div>
             <p class="text-base font-bold text-text-main">Database Sync Active</p>
             <p class="text-xs text-text-muted">
@@ -71,12 +71,12 @@
 
       <span
         class={classNames(
-          'font-mono text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border',
+          'rounded-md border px-2 py-0.5 font-mono text-xs font-bold tracking-wider uppercase',
           {
-            'bg-primary/10 text-primary border-primary/20': syncState.status === 'syncing',
-            'bg-success-bg text-success-text border-success-border':
+            'border-primary/20 bg-primary/10 text-primary': syncState.status === 'syncing',
+            'border-success-border bg-success-bg text-success-text':
               syncState.status === 'synced' || syncState.status === 'idle',
-            'bg-error-bg text-error-text border-error-border': syncState.status === 'error'
+            'border-error-border bg-error-bg text-error-text': syncState.status === 'error'
           }
         )}
       >

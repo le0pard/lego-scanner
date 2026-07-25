@@ -26,28 +26,28 @@
 </script>
 
 {#if updateState.available}
-  <div class="w-full mt-2 animate-in fade-in duration-300 text-left">
+  <div class="animate-in fade-in mt-2 w-full text-left duration-300">
     <div
-      class="p-4 bg-primary/10 border border-primary/20 rounded-xl flex flex-col gap-3 shadow-sm"
+      class="flex flex-col gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4 shadow-sm"
     >
       <div class="flex items-start gap-3">
-        <div class="flex bg-primary text-black p-1 rounded-lg shrink-0">
-          <i class="iconify lucide--circle-arrow-down size-6"></i>
+        <div class="flex shrink-0 rounded-lg bg-primary p-1 text-black">
+          <i class="iconify size-6 lucide--circle-arrow-down"></i>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-text-main leading-snug">
+          <h4 class="text-sm leading-snug font-bold text-text-main">
             Application Update Available!
           </h4>
-          <p class="text-xs text-text-muted mt-0.5">
+          <p class="mt-0.5 text-xs text-text-muted">
             New Lego set indexes and scanning enhancements have been downloaded for offline use.
           </p>
         </div>
       </div>
       <button
         onclick={reloadApp}
-        class="w-full bg-primary hover:bg-primary-hover text-black text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 active:scale-[0.98]"
+        class="flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2.5 text-center text-xs font-bold text-black shadow-sm transition-colors hover:bg-primary-hover active:scale-[0.98]"
       >
-        <i class="iconify lucide--refresh-cw size-4"></i>
+        <i class="iconify size-4 lucide--refresh-cw"></i>
         Reload & Update App
       </button>
     </div>

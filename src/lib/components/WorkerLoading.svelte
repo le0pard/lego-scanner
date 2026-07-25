@@ -1,12 +1,12 @@
 <div
-  class="w-full aspect-square flex flex-col items-center justify-center bg-card-bg border border-border shadow-lg rounded-2xl p-6 text-center"
+  class="flex aspect-square w-full flex-col items-center justify-center rounded-2xl border border-border bg-card-bg p-6 text-center shadow-lg"
 >
-  <div class="relative flex items-center justify-center size-16 mb-4">
+  <div class="relative mb-4 flex size-16 items-center justify-center">
     <div
-      class="absolute inset-0 rounded-full border-4 border-app-bg border-t-primary animate-spin"
+      class="absolute inset-0 animate-spin rounded-full border-4 border-app-bg border-t-primary"
     ></div>
-    <i class="iconify lucide--cpu size-6 text-text-muted animate-pulse"></i>
+    <i class="iconify size-6 animate-pulse text-text-muted lucide--cpu"></i>
   </div>
-  <h2 class="text-lg font-bold text-text-main mb-1">Booting Engine</h2>
+  <h2 class="mb-1 text-lg font-bold text-text-main">Booting Engine</h2>
   <p class="text-sm text-text-muted">Loading WASM detector...</p>
 </div>
