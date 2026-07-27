@@ -24,7 +24,10 @@ export default defineConfig({
         fallback: '404.html',
         strict: true,
         precompress: false
-      })
+      }),
+      prerender: {
+        origin: 'https://lego-scanner.leopard.in.ua'
+      }
     })
   ],
   define: {
