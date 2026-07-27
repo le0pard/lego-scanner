@@ -165,6 +165,7 @@
       .filter(Boolean)
       .join(' ')}</title
   >
+  <link rel="canonical" href={`${page.url.origin}${page.url.pathname}`} />
 </svelte:head>
 
 <main
