@@ -158,10 +158,7 @@
 
 <svelte:head>
   <title
-    >{[
-      page.data.title ? `${page.data.title} |` : null,
-      'L-Scan: LEGO Minifigure Online Scanner'
-    ]
+    >{[page.data.title ? `${page.data.title} |` : null, 'L-Scan: LEGO Minifigure Online Scanner']
       .filter(Boolean)
       .join(' ')}</title
   >
