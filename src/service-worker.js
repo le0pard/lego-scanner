@@ -186,7 +186,8 @@ self.addEventListener('fetch', (event) => {
     } catch (err) {
       // Cross-check all storage indices before failing completely
       const response =
-        (await staticCache.match(standardizedReq, { ignoreVary: true })) || (await imageCache.match(standardizedReq, { ignoreVary: true }));
+        (await staticCache.match(standardizedReq, { ignoreVary: true })) ||
+        (await imageCache.match(standardizedReq, { ignoreVary: true }));
       if (response) return response;
 
       throw err;
