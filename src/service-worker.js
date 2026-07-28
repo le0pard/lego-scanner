@@ -132,7 +132,7 @@ self.addEventListener('fetch', (event) => {
           err
         );
 
-        const cachedResponse = await staticCache.match(standardizedReq);
+        const cachedResponse = await staticCache.match(standardizedReq, { ignoreVary: true });
         if (cachedResponse) return cachedResponse;
 
         throw err;
@@ -141,14 +141,14 @@ self.addEventListener('fetch', (event) => {
 
     // Static Application Shell Cache Check
     if (ASSETS.includes(sanitizedPath)) {
-      const response = await staticCache.match(standardizedReq);
+      const response = await staticCache.match(standardizedReq, { ignoreVary: true });
       if (response) return response;
     }
 
     // Persistent Image Assets Interceptor (Cache-First)
     const isOptimizedImage = OPTIMIZED_ASSETS_REGEX.test(sanitizedPath);
     if (isOptimizedImage) {
-      const cachedImage = await imageCache.match(standardizedReq);
+      const cachedImage = await imageCache.match(standardizedReq, { ignoreVary: true });
       if (cachedImage) {
         event.waitUntil(updateImageMetadata(IMAGE_CACHE, standardizedReq.url));
         return cachedImage;
@@ -158,7 +158,7 @@ self.addEventListener('fetch', (event) => {
     // If an old hash file is requested, look across ALL legacy cache spaces on disk
     const isImmutableChunk = sanitizedPath.includes(PREGENERATED_ASSETS_PREFIX);
     if (isImmutableChunk) {
-      const globalCacheMatch = await caches.match(standardizedReq);
+      const globalCacheMatch = await caches.match(standardizedReq, { ignoreVary: true });
       if (globalCacheMatch) {
         return globalCacheMatch; // Found in an older cache folder
       }
@@ -186,7 +186,7 @@ self.addEventListener('fetch', (event) => {
     } catch (err) {
       // Cross-check all storage indices before failing completely
       const response =
-        (await staticCache.match(standardizedReq)) || (await imageCache.match(standardizedReq));
+        (await staticCache.match(standardizedReq, { ignoreVary: true })) || (await imageCache.match(standardizedReq, { ignoreVary: true }));
       if (response) return response;
 
       throw err;
