@@ -160,7 +160,7 @@
   <title
     >{[
       page.data.title ? `${page.data.title} |` : null,
-      'L-Scan: LEGO Collectible Minifigure Online Scanner'
+      'L-Scan: LEGO Minifigure Online Scanner'
     ]
       .filter(Boolean)
       .join(' ')}</title

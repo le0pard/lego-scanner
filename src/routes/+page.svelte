@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-  <meta name="description" content="L-Scan: LEGO Collectible Minifigure Online Scanner" />
+  <meta name="description" content="L-Scan: LEGO Minifigure Online Scanner" />
 </svelte:head>
 
 <UpdateBanner />

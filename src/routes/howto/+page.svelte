@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <meta name="description" content="How to use L-Scan LEGO Collectible Minifigure Online Scanner" />
+  <meta name="description" content="How to use L-Scan LEGO Minifigure Online Scanner" />
 </svelte:head>
 
 <div class="animate-in fade-in mt-4 flex w-full flex-1 flex-col gap-5 pb-6 text-left duration-300">
