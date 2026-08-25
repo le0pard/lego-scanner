@@ -1,0 +1,67 @@
+{
+  "series": "mighty-machines-series-1",
+  "displayName": "Mighty Machines Series 1",
+  "releaseYear": 2026,
+  "minifigures": [
+    {
+      "slug": "mm1_road_roller",
+      "name": "Road Roller",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/road-roller.jpg",
+      "identifiers": [
+        {
+          "code": "6590734",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "mm1_wheel_loader",
+      "name": "Wheel Loader",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/wheel-loader.jpg",
+      "identifiers": []
+    },
+    {
+      "slug": "mm1_dump_truck",
+      "name": "Dump Truck",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/dump-truck.jpg",
+      "identifiers": []
+    },
+    {
+      "slug": "mm1_cement_truck",
+      "name": "Cement Truck",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/cement-truck.jpg",
+      "identifiers": []
+    },
+    {
+      "slug": "mm1_wrecking_ball_crane",
+      "name": "Wrecking Ball Crane",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/wrecking-ball-crane.jpg",
+      "identifiers": [
+        {
+          "code": "6590738",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
+    },
+    {
+      "slug": "mm1_excavator",
+      "name": "Excavator",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/excavator.jpg",
+      "identifiers": []
+    },
+    {
+      "slug": "mm1_mobile_crane",
+      "name": "Mobile Crane",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/mobile-crane.jpg",
+      "identifiers": []
+    },
+    {
+      "slug": "mm1_bulldozer",
+      "name": "Bulldozer",
+      "imagePath": "/assets/minifigures/mighty-machines-series-1/bulldozer.jpg",
+      "identifiers": []
+    }
+  ]
+}
