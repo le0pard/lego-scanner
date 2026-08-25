@@ -19,19 +19,37 @@
       "slug": "mm1_wheel_loader",
       "name": "Wheel Loader",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/wheel-loader.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590735",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     },
     {
       "slug": "mm1_dump_truck",
       "name": "Dump Truck",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/dump-truck.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590736",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     },
     {
       "slug": "mm1_cement_truck",
       "name": "Cement Truck",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/cement-truck.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590737",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     },
     {
       "slug": "mm1_wrecking_ball_crane",
@@ -49,19 +67,37 @@
       "slug": "mm1_excavator",
       "name": "Excavator",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/excavator.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590739",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     },
     {
       "slug": "mm1_mobile_crane",
       "name": "Mobile Crane",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/mobile-crane.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590740",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     },
     {
       "slug": "mm1_bulldozer",
       "name": "Bulldozer",
       "imagePath": "/assets/minifigures/mighty-machines-series-1/bulldozer.jpg",
-      "identifiers": []
+      "identifiers": [
+        {
+          "code": "6590741",
+          "factory": "S",
+          "year": "6"
+        }
+      ]
     }
   ]
 }
