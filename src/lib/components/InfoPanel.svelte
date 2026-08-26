@@ -75,7 +75,7 @@
           <div>
             <p class="text-base font-bold text-text-main">Database Sync Active</p>
             <p class="text-xs text-text-muted">
-              DB latest update: {formatDateTime(syncState.lastSynced)}
+              Last verified: {formatDateTime(syncState.lastSynced)}
             </p>
           </div>
         {/if}
