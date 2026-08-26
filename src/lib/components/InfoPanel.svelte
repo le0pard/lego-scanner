@@ -3,7 +3,19 @@
   import { resolve } from '$app/paths';
   import { syncState } from '$lib/states/sync.svelte.js';
   import { formatTime } from '$lib/utils/date.js';
+  import { triggerDatabaseSync } from '$lib/utils/sync_manager.js';
   import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced';
+
+  // Prevent multiple clicks while syncing
+  let isManualSyncing = $state(false);
+
+  const handleManualSync = async () => {
+    if (isManualSyncing) return;
+
+    isManualSyncing = true;
+    await triggerDatabaseSync(resolve('/'));
+    isManualSyncing = false;
+  };
 </script>
 
 <div class="flex h-full flex-col justify-between gap-6 p-2 md:p-4">
@@ -83,5 +95,21 @@
         {syncState.status}
       </span>
     </div>
+
+    <button
+      onclick={handleManualSync}
+      disabled={isManualSyncing || syncState.status === 'syncing'}
+      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-border bg-card-bg px-4 py-3 text-sm font-bold text-text-main shadow-sm transition-all hover:border-primary/50 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
+    >
+      <i
+        class={classNames('iconify size-4', {
+          'animate-spin lucide--loader-circle': isManualSyncing || syncState.status === 'syncing',
+          'lucide--refresh-cw': !isManualSyncing && syncState.status !== 'syncing'
+        })}
+      ></i>
+      {isManualSyncing || syncState.status === 'syncing'
+        ? 'Checking for updates...'
+        : 'Check for Updates'}
+    </button>
   </div>
 </div>
