@@ -12,7 +12,13 @@ export const performDatabaseSync = async (basePath = '/') => {
 
   try {
     // Fetch the latest manifest to check for catalog updates
-    const manifestResponse = await fetch(`${cleanBase}/api/manifest.json?t=${Date.now()}`);
+    const manifestResponse = await fetch(`${cleanBase}/api/manifest.json?t=${Date.now()}`, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    });
     if (!manifestResponse.ok) throw new Error('Could not fetch remote manifest');
     const { seriesManifest } = await manifestResponse.json();
 
@@ -31,7 +37,13 @@ export const performDatabaseSync = async (basePath = '/') => {
 
       if (localHash !== remoteInfo.hash) {
         console.log(`Sync Worker: Pulling network update parameters for Series: ${seriesId}...`);
-        const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`);
+        const dataResponse = await fetch(`${cleanBase}${remoteInfo.endpoint}`, {
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0'
+          }
+        });
 
         if (!dataResponse.ok) {
           throw new Error(`Network dropout encountered while fetching catalog series: ${seriesId}`);
@@ -52,14 +64,21 @@ export const performDatabaseSync = async (basePath = '/') => {
       (meta) => !remoteSeriesKeys.has(meta.series)
     );
 
-    if (downloadsToProcess.length === 0 && !codeHasDiscontinuedSeries) {
-      return false;
-    }
-
     // ==========================================================================
     // ATOMIC DATABASE FLUSH (100% Acid Compliant, Zero Network Activity)
     // ==========================================================================
     await db.transaction('rw', [db.minifigures, db.syncMeta], async () => {
+      const now = new Date().toISOString();
+
+      // If the catalog is already up to date, just update the timestamps!
+      if (downloadsToProcess.length === 0 && !codeHasDiscontinuedSeries) {
+        for (const meta of localMetaArray) {
+          await db.syncMeta.put({ ...meta, lastSynced: now });
+        }
+        didUpdate = true; // Force the UI to recognize the new timestamp
+        return;
+      }
+
       // Flush and modify updated download modules sequentially inside the transaction
       for (const update of downloadsToProcess) {
         const { seriesId, remoteHash, dbData } = update;
@@ -85,7 +104,7 @@ export const performDatabaseSync = async (basePath = '/') => {
         await db.syncMeta.put({
           series: seriesId,
           hash: remoteHash,
-          lastSynced: new Date().toISOString()
+          lastSynced: now
         });
 
         didUpdate = true;

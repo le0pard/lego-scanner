@@ -12,7 +12,7 @@ const IMAGE_CACHE_VERSION = 'v1';
 const STATIC_CACHE = `static-${version}`; // Rotates and wipes on version updates
 const IMAGE_CACHE = `runtime-images-${IMAGE_CACHE_VERSION}`; // Persistent across updates to preserve user matching history
 
-const API_TIMEOUT_MS = 3500;
+const API_TIMEOUT_MS = 8000;
 
 const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path) && !path.startsWith('/api/');
