@@ -2,7 +2,7 @@
   import classNames from 'classnames';
   import { resolve } from '$app/paths';
   import { syncState } from '$lib/states/sync.svelte.js';
-  import { formatTime } from '$lib/utils/date.js';
+  import { formatDateTime } from '$lib/utils/date.js';
   import { triggerDatabaseSync } from '$lib/utils/sync_manager.js';
   import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced';
 
@@ -75,7 +75,7 @@
           <div>
             <p class="text-base font-bold text-text-main">Database Sync Active</p>
             <p class="text-xs text-text-muted">
-              Last verified: {formatTime(syncState.lastSynced)}
+              DB latest update: {formatDateTime(syncState.lastSynced)}
             </p>
           </div>
         {/if}

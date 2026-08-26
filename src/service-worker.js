@@ -15,7 +15,7 @@ const IMAGE_CACHE = `runtime-images-${IMAGE_CACHE_VERSION}`; // Persistent acros
 const API_TIMEOUT_MS = 3500;
 
 const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
-  return !OPTIMIZED_ASSETS_REGEX.test(path);
+  return !OPTIMIZED_ASSETS_REGEX.test(path) && !path.startsWith('/api/');
 });
 
 /**
