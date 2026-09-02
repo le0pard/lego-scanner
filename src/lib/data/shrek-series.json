@@ -9,7 +9,8 @@
       "imagePath": "/assets/minifigures/shrek-series/dragon.jpg",
       "identifiers": [
         { "code": "6634900", "factory": "R", "year": "6" },
-        { "code": "6627605", "factory": "S", "year": "6" }
+        { "code": "6627605", "factory": "S", "year": "6" },
+        { "code": "6634879", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -18,7 +19,8 @@
       "imagePath": "/assets/minifigures/shrek-series/shrek.jpg",
       "identifiers": [
         { "code": "6634901", "factory": "R", "year": "6" },
-        { "code": "6627606", "factory": "S", "year": "6" }
+        { "code": "6627606", "factory": "S", "year": "6" },
+        { "code": "6634880", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -27,7 +29,8 @@
       "imagePath": "/assets/minifigures/shrek-series/fiona-and-donkey.jpg",
       "identifiers": [
         { "code": "6634902", "factory": "R", "year": "6" },
-        { "code": "6627607", "factory": "S", "year": "6" }
+        { "code": "6627607", "factory": "S", "year": "6" },
+        { "code": "6634881", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -36,7 +39,8 @@
       "imagePath": "/assets/minifigures/shrek-series/thelonious.jpg",
       "identifiers": [
         { "code": "6634903", "factory": "R", "year": "6" },
-        { "code": "6627608", "factory": "S", "year": "6" }
+        { "code": "6627608", "factory": "S", "year": "6" },
+        { "code": "6634882", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -45,7 +49,8 @@
       "imagePath": "/assets/minifigures/shrek-series/big-bad-wolf.jpg",
       "identifiers": [
         { "code": "6634904", "factory": "R", "year": "6" },
-        { "code": "6627609", "factory": "S", "year": "6" }
+        { "code": "6627609", "factory": "S", "year": "6" },
+        { "code": "6634883", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -54,7 +59,8 @@
       "imagePath": "/assets/minifigures/shrek-series/puss-in-boots.jpg",
       "identifiers": [
         { "code": "6634905", "factory": "R", "year": "6" },
-        { "code": "6627610", "factory": "S", "year": "6" }
+        { "code": "6627610", "factory": "S", "year": "6" },
+        { "code": "6634884", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -63,7 +69,8 @@
       "imagePath": "/assets/minifigures/shrek-series/gingy.jpg",
       "identifiers": [
         { "code": "6634906", "factory": "R", "year": "6" },
-        { "code": "6627611", "factory": "S", "year": "6" }
+        { "code": "6627611", "factory": "S", "year": "6" },
+        { "code": "6634885", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -72,7 +79,8 @@
       "imagePath": "/assets/minifigures/shrek-series/merlin.jpg",
       "identifiers": [
         { "code": "6634907", "factory": "R", "year": "6" },
-        { "code": "6627612", "factory": "S", "year": "6" }
+        { "code": "6627612", "factory": "S", "year": "6" },
+        { "code": "6634886", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -81,7 +89,8 @@
       "imagePath": "/assets/minifigures/shrek-series/lord-farquaad.jpg",
       "identifiers": [
         { "code": "6634908", "factory": "R", "year": "6" },
-        { "code": "6627613", "factory": "S", "year": "6" }
+        { "code": "6627613", "factory": "S", "year": "6" },
+        { "code": "6634887", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -90,7 +99,8 @@
       "imagePath": "/assets/minifigures/shrek-series/fairy-godmotherm.jpg",
       "identifiers": [
         { "code": "6634909", "factory": "R", "year": "6" },
-        { "code": "6627614", "factory": "S", "year": "6" }
+        { "code": "6627614", "factory": "S", "year": "6" },
+        { "code": "6634888", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -99,7 +109,8 @@
       "imagePath": "/assets/minifigures/shrek-series/pinocchio.jpg",
       "identifiers": [
         { "code": "6634910", "factory": "R", "year": "6" },
-        { "code": "6627615", "factory": "S", "year": "6" }
+        { "code": "6627615", "factory": "S", "year": "6" },
+        { "code": "6634889", "factory": "S", "year": "6" }
       ]
     },
     {
@@ -108,7 +119,8 @@
       "imagePath": "/assets/minifigures/shrek-series/prince-charming.jpg",
       "identifiers": [
         { "code": "6634911", "factory": "R", "year": "6" },
-        { "code": "6627616", "factory": "S", "year": "6" }
+        { "code": "6627616", "factory": "S", "year": "6" },
+        { "code": "6634890", "factory": "S", "year": "6" }
       ]
     }
   ]
