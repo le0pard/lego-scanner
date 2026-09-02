@@ -1,0 +1,115 @@
+{
+  "series": "shrek-series",
+  "displayName": "Shrek Series",
+  "releaseYear": 2026,
+  "minifigures": [
+    {
+      "slug": "shrek_dragon",
+      "name": "Dragon",
+      "imagePath": "/assets/minifigures/shrek-series/dragon.jpg",
+      "identifiers": [
+        { "code": "6634900", "factory": "R", "year": "6" },
+        { "code": "6627605", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_shrek",
+      "name": "Shrek",
+      "imagePath": "/assets/minifigures/shrek-series/shrek.jpg",
+      "identifiers": [
+        { "code": "6634901", "factory": "R", "year": "6" },
+        { "code": "6627606", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_fiona_and_donkey",
+      "name": "Fiona and Donkey",
+      "imagePath": "/assets/minifigures/shrek-series/fiona-and-donkey.jpg",
+      "identifiers": [
+        { "code": "6634902", "factory": "R", "year": "6" },
+        { "code": "6627607", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_thelonious",
+      "name": "Thelonious",
+      "imagePath": "/assets/minifigures/shrek-series/thelonious.jpg",
+      "identifiers": [
+        { "code": "6634903", "factory": "R", "year": "6" },
+        { "code": "6627608", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_big_bad_wolf",
+      "name": "Big Bad Wolf",
+      "imagePath": "/assets/minifigures/shrek-series/big-bad-wolf.jpg",
+      "identifiers": [
+        { "code": "6634904", "factory": "R", "year": "6" },
+        { "code": "6627609", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_puss_in_boots",
+      "name": "Puss in Boots",
+      "imagePath": "/assets/minifigures/shrek-series/puss-in-boots.jpg",
+      "identifiers": [
+        { "code": "6634905", "factory": "R", "year": "6" },
+        { "code": "6627610", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_gingy",
+      "name": "Gingy",
+      "imagePath": "/assets/minifigures/shrek-series/gingy.jpg",
+      "identifiers": [
+        { "code": "6634906", "factory": "R", "year": "6" },
+        { "code": "6627611", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_merlin",
+      "name": "Merlin",
+      "imagePath": "/assets/minifigures/shrek-series/merlin.jpg",
+      "identifiers": [
+        { "code": "6634907", "factory": "R", "year": "6" },
+        { "code": "6627612", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_lord_farquaad",
+      "name": "Lord Farquaad",
+      "imagePath": "/assets/minifigures/shrek-series/lord-farquaad.jpg",
+      "identifiers": [
+        { "code": "6634908", "factory": "R", "year": "6" },
+        { "code": "6627613", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_fairy_godmother",
+      "name": "Fairy Godmother",
+      "imagePath": "/assets/minifigures/shrek-series/fairy-godmotherm.jpg",
+      "identifiers": [
+        { "code": "6634909", "factory": "R", "year": "6" },
+        { "code": "6627614", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_pinocchio",
+      "name": "Pinocchio",
+      "imagePath": "/assets/minifigures/shrek-series/pinocchio.jpg",
+      "identifiers": [
+        { "code": "6634910", "factory": "R", "year": "6" },
+        { "code": "6627615", "factory": "S", "year": "6" }
+      ]
+    },
+    {
+      "slug": "shrek_prince_charming",
+      "name": "Prince Charming",
+      "imagePath": "/assets/minifigures/shrek-series/prince-charming.jpg",
+      "identifiers": [
+        { "code": "6634911", "factory": "R", "year": "6" },
+        { "code": "6627616", "factory": "S", "year": "6" }
+      ]
+    }
+  ]
+}
