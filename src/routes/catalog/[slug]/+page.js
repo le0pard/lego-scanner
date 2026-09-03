@@ -27,7 +27,7 @@ export const load = async ({ params }) => {
   }));
 
   return {
-    title: `${seriesMetadata.displayName}`,
+    title: `${seriesMetadata.displayName} Codes`,
     figures: collection,
     metadata: seriesMetadata
   };

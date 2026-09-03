@@ -28,7 +28,7 @@ export const load = async () => {
     .sort((a, b) => (b.releaseYear || 0) - (a.releaseYear || 0));
 
   return {
-    title: 'Lego Minifigures Catalog',
+    title: 'Lego Minifigures Catalog and Data Codes',
     seriesList
   };
 };
