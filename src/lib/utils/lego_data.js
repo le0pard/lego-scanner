@@ -19,8 +19,8 @@ export const optimizedImageModules = import.meta.glob(
   {
     query: {
       enhanced: true,
-      // 160 (Scanner), 240 (Catalog), 480 (Retina), 720 (Retina Max)
-      w: '160;240;480;720'
+      // 160 (Scanner), 240 (Catalog), 480 (Retina), 650 (Retina Max)
+      w: '160;240;480;650'
     },
     import: 'default',
     eager: true
