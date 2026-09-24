@@ -20,14 +20,13 @@
 
 <div class="flex h-full flex-col justify-between gap-6 p-2 md:p-4">
   <div class="flex flex-col gap-3">
-    <div
-      class="flex aspect-video w-full items-center justify-center overflow-hidden border border-border bg-black"
-    >
+    <div class="w-full overflow-hidden rounded-xl border border-border bg-app-bg">
       <enhanced:img
         src={dataMatrixCodeExampleImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        class="h-full w-full object-cover"
+        sizes="(min-width: 640px) 450px, 100vw"
+        class="h-auto w-full"
       />
     </div>
 

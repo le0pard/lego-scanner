@@ -35,13 +35,12 @@
   <article
     class="flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-card-bg p-4"
   >
-    <div class="w-full overflow-hidden rounded-xl border border-border">
+    <div class="w-full overflow-hidden rounded-xl border border-border bg-app-bg">
       <enhanced:img
         src={scannerCodeImg}
-        fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
         sizes="(min-width: 1024px) 1024px, 100vw"
-        class="h-auto w-full object-cover"
+        class="h-auto w-full"
       />
     </div>
     <p class="mt-0.5 text-center text-xs text-text-muted italic">
