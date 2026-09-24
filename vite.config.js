@@ -27,7 +27,9 @@ export default defineConfig({
       }),
       prerender: {
         origin: 'https://lego-scanner.leopard.in.ua'
-      }
+      },
+      // Inline only small CSS files (< 2 KB)
+      inlineStyleThreshold: 2048
     })
   ],
   define: {
