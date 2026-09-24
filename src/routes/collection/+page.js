@@ -6,11 +6,19 @@ export const load = async () => {
     return {
       slug: data.series,
       displayName: data.displayName || data.series,
+      releaseYear: data.releaseYear,
       figures: data.minifigures || []
     };
   });
 
-  const groupedCollections = await Promise.all(promises);
+  const groupedCollectionsRes = await Promise.all(promises);
+
+  const groupedCollections = groupedCollectionsRes.filter(Boolean).sort((a, b) => {
+    const yearDiff = (b.releaseYear || 0) - (a.releaseYear || 0);
+    if (yearDiff !== 0) return yearDiff;
+
+    return a.displayName.localeCompare(b.displayName);
+  });
 
   return {
     title: 'My Collection',

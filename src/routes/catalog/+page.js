@@ -23,9 +23,12 @@ export const load = async () => {
   let seriesList = await Promise.all(promises);
 
   // Filter out any empties and sort by newest release year
-  seriesList = seriesList
-    .filter(Boolean)
-    .sort((a, b) => (b.releaseYear || 0) - (a.releaseYear || 0));
+  seriesList = seriesList.filter(Boolean).sort((a, b) => {
+    const yearDiff = (b.releaseYear || 0) - (a.releaseYear || 0);
+    if (yearDiff !== 0) return yearDiff;
+
+    return a.displayName.localeCompare(b.displayName);
+  });
 
   return {
     title: 'Lego Minifigures Catalog and Data Codes',

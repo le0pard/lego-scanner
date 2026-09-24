@@ -31,7 +31,7 @@
             <h3 class="text-xl font-bold text-text-main">{group.displayName}</h3>
             <a
               href={resolve(`/catalog/${group.slug}`)}
-              class="flex items-center gap-1 text-sm font-bold text-primary transition-colors hover:text-primary-hover"
+              class="flex items-center gap-1 text-sm font-bold text-text-muted transition-colors hover:text-text-main"
             >
               View Catalog <i class="iconify size-4 lucide--arrow-right"></i>
             </a>

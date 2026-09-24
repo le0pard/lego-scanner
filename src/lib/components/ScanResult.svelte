@@ -162,7 +162,7 @@
           {/if}
           <h2 class="mb-1 text-xl leading-tight font-black text-text-main sm:text-2xl">
             {surpriseMode.active && !collectionState.isCollected(minifig.slug)
-              ? '???'
+              ? '???????'
               : minifig.name || 'Unknown Figure'}
           </h2>
           {#if legoData?.code}
