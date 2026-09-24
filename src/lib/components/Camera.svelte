@@ -415,7 +415,7 @@
       <video bind:this={videoElement} autoplay playsinline muted class="h-full w-full object-cover"
       ></video>
       <div
-        class="pointer-events-none absolute z-10 size-40 rounded-xl border-3 border-dashed border-primary shadow-[0_0_0_100vmax_rgba(0,0,0,0.5)]"
+        class="pointer-events-none absolute z-10 h-2/3 w-2/3 rounded-xl border-3 border-dashed border-primary shadow-[0_0_0_100vmax_rgba(0,0,0,0.5)]"
       ></div>
     </div>
 
