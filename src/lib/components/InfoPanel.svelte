@@ -4,7 +4,7 @@
   import { syncState } from '$lib/states/sync.svelte.js';
   import { formatDateTime } from '$lib/utils/date.js';
   import { triggerDatabaseSync } from '$lib/utils/sync_manager.js';
-  import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced';
+  import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced&w=360;480;720;1024';
 
   // Prevent multiple clicks while syncing
   let isManualSyncing = $state(false);
@@ -25,7 +25,7 @@
         src={dataMatrixCodeExampleImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        sizes="(min-width: 640px) 450px, 100vw"
+        sizes="(min-width: 640px) 450px, calc(100vw - 3rem)"
         class="h-auto w-full"
       />
     </div>

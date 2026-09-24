@@ -1,6 +1,6 @@
 <script>
   import ReturnButton from '$lib/components/ReturnButton.svelte';
-  import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced';
+  import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced&w=360;480;720;1024;1440';
 </script>
 
 <svelte:head>
@@ -39,7 +39,7 @@
       <enhanced:img
         src={scannerCodeImg}
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        sizes="(min-width: 1024px) 1024px, 100vw"
+        sizes="(min-width: 1024px) 954px, (min-width: 640px) 720px, calc(100vw - 4rem)"
         class="h-auto w-full"
       />
     </div>
