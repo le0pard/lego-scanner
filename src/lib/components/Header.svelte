@@ -37,10 +37,9 @@
   </div>
 
   {#if showTabs}
-    <div class="flex shrink-0 rounded-xl border border-border bg-card-bg p-1" role="tablist">
+    <div class="flex shrink-0 rounded-xl border border-border bg-card-bg p-1">
       <button
-        role="tab"
-        aria-selected={cameraTabState()}
+        aria-pressed={cameraTabState()}
         onclick={activateCameraTabState}
         class={classNames(
           'cursor-pointer rounded-lg px-4 py-1.5 text-xs font-black transition-all duration-150 active:scale-95 sm:text-sm',
@@ -53,8 +52,7 @@
         Camera
       </button>
       <button
-        role="tab"
-        aria-selected={uploadTabState()}
+        aria-pressed={uploadTabState()}
         onclick={activateUploadTabState}
         class={classNames(
           'cursor-pointer rounded-lg px-4 py-1.5 text-xs font-black transition-all duration-150 active:scale-95 sm:text-sm',
@@ -73,6 +71,7 @@
     <button
       title="Toggle Surprise Mode"
       aria-label="Toggle Surprise Mode"
+      aria-pressed={surpriseMode.active}
       onclick={() => (surpriseMode.active = !surpriseMode.active)}
       class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border transition-colors {surpriseMode.active
         ? 'border-primary bg-primary text-neutral-950 shadow-sm'
