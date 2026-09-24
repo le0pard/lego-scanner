@@ -40,7 +40,7 @@
         src={scannerCodeImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        sizes="(min-width: 640px) 640px, 100vw"
+        sizes="(min-width: 1024px) 1024px, 100vw"
         class="h-auto w-full object-cover"
       />
     </div>

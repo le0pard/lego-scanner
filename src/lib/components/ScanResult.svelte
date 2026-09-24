@@ -116,7 +116,7 @@
         class="relative flex flex-col items-center gap-5 rounded-xl border border-border bg-card-bg p-4 shadow-md"
       >
         <div
-          class="image-box relative flex size-36 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-40"
+          class="image-box relative flex size-52 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-56 md:size-60"
         >
           {#if surpriseMode.active && !collectionState.isCollected(minifig.slug)}
             <div
@@ -131,7 +131,7 @@
             <enhanced:img
               src={optimizedImage}
               alt={minifig.name}
-              sizes="(min-width: 640px) 160px, 144px"
+              sizes="(min-width: 640px) 240px, 208px"
               class="max-h-full max-w-full object-contain drop-shadow-lg"
             />
           {:else}
