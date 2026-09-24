@@ -1,11 +1,17 @@
 import { db } from '$lib/utils/db.js';
+import { SvelteSet, SvelteDate } from 'svelte/reactivity';
 
-let collectedSlugs = $state(new Set());
+let collectedSlugs = new SvelteSet();
 
 export const collectionState = {
   async init() {
     const records = await db.userCollection.toArray();
-    collectedSlugs = new Set(records.map((r) => r.slug));
+
+    // Clear and repopulate the reactive set directly
+    collectedSlugs.clear();
+    for (const record of records) {
+      collectedSlugs.add(record.slug);
+    }
   },
 
   isCollected(slug) {
@@ -15,14 +21,13 @@ export const collectionState = {
   async toggle(slug) {
     if (collectedSlugs.has(slug)) {
       await db.userCollection.delete(slug);
-      const next = new Set(collectedSlugs);
-      next.delete(slug);
-      collectedSlugs = next;
+
+      collectedSlugs.delete(slug);
     } else {
-      await db.userCollection.put({ slug, addedAt: new Date().toISOString() });
-      const next = new Set(collectedSlugs);
-      next.add(slug);
-      collectedSlugs = next;
+      const addedAt = new SvelteDate().toISOString();
+      await db.userCollection.put({ slug, addedAt });
+
+      collectedSlugs.add(slug);
     }
   }
 };
