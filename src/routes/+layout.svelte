@@ -110,7 +110,7 @@
 </svelte:head>
 
 <main
-  class="relative mx-auto flex min-h-dvh max-w-md flex-col overflow-x-hidden px-4 pt-pwa-top pb-pwa-bottom sm:border-x sm:border-border sm:bg-app-bg sm:shadow-2xl landscape:max-w-4xl"
+  class="relative mx-auto flex min-h-dvh max-w-lg flex-col overflow-x-hidden px-4 pt-pwa-top pb-pwa-bottom sm:border-x sm:border-border sm:bg-app-bg sm:shadow-2xl landscape:max-w-5xl"
 >
   <Header {showTabs} />
 
