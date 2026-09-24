@@ -1,7 +1,10 @@
 <script>
   import { resolve } from '$app/paths';
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte.js';
+  import { collectionState } from '$lib/states/collection.svelte.js';
   import { extractFieldsFromDataMatrix, getOptimizedImage } from '$lib/utils/lego_data.js';
+  import { surpriseMode } from '$lib/states/ui.svelte.js';
+  import CollectionToggle from '$lib/components/CollectionToggle.svelte';
 
   const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
 
@@ -115,6 +118,15 @@
         <div
           class="image-box relative flex size-36 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-40"
         >
+          {#if surpriseMode.active && !collectionState.isCollected(minifig.slug)}
+            <div
+              class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-neutral-900 text-white"
+            >
+              <i class="mb-2 iconify size-10 opacity-50 lucide--help-circle"></i>
+              <span class="text-xs font-bold tracking-widest uppercase">Surprise</span>
+            </div>
+          {/if}
+
           {#if optimizedImage}
             <enhanced:img
               src={optimizedImage}
@@ -149,7 +161,9 @@
             </span>
           {/if}
           <h2 class="mb-1 text-xl leading-tight font-black text-text-main sm:text-2xl">
-            {minifig.name || 'Unknown Figure'}
+            {surpriseMode.active && !collectionState.isCollected(minifig.slug)
+              ? '???'
+              : minifig.name || 'Unknown Figure'}
           </h2>
           {#if legoData?.code}
             <p class="text-sm font-medium text-text-muted">
@@ -157,11 +171,15 @@
             </p>
           {/if}
         </div>
+
+        <div class="w-full">
+          <CollectionToggle slug={minifig.slug} />
+        </div>
       </div>
 
       <button
         onclick={resetScanState}
-        class="mt-4 w-full cursor-pointer rounded-xl border-2 border-border bg-app-bg px-4 py-3.5 font-bold text-text-main transition-colors hover:border-primary active:scale-[0.99]"
+        class="mt-2 w-full cursor-pointer rounded-xl border-2 border-border bg-app-bg px-4 py-3.5 font-bold text-text-main transition-colors hover:border-primary active:scale-[0.99]"
       >
         Scan Another Box
       </button>

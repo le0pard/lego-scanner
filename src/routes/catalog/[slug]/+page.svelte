@@ -3,6 +3,9 @@
   import { getOptimizedImage } from '$lib/utils/lego_data.js';
   import ReturnButton from '$lib/components/ReturnButton.svelte';
 
+  import CollectionToggle from '$lib/components/CollectionToggle.svelte';
+  import { collectionState } from '$lib/states/collection.svelte.js';
+
   let { data } = $props();
 
   let figures = $derived(data.figures);
@@ -55,7 +58,15 @@
   <div class="grid grid-cols-2 gap-4 landscape:grid-cols-4">
     {#each figures as fig, index (index)}
       {@const optImg = getOptimizedImage(fig.imagePath)}
-      <div class="flex flex-col rounded-2xl border border-border bg-card-bg p-4 shadow-sm">
+      {@const isOwned = collectionState.isCollected(fig.slug)}
+
+      <div
+        class="flex flex-col rounded-2xl border p-4 shadow-sm transition-all duration-300"
+        class:border-success-border={isOwned}
+        class:bg-success-bg={isOwned}
+        class:border-border={!isOwned}
+        class:bg-card-bg={!isOwned}
+      >
         <div
           class="image-box relative mb-4 aspect-4/5 w-full rounded-xl border border-border/50 bg-app-bg"
         >
@@ -63,6 +74,14 @@
             <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 160px, 144px" />
           {:else}
             <img src={fig.imagePath} alt={fig.name} loading="lazy" />
+          {/if}
+
+          {#if isOwned}
+            <div
+              class="absolute top-2 right-2 flex size-6 items-center justify-center rounded-full border border-success-border bg-success-bg text-success-text shadow-sm"
+            >
+              <i class="iconify size-4 lucide--check"></i>
+            </div>
           {/if}
         </div>
 
@@ -76,6 +95,10 @@
           >
             Codes: {fig.identifiers?.map((i) => i.code).join(', ')}
           </p>
+        </div>
+
+        <div class="mt-3">
+          <CollectionToggle slug={fig.slug} />
         </div>
       </div>
     {/each}

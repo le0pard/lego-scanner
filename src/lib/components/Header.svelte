@@ -9,6 +9,7 @@
     activateUploadTabState
   } from '$lib/states/tabs.svelte.js';
   import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte.js';
+  import { surpriseMode } from '$lib/states/ui.svelte.js';
 
   let { showTabs = true } = $props();
 
@@ -68,7 +69,18 @@
     </div>
   {/if}
 
-  <nav aria-label="Main Navigation" class="flex flex-1 justify-end">
+  <nav aria-label="Main Navigation" class="flex flex-1 items-center justify-end gap-3">
+    <button
+      title="Toggle Surprise Mode"
+      aria-label="Toggle Surprise Mode"
+      onclick={() => (surpriseMode.active = !surpriseMode.active)}
+      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border transition-colors {surpriseMode.active
+        ? 'border-primary bg-primary text-neutral-950 shadow-sm'
+        : 'border-transparent bg-transparent text-text-main hover:bg-card-bg'}"
+    >
+      <i class="iconify size-5 {surpriseMode.active ? 'mdi--gift' : 'mdi--eye'}"></i>
+    </button>
+
     <button
       aria-expanded={isMenuOpen()}
       aria-controls="mobile-menu"
@@ -120,6 +132,15 @@
           >
             <i class="iconify size-8 mdi--view-grid"></i>
             Catalog
+          </a>
+        </li>
+        <li>
+          <a
+            href={resolve('/collection')}
+            class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
+          >
+            <i class="iconify size-8 mdi--collection"></i>
+            My Collection
           </a>
         </li>
         <li>

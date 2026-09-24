@@ -8,6 +8,7 @@
 
   import { setSyncStatus } from '$lib/states/sync.svelte.js';
   import { setUpdateAvailable } from '$lib/states/update.svelte.js';
+  import { collectionState } from '$lib/states/collection.svelte.js';
 
   import {
     firstSortedMetaRecord,
@@ -31,6 +32,12 @@
         document.documentElement.removeAttribute('data-theme');
       }
     }
+  });
+
+  onMount(() => {
+    if (!browser) return;
+
+    collectionState.init();
   });
 
   onMount(async () => {
