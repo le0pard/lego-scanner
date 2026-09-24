@@ -27,7 +27,7 @@
 
       {#if ownedFigures.length > 0}
         <section class="flex flex-col gap-4">
-          <div class="flex items-end justify-between border-b border-border pb-2">
+          <div class="flex items-end justify-between gap-1 border-b border-border pb-2">
             <h3 class="text-xl font-bold text-text-main">{group.displayName}</h3>
             <a
               href={resolve(`/catalog/${group.slug}`)}
