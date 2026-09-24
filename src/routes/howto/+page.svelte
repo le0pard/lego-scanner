@@ -1,6 +1,6 @@
 <script>
   import ReturnButton from '$lib/components/ReturnButton.svelte';
-  import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced&w=360;480;720;1024;1440';
+  import scannerCodeImg from '$lib/assets/howto/scanner-code.jpg?enhanced&w=360;480;720;1024';
 </script>
 
 <svelte:head>
