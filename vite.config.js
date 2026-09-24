@@ -36,6 +36,7 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(pkg.version)
   },
   build: {
+    target: 'es2022',
     sourcemap: false,
     reportCompressedSize: false
   }

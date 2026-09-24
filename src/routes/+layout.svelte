@@ -26,10 +26,17 @@
 
     if (typeof window !== 'undefined') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (prefersDark) {
         document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', '#1e2028');
+        }
       } else {
         document.documentElement.removeAttribute('data-theme');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', '#f4c946');
+        }
       }
     }
   });
