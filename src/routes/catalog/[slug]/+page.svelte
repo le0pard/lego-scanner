@@ -71,7 +71,7 @@
           class="image-box relative mb-4 aspect-4/5 w-full rounded-xl border border-border/50 bg-app-bg"
         >
           {#if optImg}
-            <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 160px, 144px" />
+            <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 240px, 50vw" />
           {:else}
             <img src={fig.imagePath} alt={fig.name} loading="lazy" />
           {/if}

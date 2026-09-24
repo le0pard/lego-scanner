@@ -48,7 +48,7 @@
                     <enhanced:img
                       src={optImg}
                       alt={fig.name}
-                      sizes="(min-width: 640px) 160px, 144px"
+                      sizes="(min-width: 640px) 240px, 50vw"
                     />
                   {:else}
                     <img src={fig.imagePath} alt={fig.name} loading="lazy" />
