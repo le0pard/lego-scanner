@@ -1,0 +1,80 @@
+# L-Scan: LEGO Minifigures Scanner (Full Context & Specs)
+
+> L-Scan is an open-source Progressive Web Application (PWA) for scanning and identifying LEGO Collectible Minifigures using Data Matrix codes.
+
+---
+
+## Technical Overview
+
+- **Framework**: SvelteKit (Static site generation with prerendered routes)
+- **Barcode Engine**: `zxing-wasm` running inside a dedicated Web Worker via Comlink
+- **Image Pipeline**: Morphological closing and scratch repair algorithms running in OffscreenCanvas workers
+- **Data Persistence**: IndexedDB via Dexie.js for both minifigure catalog data and user collection records
+- **Styles & Icons**: Tailwind CSS v4 with OKLCH theme color tokens
+
+---
+
+## Application Structure & Routing
+
+- `/`: Scanner landing view (Real-time camera reticle + image file upload modes)
+- `/catalog`: Browse all available LEGO minifigure series and individual figures
+- `/catalog/[series]`: View detailed figure breakdowns and codes for a specific series
+- `/collection`: User collection tracking dashboard showing owned figures grouped by series
+- `/howto`: Interactive packaging guide and troubleshooting instructions
+
+---
+
+## Series Compatibility
+
+Data Matrix tracking codes are exclusively printed on **LEGO Collectible Minifigures Series 25 and newer** (released 2024–present). Box packages from Series 1 through 24 use historical box layouts without Data Matrix codes.
+
+---
+
+## Data Matrix Code Locations
+
+1. Locate the bottom flap of a blind-boxed LEGO Minifigure package.
+2. Next to the standard linear EAN/UPC barcode, find the small square pixelated code (Data Matrix).
+3. Align the square code within the live camera reticle or upload a photo to decode.
+
+---
+
+## Public JSON API Schema
+
+### `GET /api/manifest.json`
+
+Returns current hashes for all available collections:
+
+```json
+{
+  "updatedAt": "2026-09-24",
+  "seriesManifest": {
+    "series-25": {
+      "endpoint": "/api/collections/series-25.json",
+      "hash": "..."
+    }
+  }
+}
+```
+
+### `GET /api/collections/{slug}.json`
+
+Returns an array of minifigures for the requested series:
+
+```json
+[
+  {
+    "name": "Triceratops Costume Fan",
+    "slug": "triceratops-costume-fan",
+    "series": "series-25",
+    "imagePath": "...",
+    "identifiers": [
+      {
+        "code": "6470840",
+        "factory": "118789",
+        "year": "2024"
+      }
+    ],
+    "searchKeys": ["6470840_118789_2024"]
+  }
+]
+```

@@ -1,0 +1,22 @@
+# L-Scan: LEGO Minifigures Scanner
+
+> L-Scan is an open-source Progressive Web Application (PWA) designed to identify blind-boxed LEGO Collectible Minifigures (Series 25 and newer) instantly by decoding the Data Matrix codes printed on the bottom flap of mystery packaging.
+
+L-Scan processes imagery entirely client-side using `zxing-wasm` running inside Web Workers and caches figure metadata in IndexedDB for offline operation. It features real-time live camera reticle scanning, image upload analysis, and an offline-capable minifigure collection catalog.
+
+## Core Application Pages
+
+- [Scanner App](/): The primary interactive interface featuring real-time camera scanning and file upload tabs.
+- [Minifigure Catalog](/catalog): Index of all supported LEGO Collectible Minifigure series and individual figure codes.
+- [My Collection](/collection): Personal tracking dashboard displaying minifigures marked as owned by the user, persisted locally in IndexedDB.
+- [How to Scan Minifigures](/howto): Step-by-step setup guide explaining Data Matrix code locations, series compatibility (Series 25+), glare resolution, and print defect recovery.
+
+## Data Endpoints & APIs
+
+- [Series Manifest](/api/manifest.json): Public JSON endpoint providing dataset hashes and endpoint URLs for all available minifigure collections.
+- [Series API Template](/api/collections/{series-slug}.json): Endpoint returning itemized minifigure datasets (slugs, names, factory codes, year, and search keys) for a target series (e.g., `series-25`, `series-29`, `f1-race-cars`).
+
+## Community & Source Code
+
+- [GitHub Repository](https://github.com/le0pard/lego-scanner): Open-source codebase built with SvelteKit, Tailwind CSS, Comlink, and Web Workers.
+- [Report Missing Brick Set](https://github.com/le0pard/lego-scanner/discussions/new?category=missing-set): Community discussion thread for submitting unindexed minifigure Data Matrix codes.
