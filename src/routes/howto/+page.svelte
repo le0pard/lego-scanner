@@ -35,15 +35,13 @@
   <article
     class="flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-card-bg p-4"
   >
-    <div
-      class="flex aspect-video min-h-55 w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-black landscape:aspect-auto landscape:flex-1"
-    >
+    <div class="w-full overflow-hidden rounded-xl border border-border">
       <enhanced:img
         src={scannerCodeImg}
         fetchpriority="high"
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
-        sizes="(orientation: landscape) 50vw, (min-width: 480px) 480px, 100vw"
-        class="h-full w-full object-cover landscape:object-contain"
+        sizes="(min-width: 640px) 640px, 100vw"
+        class="h-auto w-full object-cover"
       />
     </div>
     <p class="mt-0.5 text-center text-xs text-text-muted italic">
