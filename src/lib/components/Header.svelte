@@ -138,7 +138,7 @@
             href={resolve('/collection')}
             class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
-            <i class="iconify size-8 mdi--collection"></i>
+            <i class="iconify size-8 mdi--box-variant-closed"></i>
             My Collection
           </a>
         </li>
