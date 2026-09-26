@@ -2,6 +2,7 @@
   import { scanResultState } from '$lib/states/scanResult.svelte.js';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
+  import { sessionState } from '$lib/states/session.svelte.js';
   import { db } from '$lib/utils/db';
   import ScanResult from './ScanResult.svelte';
   import InfoPanel from './InfoPanel.svelte';
@@ -11,6 +12,7 @@
 
   let minifig = $state(null);
   let searchCompleted = $state(false);
+  let sessionData = $state({ isDuplicate: false, mysteryId: 0 });
 
   $effect(() => {
     // Stale guard indicator tracks if this specific execution cycle is still valid
@@ -22,6 +24,7 @@
 
         if (!legoData || !legoData.key) {
           if (!isCurrent) return; // Discard state mutations if a newer scan has already started
+
           minifig = null;
           errorTick();
           searchCompleted = true;
@@ -39,6 +42,7 @@
 
           if (found) {
             minifig = found;
+            sessionData = sessionState.registerScan(found.slug);
             successTick();
           } else {
             minifig = null;
@@ -85,7 +89,7 @@
   {#if scanResultState.errorMessage && scanResultState.errorMessage.length > 0}
     <ScanError errorMessage={scanResultState.errorMessage} />
   {:else if scanResultState.result}
-    <ScanResult {minifig} {searchCompleted} />
+    <ScanResult {minifig} {searchCompleted} {sessionData} />
   {:else}
     <InfoPanel />
   {/if}

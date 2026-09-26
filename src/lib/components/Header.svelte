@@ -9,9 +9,17 @@
     activateUploadTabState
   } from '$lib/states/tabs.svelte.js';
   import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte.js';
-  import { surpriseMode } from '$lib/states/ui.svelte.js';
+  import { mysteryMode } from '$lib/states/ui.svelte.js';
+  import { sessionState } from '$lib/states/session.svelte.js';
 
   let { showTabs = true } = $props();
+
+  const handleMysteryToggle = () => {
+    mysteryMode.toggle();
+    if (!mysteryMode.active) {
+      sessionState.resetSession();
+    }
+  };
 
   $effect(() => {
     if (typeof document !== 'undefined' && document.body?.style) {
@@ -69,15 +77,15 @@
 
   <nav aria-label="Main Navigation" class="flex flex-1 items-center justify-end gap-3">
     <button
-      title="Toggle Surprise Mode"
-      aria-label="Toggle Surprise Mode"
-      aria-pressed={surpriseMode.active}
-      onclick={() => (surpriseMode.active = !surpriseMode.active)}
-      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border transition-colors {surpriseMode.active
+      title="Toggle Mystery Mode"
+      aria-label="Toggle Mystery Mode"
+      aria-pressed={mysteryMode.active}
+      onclick={handleMysteryToggle}
+      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border transition-colors {mysteryMode.active
         ? 'border-primary bg-primary text-neutral-950 shadow-sm'
         : 'border-transparent bg-transparent text-text-main hover:bg-card-bg'}"
     >
-      <i class="iconify size-5 {surpriseMode.active ? 'mdi--gift' : 'mdi--eye'}"></i>
+      <i class="iconify size-5 {mysteryMode.active ? 'mdi--gift' : 'mdi--eye'}"></i>
     </button>
 
     <button

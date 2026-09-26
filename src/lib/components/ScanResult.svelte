@@ -3,13 +3,14 @@
   import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte.js';
   import { collectionState } from '$lib/states/collection.svelte.js';
   import { extractFieldsFromDataMatrix, getOptimizedImage } from '$lib/utils/lego_data.js';
-  import { surpriseMode } from '$lib/states/ui.svelte.js';
+  import { sessionState } from '$lib/states/session.svelte.js';
+  import { mysteryMode } from '$lib/states/ui.svelte.js';
   import CollectionToggle from '$lib/components/CollectionToggle.svelte';
 
   const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
 
   // Receive the processed data from RightPanel
-  let { minifig, searchCompleted } = $props();
+  let { minifig, searchCompleted, sessionData } = $props();
 
   let legoData = $derived(extractFieldsFromDataMatrix(scanResultState.result));
   let optimizedImage = $derived(getOptimizedImage(minifig?.imagePath));
@@ -39,6 +40,11 @@
         copyStatus = 'idle';
       }, 2000);
     }
+  };
+
+  const resetSessionAndScan = () => {
+    sessionState.resetSession();
+    resetScanState();
   };
 
   /**
@@ -118,12 +124,36 @@
         <div
           class="image-box relative flex size-52 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-56 md:size-60"
         >
-          {#if surpriseMode.active && !collectionState.isCollected(minifig.slug)}
+          {#if mysteryMode.active && !collectionState.isCollected(minifig.slug)}
             <div
-              class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-neutral-900 text-white"
+              class="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl transition-colors {sessionData.isDuplicate
+                ? 'border-2 border-error-border bg-error-bg text-error-text'
+                : 'bg-neutral-900 text-white'}"
             >
-              <i class="mb-2 iconify size-10 opacity-50 lucide--help-circle"></i>
-              <span class="text-xs font-bold tracking-widest uppercase">Surprise</span>
+              {#if sessionData.isDuplicate}
+                <i class="mb-2 iconify size-8 animate-pulse lucide--alert-triangle"></i>
+              {/if}
+
+              <span class="mb-1 text-4xl font-black">#{sessionData.mysteryId}</span>
+
+              <span
+                class="text-[10px] font-bold tracking-widest uppercase {sessionData.isDuplicate
+                  ? 'text-error-text-muted'
+                  : 'text-white/70'}"
+              >
+                {sessionData.isDuplicate ? 'Duplicate Box' : 'Mystery Box'}
+              </span>
+
+              {#if sessionData.isDuplicate}
+                <button
+                  type="button"
+                  onclick={resetSessionAndScan}
+                  class="mt-4 flex cursor-pointer items-center gap-1.5 rounded-lg bg-error-text/10 px-3 py-1.5 text-xs font-bold transition-all hover:bg-error-text/20 active:scale-95"
+                >
+                  <i class="iconify size-3.5 lucide--rotate-ccw"></i>
+                  Reset Session
+                </button>
+              {/if}
             </div>
           {/if}
 
@@ -161,9 +191,11 @@
             </span>
           {/if}
           <h2 class="mb-1 text-xl leading-tight font-black text-text-main sm:text-2xl">
-            {surpriseMode.active && !collectionState.isCollected(minifig.slug)
-              ? '???????'
-              : minifig.name || 'Unknown Figure'}
+            {#if mysteryMode.active && !collectionState.isCollected(minifig.slug)}
+              Mystery Figure {sessionData.mysteryId}
+            {:else}
+              {minifig.name || 'Unknown Figure'}
+            {/if}
           </h2>
           {#if legoData?.code}
             <p class="text-sm font-medium text-text-muted">
