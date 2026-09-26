@@ -78,6 +78,22 @@
       </ul>
     </section>
 
+    <section class="flex flex-col gap-1.5">
+      <h3 class="flex items-center gap-2 text-base font-bold text-text-main">
+        <i class="iconify size-5 text-primary lucide--gift"></i> 3. Mystery Mode & Duplicates
+      </h3>
+      <p>
+        Tap the <strong>Gift/Eye icon</strong> in the top navigation bar to toggle
+        <strong>Mystery Mode</strong>. When active, any unowned figures you scan will be masked as a
+        <strong>Mystery Box</strong> to preserve the element of surprise until you open them.
+      </p>
+      <p class="mt-1">
+        Additionally, the scanner actively tracks your current store trip. If you accidentally scan
+        the exact same character twice in one session, the app will alert you with a red
+        <strong>Duplicate Box!</strong> warning to help you avoid buying unwanted doubles.
+      </p>
+    </section>
+
     <section class="flex flex-col gap-1.5 rounded-xl border border-border bg-card-bg/40 p-4">
       <h3 class="mb-1 flex items-center gap-2 text-base font-bold text-text-main">
         <i class="iconify size-5 text-primary lucide--sparkles"></i> Pro-Tips for Perfect Scanning
