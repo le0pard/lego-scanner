@@ -122,11 +122,11 @@
         class="relative flex flex-col items-center gap-5 rounded-xl border border-border bg-card-bg p-4 shadow-md"
       >
         <div
-          class="image-box relative flex size-52 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-56 md:size-60"
+          class="image-box flex size-52 shrink-0 items-center justify-center rounded-xl border border-border bg-app-bg p-2 sm:size-56 md:size-60"
         >
           {#if mysteryMode.active && !collectionState.isCollected(minifig.slug)}
             <div
-              class="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl transition-colors {sessionData.isDuplicate
+              class="flex h-full w-full flex-col items-center justify-center rounded-xl transition-colors {sessionData.isDuplicate
                 ? 'border-2 border-error-border bg-error-bg text-error-text'
                 : 'bg-neutral-900 text-white'}"
             >
@@ -155,21 +155,21 @@
                 </button>
               {/if}
             </div>
-          {/if}
-
-          {#if optimizedImage}
-            <enhanced:img
-              src={optimizedImage}
-              alt={minifig.name}
-              sizes="(min-width: 640px) 240px, 208px"
-              class="max-h-full max-w-full object-contain drop-shadow-lg"
-            />
           {:else}
-            <img
-              src={minifig.imagePath}
-              alt={minifig.name}
-              class="max-h-full max-w-full object-contain drop-shadow-lg"
-            />
+            {#if optimizedImage}
+              <enhanced:img
+                src={optimizedImage}
+                alt={minifig.name}
+                sizes="(min-width: 640px) 240px, 208px"
+                class="max-h-full max-w-full object-contain drop-shadow-lg"
+              />
+            {:else}
+              <img
+                src={minifig.imagePath}
+                alt={minifig.name}
+                class="max-h-full max-w-full object-contain drop-shadow-lg"
+              />
+            {/if}
           {/if}
         </div>
         <div class="flex flex-col items-start justify-center">
