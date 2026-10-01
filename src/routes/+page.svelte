@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { resolve } from '$app/paths';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { wrap } from 'comlink';
 
   import Camera from '#lib/components/Camera.svelte';

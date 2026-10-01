@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import classNames from 'classnames';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { transfer } from 'comlink';
   import { setScanResult, resetScanState } from '#lib/states/scanResult.svelte.js';
   import {

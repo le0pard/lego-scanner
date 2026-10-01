@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import classNames from 'classnames';
-  import { dev, browser } from '$app/environment';
+  import { dev, browser } from '$app/env';
   import { useTiks } from '@rexa-developer/tiks/svelte';
   import { setScanResult, setScanError, resetScanState } from '#lib/states/scanResult.svelte.js';
 

@@ -2,7 +2,7 @@
   import './css/app.css';
   import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { resolve } from '$app/paths';
   import Header from '#lib/components/Header.svelte';
 
