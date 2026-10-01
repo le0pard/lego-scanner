@@ -1,10 +1,10 @@
 <script>
   import { resolve } from '$app/paths';
-  import { getOptimizedImage } from '$lib/utils/lego_data.js';
-  import ReturnButton from '$lib/components/ReturnButton.svelte';
+  import { getOptimizedImage } from '#lib/utils/lego_data.js';
+  import ReturnButton from '#lib/components/ReturnButton.svelte';
 
-  import CollectionToggle from '$lib/components/CollectionToggle.svelte';
-  import { collectionState } from '$lib/states/collection.svelte.js';
+  import CollectionToggle from '#lib/components/CollectionToggle.svelte';
+  import { collectionState } from '#lib/states/collection.svelte.js';
 
   let { data } = $props();
 

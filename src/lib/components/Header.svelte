@@ -7,10 +7,10 @@
     uploadTabState,
     activateCameraTabState,
     activateUploadTabState
-  } from '$lib/states/tabs.svelte.js';
-  import { isMenuOpen, toggleMenu, closeMenu } from '$lib/states/menu.svelte.js';
-  import { mysteryMode } from '$lib/states/ui.svelte.js';
-  import { sessionState } from '$lib/states/session.svelte.js';
+  } from '#lib/states/tabs.svelte.js';
+  import { isMenuOpen, toggleMenu, closeMenu } from '#lib/states/menu.svelte.js';
+  import { mysteryMode } from '#lib/states/ui.svelte.js';
+  import { sessionState } from '#lib/states/session.svelte.js';
 
   let { showTabs = true } = $props();
 

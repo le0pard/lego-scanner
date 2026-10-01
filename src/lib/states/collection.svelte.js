@@ -1,4 +1,4 @@
-import { db } from '$lib/utils/db.js';
+import { db } from '#lib/utils/db.js';
 import { SvelteSet, SvelteDate } from 'svelte/reactivity';
 
 let collectedSlugs = new SvelteSet();

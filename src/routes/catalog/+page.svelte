@@ -1,7 +1,7 @@
 <script>
   import { resolve } from '$app/paths';
-  import { getOptimizedImage } from '$lib/utils/lego_data.js';
-  import ReturnButton from '$lib/components/ReturnButton.svelte';
+  import { getOptimizedImage } from '#lib/utils/lego_data.js';
+  import ReturnButton from '#lib/components/ReturnButton.svelte';
 
   let { data } = $props();
   let seriesList = $derived(data.seriesList || []);

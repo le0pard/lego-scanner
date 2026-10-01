@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { seriesEntries, seriesJsonFiles } from '$lib/utils/lego_data.js';
+import { seriesEntries, seriesJsonFiles } from '#lib/utils/lego_data.js';
 
 export const entries = seriesEntries;
 

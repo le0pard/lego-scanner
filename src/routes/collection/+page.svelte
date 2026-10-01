@@ -1,9 +1,9 @@
 <script>
   import { resolve } from '$app/paths';
-  import { getOptimizedImage } from '$lib/utils/lego_data.js';
-  import { collectionState } from '$lib/states/collection.svelte.js';
-  import CollectionToggle from '$lib/components/CollectionToggle.svelte';
-  import ReturnButton from '$lib/components/ReturnButton.svelte';
+  import { getOptimizedImage } from '#lib/utils/lego_data.js';
+  import { collectionState } from '#lib/states/collection.svelte.js';
+  import CollectionToggle from '#lib/components/CollectionToggle.svelte';
+  import ReturnButton from '#lib/components/ReturnButton.svelte';
 
   let { data } = $props();
   let groupedCollections = $derived(data.groupedCollections || []);

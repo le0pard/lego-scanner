@@ -1,5 +1,5 @@
 <script>
-  import { updateState } from '$lib/states/update.svelte.js';
+  import { updateState } from '#lib/states/update.svelte.js';
 
   const reloadApp = async () => {
     if ('serviceWorker' in navigator) {

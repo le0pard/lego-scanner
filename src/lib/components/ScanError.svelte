@@ -1,5 +1,5 @@
 <script>
-  import { resetScanState } from '$lib/states/scanResult.svelte.js';
+  import { resetScanState } from '#lib/states/scanResult.svelte.js';
 
   let { errorMessage } = $props();
 </script>

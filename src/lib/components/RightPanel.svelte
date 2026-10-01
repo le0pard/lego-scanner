@@ -1,9 +1,9 @@
 <script>
-  import { scanResultState } from '$lib/states/scanResult.svelte.js';
+  import { scanResultState } from '#lib/states/scanResult.svelte.js';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { extractFieldsFromDataMatrix } from '$lib/utils/lego_data.js';
-  import { sessionState } from '$lib/states/session.svelte.js';
-  import { db } from '$lib/utils/db';
+  import { extractFieldsFromDataMatrix } from '#lib/utils/lego_data.js';
+  import { sessionState } from '#lib/states/session.svelte.js';
+  import { db } from '#lib/utils/db';
   import ScanResult from './ScanResult.svelte';
   import InfoPanel from './InfoPanel.svelte';
   import ScanError from './ScanError.svelte';

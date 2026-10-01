@@ -1,7 +1,7 @@
 import { wrap } from 'comlink';
-import { db } from '$lib/utils/db.js';
-import { setSyncStatus } from '$lib/states/sync.svelte.js';
-import { SYNC_LEGO_CATALOG_EVENT } from '$lib/utils/constants.js';
+import { db } from '#lib/utils/db.js';
+import { setSyncStatus } from '#lib/states/sync.svelte.js';
+import { SYNC_LEGO_CATALOG_EVENT } from '#lib/utils/constants.js';
 
 // Extracted from +layout.svelte
 export const firstSortedMetaRecord = async () => {
@@ -15,7 +15,7 @@ export const triggerDatabaseSync = async (basePath) => {
     setSyncStatus('syncing');
 
     // Boot the sync worker
-    const SyncWorker = (await import('$lib/sync-worker?worker')).default;
+    const SyncWorker = (await import('#lib/sync-worker?worker')).default;
     syncWorker = new SyncWorker();
     const syncApi = wrap(syncWorker);
 

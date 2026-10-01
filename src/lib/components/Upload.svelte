@@ -3,7 +3,7 @@
   import classNames from 'classnames';
   import { dev, browser } from '$app/environment';
   import { useTiks } from '@rexa-developer/tiks/svelte';
-  import { setScanResult, setScanError, resetScanState } from '$lib/states/scanResult.svelte.js';
+  import { setScanResult, setScanError, resetScanState } from '#lib/states/scanResult.svelte.js';
 
   const { getScanner } = $props();
   const { warning: warningTick } = useTiks({ theme: 'crisp', volume: 1.0 });

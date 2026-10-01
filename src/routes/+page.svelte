@@ -4,13 +4,13 @@
   import { browser } from '$app/environment';
   import { wrap } from 'comlink';
 
-  import Camera from '$lib/components/Camera.svelte';
-  import UpdateBanner from '$lib/components/UpdateBanner.svelte';
-  import RightPanel from '$lib/components/RightPanel.svelte';
-  import Upload from '$lib/components/Upload.svelte';
-  import WorkerError from '$lib/components/WorkerError.svelte';
-  import WorkerLoading from '$lib/components/WorkerLoading.svelte';
-  import { uploadTabState } from '$lib/states/tabs.svelte.js';
+  import Camera from '#lib/components/Camera.svelte';
+  import UpdateBanner from '#lib/components/UpdateBanner.svelte';
+  import RightPanel from '#lib/components/RightPanel.svelte';
+  import Upload from '#lib/components/Upload.svelte';
+  import WorkerError from '#lib/components/WorkerError.svelte';
+  import WorkerLoading from '#lib/components/WorkerLoading.svelte';
+  import { uploadTabState } from '#lib/states/tabs.svelte.js';
 
   let workersLoaded = $state(false);
   let errorMessage = $state('');
@@ -23,7 +23,7 @@
     if (!browser) return;
 
     try {
-      const ScannerWorker = (await import('$lib/scanner-worker?worker')).default;
+      const ScannerWorker = (await import('#lib/scanner-worker?worker')).default;
       scannerWorker = new ScannerWorker();
       scannerWorkerApi = wrap(scannerWorker);
       await scannerWorkerApi.init(resolve('/'));

@@ -1,4 +1,4 @@
-import { db } from '$lib/utils/db.js';
+import { db } from '#lib/utils/db.js';
 
 /**
  * Shared standalone Core Sync Engine execution unit.

@@ -1,5 +1,5 @@
 <script>
-  import { collectionState } from '$lib/states/collection.svelte.js';
+  import { collectionState } from '#lib/states/collection.svelte.js';
 
   let { slug } = $props();
 </script>

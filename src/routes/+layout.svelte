@@ -4,17 +4,17 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { resolve } from '$app/paths';
-  import Header from '$lib/components/Header.svelte';
+  import Header from '#lib/components/Header.svelte';
 
-  import { setSyncStatus } from '$lib/states/sync.svelte.js';
-  import { setUpdateAvailable } from '$lib/states/update.svelte.js';
-  import { collectionState } from '$lib/states/collection.svelte.js';
+  import { setSyncStatus } from '#lib/states/sync.svelte.js';
+  import { setUpdateAvailable } from '#lib/states/update.svelte.js';
+  import { collectionState } from '#lib/states/collection.svelte.js';
 
   import {
     firstSortedMetaRecord,
     triggerDatabaseSync,
     registerPeriodicSync
-  } from '$lib/utils/sync_manager.js';
+  } from '#lib/utils/sync_manager.js';
 
   let { children } = $props();
 

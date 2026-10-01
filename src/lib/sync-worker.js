@@ -1,5 +1,5 @@
 import { expose } from 'comlink';
-import { performDatabaseSync } from '$lib/utils/worker/sync_engine.js';
+import { performDatabaseSync } from '#lib/utils/worker/sync_engine.js';
 
 const api = {
   /**

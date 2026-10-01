@@ -16,6 +16,7 @@ export default defineConfig({
         runes: true
       },
       paths: {
+        origin: 'https://lego-scanner.leopard.in.ua',
         relative: false
       },
       adapter: adapter({
@@ -25,9 +26,6 @@ export default defineConfig({
         strict: true,
         precompress: false
       }),
-      prerender: {
-        origin: 'https://lego-scanner.leopard.in.ua'
-      },
       // Inline only small CSS files (< 2 KB)
       inlineStyleThreshold: 2048
     })

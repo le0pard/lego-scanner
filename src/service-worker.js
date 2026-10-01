@@ -1,11 +1,13 @@
-import { build, files, prerendered, version } from '$service-worker';
-import { SYNC_LEGO_CATALOG_EVENT } from '$lib/utils/constants.js';
-import { updateImageMetadata } from '$lib/utils/worker/images_metadata_db.js';
-import { performDatabaseSync } from '$lib/utils/worker/sync_engine.js';
+import { self } from '$app/service-worker';
+import { version } from '$app/env';
+import { immutable, assets, prerendered } from '$app/manifest';
+import { resolve } from '$app/paths';
+import { SYNC_LEGO_CATALOG_EVENT } from '#lib/utils/constants.js';
+import { updateImageMetadata } from '#lib/utils/worker/images_metadata_db.js';
+import { performDatabaseSync } from '#lib/utils/worker/sync_engine.js';
 
 const PREGENERATED_ASSETS_PREFIX = '_app/immutable/';
 const OPTIMIZED_ASSETS_REGEX = /_app\/immutable\/assets\/.+\.(webp|avif|png|jpg|jpeg)$/i;
-const self = globalThis.self;
 const IMAGE_CACHE_VERSION = 'v1';
 
 // Two-Tier Cache Strategy Split
@@ -14,7 +16,7 @@ const IMAGE_CACHE = `runtime-images-${IMAGE_CACHE_VERSION}`; // Persistent acros
 
 const API_TIMEOUT_MS = 3000;
 
-const ASSETS = [...build, ...files, ...prerendered].filter((path) => {
+const ASSETS = [...immutable, ...assets, ...prerendered].map((asset) => resolve(asset.path)).filter((path) => {
   return !OPTIMIZED_ASSETS_REGEX.test(path) && !path.startsWith('/api/');
 });
 

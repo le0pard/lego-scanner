@@ -1,11 +1,11 @@
 <script>
   import { resolve } from '$app/paths';
-  import { scanResultState, resetScanState } from '$lib/states/scanResult.svelte.js';
-  import { collectionState } from '$lib/states/collection.svelte.js';
-  import { extractFieldsFromDataMatrix, getOptimizedImage } from '$lib/utils/lego_data.js';
-  import { sessionState } from '$lib/states/session.svelte.js';
-  import { mysteryMode } from '$lib/states/ui.svelte.js';
-  import CollectionToggle from '$lib/components/CollectionToggle.svelte';
+  import { scanResultState, resetScanState } from '#lib/states/scanResult.svelte.js';
+  import { collectionState } from '#lib/states/collection.svelte.js';
+  import { extractFieldsFromDataMatrix, getOptimizedImage } from '#lib/utils/lego_data.js';
+  import { sessionState } from '#lib/states/session.svelte.js';
+  import { mysteryMode } from '#lib/states/ui.svelte.js';
+  import CollectionToggle from '#lib/components/CollectionToggle.svelte';
 
   const REPOSITORY_URL = 'https://github.com/le0pard/lego-scanner/issues/new';
 

@@ -1,10 +1,10 @@
 <script>
   import classNames from 'classnames';
   import { resolve } from '$app/paths';
-  import { syncState } from '$lib/states/sync.svelte.js';
-  import { formatDateTime } from '$lib/utils/date.js';
-  import { triggerDatabaseSync } from '$lib/utils/sync_manager.js';
-  import dataMatrixCodeExampleImg from '$lib/assets/howto/data-matrix-example.jpg?enhanced&w=360;480;720';
+  import { syncState } from '#lib/states/sync.svelte.js';
+  import { formatDateTime } from '#lib/utils/date.js';
+  import { triggerDatabaseSync } from '#lib/utils/sync_manager.js';
+  import dataMatrixCodeExampleImg from '#lib/assets/howto/data-matrix-example.jpg?enhanced&w=360;480;720';
 
   // Prevent multiple clicks while syncing
   let isManualSyncing = $state(false);
