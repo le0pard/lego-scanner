@@ -54,7 +54,7 @@
     </a>
 
     <a
-      href={resolve('/howto')}
+      href={resolve('howto')}
       class="w-full cursor-pointer rounded-xl border border-border bg-card-bg px-4 py-3 text-center text-sm font-bold text-text-main transition-all hover:border-primary/50 active:scale-[0.98]"
     >
       Read Documentation

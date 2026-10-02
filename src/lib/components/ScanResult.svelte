@@ -162,7 +162,7 @@
                 alt={minifig.name}
                 sizes="(min-width: 640px) 240px, 208px"
                 class="max-h-full max-w-full object-contain drop-shadow-lg"
-              />
+              ></enhanced:img>
             {:else}
               <img
                 src={minifig.imagePath}
@@ -175,7 +175,7 @@
         <div class="flex flex-col items-start justify-center">
           {#if minifig.series}
             <a
-              href={resolve(`/catalog/${minifig.series}`)}
+              href={resolve(`catalog/${minifig.series}`)}
               class="mb-2 flex items-center justify-center gap-1 rounded-full border border-transparent bg-badge-bg px-3 py-1 text-xs font-bold text-badge-text transition-colors hover:border-primary active:scale-95"
             >
               <i

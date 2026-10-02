@@ -23,14 +23,14 @@
     {#each seriesList as series (series.slug)}
       {@const optImg = getOptimizedImage(series.coverImage)}
       <a
-        href={resolve(`/catalog/${series.slug}`)}
+        href={resolve(`catalog/${series.slug}`)}
         class="flex items-center gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-sm transition-colors hover:border-primary active:scale-[0.98]"
       >
         <div
           class="image-wrapper flex size-16 shrink-0 items-center justify-center rounded-xl bg-app-bg p-1.5"
         >
           {#if optImg}
-            <enhanced:img src={optImg} alt={series.displayName} />
+            <enhanced:img src={optImg} alt={series.displayName}></enhanced:img>
           {:else}
             <img src={series.coverImage} alt={series.displayName} />
           {/if}

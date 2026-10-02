@@ -27,7 +27,7 @@
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
         sizes="(min-width: 640px) 450px, calc(100vw - 3rem)"
         class="h-auto w-full"
-      />
+      ></enhanced:img>
     </div>
 
     <p class="text-sm leading-relaxed text-text-muted">
@@ -43,7 +43,7 @@
       <span class="leading-normal">
         Works with <strong>Series 25 & newer</strong> boxes.
         <a
-          href={resolve('/howto')}
+          href={resolve('howto')}
           class="ml-0.5 font-bold text-text-main underline transition-colors hover:text-primary"
         >
           View compatibility guide

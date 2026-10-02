@@ -31,7 +31,9 @@
     }
   });
 
-  afterNavigate(() => {
+  afterNavigate(({ shallow }) => {
+    if (shallow) return;
+
     closeMenu();
   });
 </script>
@@ -134,7 +136,7 @@
         </li>
         <li>
           <a
-            href={resolve('/catalog')}
+            href={resolve('catalog')}
             class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
             <i class="iconify size-8 mdi--view-grid"></i>
@@ -143,7 +145,7 @@
         </li>
         <li>
           <a
-            href={resolve('/collection')}
+            href={resolve('collection')}
             class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
             <i class="iconify size-8 mdi--box-variant-closed"></i>
@@ -152,7 +154,7 @@
         </li>
         <li>
           <a
-            href={resolve('/howto')}
+            href={resolve('howto')}
             class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
           >
             <i class="iconify size-8 mdi--about-circle-outline"></i>

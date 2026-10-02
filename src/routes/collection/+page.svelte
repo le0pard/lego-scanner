@@ -30,7 +30,7 @@
           <div class="flex items-end justify-between gap-1 border-b border-border pb-2">
             <h3 class="text-xl font-bold text-text-main">{group.displayName}</h3>
             <a
-              href={resolve(`/catalog/${group.slug}`)}
+              href={resolve(`catalog/${group.slug}`)}
               class="flex items-center gap-1 text-sm font-bold text-text-muted transition-colors hover:text-text-main"
             >
               View Catalog <i class="iconify size-4 lucide--arrow-right"></i>
@@ -45,11 +45,8 @@
                   class="image-box relative mb-4 aspect-4/5 w-full rounded-xl border border-border/50 bg-app-bg"
                 >
                   {#if optImg}
-                    <enhanced:img
-                      src={optImg}
-                      alt={fig.name}
-                      sizes="(min-width: 640px) 240px, 50vw"
-                    />
+                    <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 240px, 50vw"
+                    ></enhanced:img>
                   {:else}
                     <img src={fig.imagePath} alt={fig.name} loading="lazy" />
                   {/if}
@@ -77,9 +74,10 @@
         <i class="mb-3 iconify size-12 opacity-50 lucide--box"></i>
         <p class="font-bold text-text-main">Your collection is empty</p>
         <p class="mt-1 text-sm">Scan boxes or browse the catalog to add figures.</p>
-        <a href={resolve('/catalog')} class="mt-4 text-sm font-bold text-primary hover:underline">
-          Browse Catalog
-        </a>
+
+        <a href={resolve('catalog')} class="mt-4 text-sm font-bold text-primary hover:underline"
+          >Browse Catalog</a
+        >
       </div>
     {/if}
   </div>

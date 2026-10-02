@@ -22,7 +22,7 @@
     <div class="flex items-center gap-3">
       <a
         title="Catalog"
-        href={resolve('/catalog')}
+        href={resolve('catalog')}
         class="flex justify-center rounded-xl border border-border bg-card-bg p-2 text-text-main transition-colors hover:border-primary active:scale-95"
       >
         <i class="iconify size-5 lucide--arrow-left"></i>
@@ -33,7 +33,7 @@
         </h2>
         {#if data.metadata?.series}
           <a
-            href={resolve(`/api/collections/${data.metadata?.series}.json`)}
+            href={resolve(`api/collections/${data.metadata?.series}.json`)}
             class="flex items-center gap-2 py-2 text-text-muted transition-colors hover:text-text-main"
             target="_blank"
             rel="noopener noreferrer"
@@ -71,7 +71,8 @@
           class="image-box relative mb-4 aspect-4/5 w-full rounded-xl border border-border/50 bg-app-bg"
         >
           {#if optImg}
-            <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 240px, 50vw" />
+            <enhanced:img src={optImg} alt={fig.name} sizes="(min-width: 640px) 240px, 50vw"
+            ></enhanced:img>
           {:else}
             <img src={fig.imagePath} alt={fig.name} loading="lazy" />
           {/if}
