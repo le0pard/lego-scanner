@@ -162,7 +162,7 @@
                 alt={minifig.name}
                 sizes="(min-width: 640px) 240px, 208px"
                 class="max-h-full max-w-full object-contain drop-shadow-lg"
-              ></enhanced:img>
+              />
             {:else}
               <img
                 src={minifig.imagePath}

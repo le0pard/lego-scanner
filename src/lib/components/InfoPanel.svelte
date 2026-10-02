@@ -27,7 +27,7 @@
         alt="Lego Minifigure box bottom with Data Matrix highlighted"
         sizes="(min-width: 640px) 450px, calc(100vw - 3rem)"
         class="h-auto w-full"
-      ></enhanced:img>
+      />
     </div>
 
     <p class="text-sm leading-relaxed text-text-muted">

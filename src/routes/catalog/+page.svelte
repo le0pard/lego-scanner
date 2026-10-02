@@ -30,7 +30,7 @@
           class="image-wrapper flex size-16 shrink-0 items-center justify-center rounded-xl bg-app-bg p-1.5"
         >
           {#if optImg}
-            <enhanced:img src={optImg} alt={series.displayName}></enhanced:img>
+            <enhanced:img src={optImg} alt={series.displayName} />
           {:else}
             <img src={series.coverImage} alt={series.displayName} />
           {/if}
