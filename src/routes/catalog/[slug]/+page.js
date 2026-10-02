@@ -11,7 +11,7 @@ export const load = async ({ params }) => {
 
   // Defensively throw a 404 if a user types a series that doesn't exist
   if (!fileLoader) {
-    error(404, { message: `Series "${slug}" not found in local records.` });
+    error(404, `Series "${slug}" not found in local records.`);
   }
 
   // Await the lazy-loaded JSON module resolution

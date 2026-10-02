@@ -35,6 +35,9 @@ export const GET = async ({ url }) => {
       seriesManifest
     });
   } catch (err) {
-    return Response.json({ error: 'Failed to generate manifest', details: err.message }, { status: 500 });
+    return Response.json(
+      { error: 'Failed to generate manifest', details: err.message },
+      { status: 500 }
+    );
   }
 };
