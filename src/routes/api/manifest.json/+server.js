@@ -1,5 +1,3 @@
-import { json } from '@sveltejs/kit';
-
 export const prerender = true;
 
 const rawFiles = import.meta.glob('/src/lib/data/*.json', {

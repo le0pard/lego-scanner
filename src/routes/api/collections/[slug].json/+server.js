@@ -1,4 +1,4 @@
-import { json, error } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { seriesEntries, seriesJsonFiles, extractSeriesJsonFromPath } from '#lib/utils/lego_data.js';
 
 export const prerender = true;
