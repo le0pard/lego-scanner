@@ -30,11 +30,11 @@ export const GET = async ({ url }) => {
       };
     }
 
-    return json({
+    return Response.json({
       updatedAt: new Date().toISOString().split('T')[0],
       seriesManifest
     });
   } catch (err) {
-    return json({ error: 'Failed to generate manifest', details: err.message }, { status: 500 });
+    return Response.json({ error: 'Failed to generate manifest', details: err.message }, { status: 500 });
   }
 };
