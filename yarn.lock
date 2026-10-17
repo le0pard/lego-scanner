@@ -200,12 +200,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-json/lucide@npm:^1.2.143":
-  version: 1.2.143
-  resolution: "@iconify-json/lucide@npm:1.2.143"
+"@iconify-json/lucide@npm:^1.2.144":
+  version: 1.2.144
+  resolution: "@iconify-json/lucide@npm:1.2.144"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10c0/0c650e3cc3404bcd01fd861c87dfb88b2e61f8c186b8cb70b32a72cf84ed53df593350a736ac0b9682101aa29b28570dccdcff9c45a651ea80a42bc7be0ef015
+  checksum: 10c0/e2873609a1a7006cc9ce01ad97103792683f77f4e7b68591c9bc979af82bf9a6ffbae88e3a5821be3d2bfbc8533ae18d4861f7c299a68a32858353187c0ff4f0
   languageName: node
   linkType: hard
 
@@ -1874,7 +1874,7 @@ __metadata:
   resolution: "lego-scanner@workspace:."
   dependencies:
     "@eslint/js": "npm:^10.0.1"
-    "@iconify-json/lucide": "npm:^1.2.143"
+    "@iconify-json/lucide": "npm:^1.2.144"
     "@iconify-json/mdi": "npm:^1.2.3"
     "@iconify/tailwind4": "npm:^1.2.3"
     "@rexa-developer/tiks": "npm:^0.3.0"
