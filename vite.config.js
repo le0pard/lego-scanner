@@ -3,12 +3,35 @@ import adapter from '@sveltejs/adapter-static';
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import { ZXING_WASM_VERSION } from 'zxing-wasm/reader';
 import readPackageProperty from 'node:fs';
+import { createRequire } from 'node:module';
 
 const pkg = JSON.parse(readPackageProperty.readFileSync('./package.json', 'utf-8'));
 
+const ZXING_WASM_DIR = 'static/wasm/zxing';
+
+// Copies the installed zxing_reader.wasm to the versioned path scanner-worker.js requests.
+// Runs before SvelteKit lists static/, so the service worker still precaches it.
+const zxingWasm = () => ({
+  name: 'zxing-wasm',
+  enforce: 'pre',
+  config: {
+    order: 'pre',
+    handler() {
+      const source = createRequire(import.meta.url).resolve('zxing-wasm/reader/zxing_reader.wasm');
+      const targetDir = `${ZXING_WASM_DIR}/${ZXING_WASM_VERSION}`;
+
+      readPackageProperty.rmSync(ZXING_WASM_DIR, { recursive: true, force: true });
+      readPackageProperty.mkdirSync(targetDir, { recursive: true });
+      readPackageProperty.copyFileSync(source, `${targetDir}/zxing_reader.wasm`);
+    }
+  }
+});
+
 export default defineConfig({
   plugins: [
+    zxingWasm(),
     tailwindcss(),
     enhancedImages(),
     sveltekit({

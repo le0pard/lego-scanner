@@ -8,6 +8,9 @@ node_modules
 /.svelte-kit
 /build
 
+# Copied from node_modules/zxing-wasm by vite.config.js
+/static/wasm
+
 # OS
 .DS_Store
 Thumbs.db
