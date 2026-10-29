@@ -3,7 +3,7 @@
   "name": "Lego Scanner",
   "description": "L-Scan - Lego Minifigures Scanner",
   "start_url": "/",
-  "display": "minimal-ui",
+  "display": "standalone",
   "theme_color": "#f4c946",
   "background_color": "#f4c946",
   "icons": [
