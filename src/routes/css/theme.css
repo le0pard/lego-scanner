@@ -84,10 +84,7 @@
   body {
     background-color: var(--color-app-bg);
     color: var(--color-text-main);
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     transition:
       background-color 0.2s ease,
       color 0.2s ease;

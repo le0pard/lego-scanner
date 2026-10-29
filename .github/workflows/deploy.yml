@@ -34,6 +34,9 @@ jobs:
       - name: Lint
         run: yarn run lint
 
+      - name: Svelte check
+        run: yarn run check --fail-on-warnings
+
       - name: Build website
         run: yarn run build
 

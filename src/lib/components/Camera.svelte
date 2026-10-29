@@ -85,7 +85,7 @@
    * Schedules a non-blocking hardware mutation batch payload
    */
   const scheduleTrackConstraint = (deltaBatch) => {
-    pendingConstraints = { ...(pendingConstraints || {}), ...deltaBatch };
+    pendingConstraints = { ...pendingConstraints, ...deltaBatch };
     flushTrackConstraints();
   };
 
