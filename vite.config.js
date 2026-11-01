@@ -6,6 +6,7 @@ import { defineConfig } from 'vite';
 import { ZXING_WASM_VERSION } from 'zxing-wasm/reader';
 import readPackageProperty from 'node:fs';
 import { createRequire } from 'node:module';
+import { validateSearchKeys } from './vite-plugins/validate-search-keys.js';
 
 const pkg = JSON.parse(readPackageProperty.readFileSync('./package.json', 'utf-8'));
 
@@ -32,6 +33,7 @@ const zxingWasm = () => ({
 export default defineConfig({
   plugins: [
     zxingWasm(),
+    validateSearchKeys(),
     tailwindcss(),
     enhancedImages(),
     sveltekit({

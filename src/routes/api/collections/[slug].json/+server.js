@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { seriesEntries, seriesJsonFiles, extractSeriesJsonFromPath } from '#lib/utils/lego_data.js';
+import { buildSearchKeys } from '#lib/utils/search_keys.js';
 
 export const prerender = true;
 export const entries = seriesEntries;
@@ -20,19 +21,11 @@ export const GET = async ({ params }) => {
     const jsonData = await extractSeriesJsonFromPath(targetPath);
     const { minifigures, ...rest } = jsonData;
 
-    const processedMinifigures = minifigures.map((fig) => {
-      const generatedSearchKeys = fig.identifiers
-        .map((id) => [
-          ...new Set([[id.code, id.factory, id.year].filter(Boolean).join('_'), id.code])
-        ])
-        .flat();
-
-      return {
-        ...fig,
-        ...rest,
-        searchKeys: generatedSearchKeys
-      };
-    });
+    const processedMinifigures = minifigures.map((fig) => ({
+      ...fig,
+      ...rest,
+      searchKeys: buildSearchKeys(fig.identifiers)
+    }));
 
     return Response.json(processedMinifigures);
   } catch {
