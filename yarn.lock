@@ -52,12 +52,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-json/lucide@npm:^1.2.149":
-  version: 1.2.149
-  resolution: "@iconify-json/lucide@npm:1.2.149"
+"@iconify-json/lucide@npm:^1.2.150":
+  version: 1.2.150
+  resolution: "@iconify-json/lucide@npm:1.2.150"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10c0/c82dd94833639eaa251579008324ef86de6c1c6c19bdc0d08229297036198d750fe86694a3f73b8a4758f9d2325e45754c32bac59d80f42e8e3be41b92f61edb
+  checksum: 10c0/c1fba09871033453af6a3141f35da09e39fff6d25d92802b6fa3be304b0ed3b6bf4b14471817b385b07b3abd3c0347ec7309c624c5173ba4b1b4c3761951d0b0
   languageName: node
   linkType: hard
 
@@ -865,12 +865,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-static@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@sveltejs/adapter-static@npm:4.0.0"
+"@sveltejs/adapter-static@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@sveltejs/adapter-static@npm:4.0.1"
   peerDependencies:
     "@sveltejs/kit": ^3.0.0-next.0
-  checksum: 10c0/fef890b413f1e2014234fb42117d502e6ed0ab17fa58affe655bc0e613cba00ac3d77fb7febf60161415c26059316d260406538879b0406a0dc5db470604e11c
+  checksum: 10c0/077c13ad020826439b50cdcb6751fbba2e4e9bf5864b4e8424fabb8b7a03f34cdc73b41bef5528443ed3f81816c8303a60321552789cf995f876111e2a261b7c
   languageName: node
   linkType: hard
 
@@ -890,9 +890,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@sveltejs/kit@npm:3.1.0"
+"@sveltejs/kit@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@sveltejs/kit@npm:3.1.1"
   dependencies:
     "@rolldown/pluginutils": "npm:^1.0.1"
     "@standard-schema/spec": "npm:^1.1.0"
@@ -915,7 +915,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/b20b3b5b1ef925044d81402c2dae9280516d7a73f0618490dd0e074f435806a68caec5a837ac89efa3cd1c7559c8f1d8644a036c9a0c274a357d6d158fd64d79
+  checksum: 10c0/f7f86a3788f1f952749990baaeeb92a19885269879db6e44435410ef8698019f2dcb006b6b997b9953f3eda8cd9e23291d98998148d1b0237800e0cdb474b759
   languageName: node
   linkType: hard
 
@@ -1507,13 +1507,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "lego-scanner@workspace:."
   dependencies:
-    "@iconify-json/lucide": "npm:^1.2.149"
+    "@iconify-json/lucide": "npm:^1.2.150"
     "@iconify-json/mdi": "npm:^1.2.3"
     "@iconify/tailwind4": "npm:^1.2.3"
     "@rexa-developer/tiks": "npm:^0.3.0"
-    "@sveltejs/adapter-static": "npm:^4.0.0"
+    "@sveltejs/adapter-static": "npm:^4.0.1"
     "@sveltejs/enhanced-img": "npm:^1.0.0"
-    "@sveltejs/kit": "npm:^3.1.0"
+    "@sveltejs/kit": "npm:^3.1.1"
     "@sveltejs/vite-plugin-svelte": "npm:^7.3.1"
     "@tailwindcss/typography": "npm:^0.5.20"
     "@tailwindcss/vite": "npm:^4.3.3"
@@ -1524,7 +1524,7 @@ __metadata:
     oxfmt: "npm:^0.75.0"
     oxlint: "npm:^1.90.0"
     svelte: "npm:^5.57.3"
-    svelte-check: "npm:^4.7.7"
+    svelte-check: "npm:^4.7.8"
     tailwindcss: "npm:^4.3.3"
     typescript: "npm:^6.0.3"
     vite: "npm:^8.3.5"
@@ -2314,9 +2314,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.7.7":
-  version: 4.7.7
-  resolution: "svelte-check@npm:4.7.7"
+"svelte-check@npm:^4.7.8":
+  version: 4.7.8
+  resolution: "svelte-check@npm:4.7.8"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@sveltejs/load-config": "npm:^0.2.3"
@@ -2329,7 +2329,7 @@ __metadata:
     typescript: ^5.0.0 || ^6.0.0
   bin:
     svelte-check: bin/svelte-check
-  checksum: 10c0/6277ec043a8006089ddb961e12692c91aff71a08048dcb6efce4eb1f2462fefd21a7ae54c8a3936f32315706dd3146b9c04ce4f946fc5f01190ce5482d72aa8a
+  checksum: 10c0/26bac0ae3516bb1619d5019086bebe20eb44ec3c773cba0819fe3e896382911d17d632842502ec81563830fb1280cce9954596821c101991e02294e1f2b1250c
   languageName: node
   linkType: hard
 
