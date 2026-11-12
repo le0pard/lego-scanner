@@ -14,7 +14,7 @@
     "format": "oxfmt"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.150",
+    "@iconify-json/lucide": "^1.2.152",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind4": "^1.2.3",
     "@rexa-developer/tiks": "^0.3.0",
@@ -23,18 +23,18 @@
     "@sveltejs/kit": "^3.1.1",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/typography": "^0.5.20",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.5",
     "@types/node": "^26.6.6",
     "classnames": "^2.5.1",
     "comlink": "^4.4.2",
     "dexie": "^4.4.7",
-    "oxfmt": "^0.75.0",
-    "oxlint": "^1.90.0",
+    "oxfmt": "^0.77.0",
+    "oxlint": "^1.92.0",
     "svelte": "^5.57.3",
     "svelte-check": "^4.7.8",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "typescript": "^6.0.3",
-    "vite": "^8.3.5",
+    "vite": "^8.3.6",
     "zxing-wasm": "^3.1.6"
   },
   "imports": {
